@@ -1,0 +1,46 @@
+export const concertRankSlides = [
+  {
+    id: 1,
+    title: '<센과 치히로의 행방불명> 오리지널 투어',
+    location: '예술의 전당 오페라 극장',
+    date: ['2026.1.7', '2026.3.22'],
+    imgUrl: '/concert-rank-banner/concert_rank_banner_1.gif',
+  },
+  {
+    id: 2,
+    title: '<뮤지컬 물랑루즈> 오리지널 투어',
+    location: '샤롯데시어터',
+    date: ['2026.1.7', '2026.3.22'],
+    imgUrl: '/concert-rank-banner/concert_rank_banner_2.gif',
+    seatOver: true,
+  },
+  {
+    id: 3,
+    title: '<센과 치히로의 행방불명> 오리지널 투어',
+    location: '예술의 전당 오페라 극장',
+    date: ['2026.1.7', '2026.3.22'],
+    imgUrl: '/concert-rank-banner/concert_rank_banner_1.gif',
+    privateSale: true,
+  },
+  {
+    id: 4,
+    title: '<센과 치히로의 행방불명> 오리지널 투어',
+    location: '예술의 전당 오페라 극장',
+    date: ['2026.1.7', '2026.3.22'],
+    imgUrl: '/concert-rank-banner/concert_rank_banner_1.gif',
+  },
+  {
+    id: 5,
+    title: '<센과 치히로의 행방불명> 오리지널 투어',
+    location: '예술의 전당 오페라 극장',
+    date: ['2026.1.7', '2026.3.22'],
+    imgUrl: '/concert-rank-banner/concert_rank_banner_1.gif',
+  },
+  {
+    id: 6,
+    title: '<센과 치히로의 행방불명> 오리지널 투어',
+    location: '예술의 전당 오페라 극장',
+    date: ['2026.1.7', '2026.3.22'],
+    imgUrl: '/concert-rank-banner/concert_rank_banner_1.gif',
+  },
+];

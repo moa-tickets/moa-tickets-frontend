@@ -68,6 +68,108 @@ const ICON_DATAS = {
       </>
     ),
   },
+  RIGHT: {
+    rect: '0 0 10 16',
+    svgChild: (
+      <>
+        <g clipPath="url(#clip0_1_5125)">
+          <path
+            d="M1.09348 0L9 7.95298L1 16"
+            stroke="#111111"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_1_5125">
+            <rect
+              width="10"
+              height="18"
+              fill="white"
+              transform="translate(0 -1)"
+            />
+          </clipPath>
+        </defs>
+      </>
+    ),
+  },
+  PLAY: {
+    rect: '0 0 24 24',
+    svgChild: (
+      <path
+        d="M19.5 11.1341C19.652 11.2219 19.7782 11.3481 19.866 11.5001C19.9538 11.6521 20 11.8246 20 12.0001C20 12.1756 19.9538 12.3481 19.866 12.5001C19.7782 12.6521 19.652 12.7783 19.5 12.8661L6.75 20.2271C6.59798 20.3149 6.42554 20.3611 6.25001 20.3611C6.07447 20.3611 5.90203 20.3149 5.75001 20.2271C5.59799 20.1394 5.47175 20.0131 5.38398 19.8611C5.29621 19.7091 5.25 19.5366 5.25 19.3611V4.64011C5.25 4.46458 5.29621 4.29214 5.38398 4.14012C5.47175 3.9881 5.59799 3.86187 5.75001 3.77411C5.90203 3.68634 6.07447 3.64014 6.25001 3.64014C6.42554 3.64014 6.59798 3.68634 6.75 3.77411L19.5 11.1341Z"
+        fill="white"
+      />
+    ),
+  },
+  PAUSE: {
+    rect: '0 0 24 24',
+    svgChild: (
+      <>
+        <rect width="4" height="18" x="6" y="3" fill="#fff" rx="1"></rect>
+        <rect width="4" height="18" x="14" y="3" fill="#fff" rx="1"></rect>
+      </>
+    ),
+  },
+  VOLUME: {
+    rect: '0 0 24 24',
+    svgChild: (
+      <>
+        <path
+          d="M11 5L6 9H2V15H6L11 19V5Z"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+        <path
+          d="M15.54 8.46C16.4774 9.39764 17.0039 10.6692 17.0039 11.995C17.0039 13.3208 16.4774 14.5924 15.54 15.53"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M19.07 4.93C20.9447 6.80528 21.9979 9.34836 21.9979 12C21.9979 14.6516 20.9447 17.1947 19.07 19.07"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </>
+    ),
+  },
+  MUTE: {
+    rect: '0 0 24 24',
+    svgChild: (
+      <>
+        <path
+          d="M11 5L6 9H2V15H6L11 19V5Z"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+        <path
+          d="M23 9L17 15"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M17 9L23 15"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </>
+    ),
+  },
 };
 
 export type IconList = keyof typeof ICON_DATAS;
