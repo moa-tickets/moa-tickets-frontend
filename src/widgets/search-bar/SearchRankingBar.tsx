@@ -62,7 +62,7 @@ const SearchRankingBar = ({ ref }: { ref: React.Ref<HTMLDivElement> }) => {
   return (
     <div
       className={cn(
-        'search__ranking__bar absolute left-0 top-[calc(100%+16px)] w-[calc(100%+50px)] bg-white shadow-[0_1px_1px_1px_rgba(0,0,0,0.25)] rounded-[14px] p-[23px]',
+        'search__ranking__bar absolute left-0 top-[calc(100%+16px)] z-[1000] w-[calc(100%+50px)] bg-white shadow-[0_1px_1px_1px_rgba(0,0,0,0.25)] rounded-[14px] p-[23px]',
       )}
       ref={ref}
     >
