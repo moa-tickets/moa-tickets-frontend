@@ -11,7 +11,7 @@ const BannerSlides = () => {
       setCurrentBannerIndex((prev) => (prev + 1) % bannerSlides.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, [currentBannerIndex]);
+  }, []);
 
   return (
     <div
