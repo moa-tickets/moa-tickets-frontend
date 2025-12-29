@@ -26,7 +26,7 @@ const MainContentsWrapper = ({
         <h2 className={cn('text-center text-[22px] font-bold mb-[33px]')}>
           {title}
         </h2>
-        {isTab && (
+        {isTab && title === '플레이' && (
           <SelectTab
             contentKey={playListKeys}
             selectedTab={selectedTab}
