@@ -23,7 +23,7 @@ const MainContentsWrapper = ({
   return (
     <div className={cn('main__contents__wrapper mt-[60px]')}>
       <div className={cn('main__contents max-w-[1080px] mx-auto')}>
-        <h2 className={cn('text-center text-[22px] font-bold mb-[13px]')}>
+        <h2 className={cn('text-center text-[22px] font-bold mb-[33px]')}>
           {title}
         </h2>
         {isTab && (
