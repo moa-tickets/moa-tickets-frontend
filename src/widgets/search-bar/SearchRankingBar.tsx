@@ -59,6 +59,9 @@ const SearchRankingBar = ({ ref }: { ref: React.Ref<HTMLDivElement> }) => {
   const [recentWords, setRecentWords] = useState<string[]>([]);
   const [popularRanks, setPopularRanks] = useState(initialPopularRanks);
 
+  // 예비
+  console.log(setPopularRanks, setRecentWords);
+
   return (
     <div
       className={cn(
