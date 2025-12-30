@@ -1,4 +1,16 @@
-export const mainBannerSlides = [
+export type MainBannerSlide = {
+  id: number;
+  imageUrl: string;
+  linkUrl: string;
+  smallClick: string;
+  bigText: string;
+  middleText: string;
+  smallText: string;
+  dateText: string;
+  textColor: string;
+};
+
+export const mainBannerSlides: MainBannerSlide[] = [
   {
     id: 1,
     imageUrl: '/main_banner/main_slide_1.jpg',

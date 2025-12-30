@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { cn } from '@/shared';
 import { mainBannerSlides } from '@/entities/constant/mainBannerSlides';
+import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import BannerSlideItem from './BannerSlideItem';
 
 const MainBannerSlides = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -98,40 +99,11 @@ const MainBannerSlides = () => {
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {mainBannerSlides.map((slide) => (
-          <Link
+          <BannerSlideItem
             key={slide.id}
-            to={slide.linkUrl}
-            onClick={handleLinkClick}
-            onDragStart={(e) => e.preventDefault()}
-            draggable={false}
-            className={cn(
-              'slide__each__wrapper relative flex-shrink-0 basis-full w-full h-full cursor-grab active:cursor-grabbing',
-            )}
-          >
-            <img
-              src={slide.imageUrl}
-              alt={`Main Banner Slide ${slide.id}`}
-              className={cn('w-full h-full object-cover')}
-              draggable={false}
-            />
-            <div className="image__text absolute inset-0 z-[50]">
-              <div
-                className="image__text__inner max-w-[1380px] mx-auto h-full"
-                style={{ color: slide.textColor }}
-              >
-                <h1 className="mt-[80px] text-[40px] font-bold mb-[10px]">
-                  {slide.bigText.split('|').map((text, index) => (
-                    <span key={index} className={'block'}>
-                      {text}
-                    </span>
-                  ))}
-                </h1>
-                <h2 className="text-[20px] mb-[30px]">{slide.middleText}</h2>
-                <span className="block">{slide.smallText}</span>
-                <span className="block">{slide.dateText}</span>
-              </div>
-            </div>
-          </Link>
+            slide={slide}
+            onLinkClick={handleLinkClick}
+          />
         ))}
       </div>
       <div className={cn('absolute bottom-[30px] left-0 w-full')}>
@@ -148,10 +120,11 @@ const MainBannerSlides = () => {
                 className={cn('cursor-pointer w-full h-full')}
                 onClick={() => goToSlide(slide.id - 1)}
               >
-                <img
+                <OptimizedImage
                   src={slide.smallClick}
                   alt={`Thumbnail ${slide.id}`}
-                  className={cn('w-full h-full object-cover')}
+                  className={cn('w-full h-full')}
+                  skeletonClassName="rounded-[20px]"
                 />
               </button>
             </li>

@@ -1,6 +1,7 @@
 import type { PlayListItem } from '@/entities/types/types';
 import { cn } from '@/shared';
 import YoutubePlayers from '../youtube-custom/YoutubePlayers';
+import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
 
 const SlidePlayCard = ({
   item,
@@ -32,11 +33,11 @@ const SlidePlayCard = ({
             'thumbnail w-[60px] aspect-[3/4] overflow-hidden rounded-[10px]',
           )}
         >
-          <img
+          <OptimizedImage
             src={item.thumbnailUrl}
             alt={item.title}
-            className="w-full h-full object-cover pointer-events-none"
-            draggable={false}
+            className="w-full h-full pointer-events-none"
+            skeletonClassName="rounded-[10px]"
           />
         </div>
         <div className={cn('title text-[18px] font-bold flex-1')}>
