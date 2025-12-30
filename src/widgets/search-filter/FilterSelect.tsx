@@ -15,7 +15,7 @@ const FilterSelect = ({
   selectList?: string[];
 }) => {
   const titleEnglish = title.split('/')[1];
-  const { dateRange, setDateFrom, setDateTo } = useSelectedFilterStore();
+  const { dateRange } = useSelectedFilterStore();
 
   const handleDisabledDate = (date: Date) => {
     const today = new Date();
