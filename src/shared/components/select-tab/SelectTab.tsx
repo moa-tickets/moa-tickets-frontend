@@ -27,7 +27,7 @@ const SelectTab = ({
             }}
           >
             {icons?.[index] && (
-              <img src={icons[index]} alt="" className="w-4 h-4" />
+              <img src={icons[index]} alt={`${key.split('/')[1]} 아이콘`} className="w-4 h-4" />
             )}
             {key.split('/')[1]}
           </button>
