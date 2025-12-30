@@ -2,6 +2,7 @@ import { cn } from '@/shared';
 import BannerSlides from '@/widgets/banner-slides/BannerSlides';
 import SearchBar from '@/widgets/search-bar/SearchBar';
 import { Link } from 'react-router-dom';
+import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
 
 const TopHeader = () => {
   return (
@@ -12,7 +13,7 @@ const TopHeader = () => {
         )}
       >
         <Link to="/">
-          <img src={'/logo.svg'} alt="logo" />
+          <OptimizedImage src={'/logo.svg'} alt="logo" className="w-full h-full" />
         </Link>
         <SearchBar />
         <BannerSlides />

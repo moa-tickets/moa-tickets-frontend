@@ -1,14 +1,16 @@
 import type { WillOpenGridItem } from '@/entities/types/types';
+import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
 
 const SlideGridCard = ({ item }: { item: WillOpenGridItem }) => {
   return (
     <div className="flex bg-white rounded-lg overflow-hidden h-[140px]">
       {/* 이미지 영역 */}
       <div className="w-[110px] h-full flex-shrink-0">
-        <img
+        <OptimizedImage
           src={item.imageUrl}
           alt={item.title}
-          className="w-full h-full object-cover"
+          className="w-full h-full"
+          skeletonClassName="rounded-l-lg"
         />
       </div>
 

@@ -2,6 +2,7 @@ import { bannerSlides } from '@/entities/constant/bannerSlides';
 import { cn } from '@/shared';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
 
 const BannerSlides = () => {
   const [currentBannerIndex, setCurrentBannerIndex] = useState<number>(0);
@@ -35,7 +36,7 @@ const BannerSlides = () => {
               top: `${(slide.id - 1) * 50 - 50 * currentBannerIndex}px`,
             }}
           >
-            <img src={slide.imageUrl} alt={slide.alt} />
+            <OptimizedImage src={slide.imageUrl} alt={slide.alt} className="w-full h-full" skeletonClassName="rounded-sm" />
           </Link>
         ),
       )}

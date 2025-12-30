@@ -1,6 +1,7 @@
 import type { ConcertRankSlide } from '@/entities/types/types';
 import { cn } from '@/shared/lib/utils';
 import { Link } from 'react-router-dom';
+import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
 
 const SlideCard = ({
   item,
@@ -16,11 +17,11 @@ const SlideCard = ({
           'slide__card__image w-full h-[288px] relative mb-[20px] mt-[30px] rounded-[16px] overflow-hidden',
         )}
       >
-        <img
+        <OptimizedImage
           src={item.imgUrl}
           alt={item.title}
-          className={cn('w-full h-full object-cover pointer-events-none')}
-          draggable={false}
+          className={cn('w-full h-full pointer-events-none')}
+          skeletonClassName="rounded-[16px]"
         />
         <span
           className={cn(

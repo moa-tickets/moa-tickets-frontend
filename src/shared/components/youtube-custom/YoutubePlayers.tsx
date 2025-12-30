@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import YouTube, { type YouTubeProps, type YouTubePlayer } from 'react-youtube';
 import Icon from '@/shared/lib/Icon';
+import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
 
 const formatTime = (seconds: number) => {
   const mins = Math.floor(seconds / 60);
@@ -132,10 +133,11 @@ const YoutubePlayers = ({
           className="absolute inset-0 flex items-center justify-center bg-black"
         >
           {thumbnailUrl && (
-            <img
+            <OptimizedImage
               src={thumbnailUrl}
               alt="video thumbnail"
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full"
+              skeletonClassName="bg-gray-800"
             />
           )}
           <div className="relative z-10 w-16 h-16 bg-red-600 rounded-full flex items-center justify-center">
