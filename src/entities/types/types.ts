@@ -30,7 +30,6 @@ export type PlayListMocksType = {
 };
 
 export type RecommendKeywordItem = {
-export type RecommendKeywordItem = {
   id: number;
   imgUrl: string;
   title: string;
