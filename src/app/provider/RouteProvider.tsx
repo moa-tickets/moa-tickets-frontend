@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import MainLayout from '@/shared/components/layouts/MainLayout';
 import MainPage from '@/pages/main/MainPage';
 import SearchResult from '@/pages/search-result/SearchResult';
+import LandingPage from '@/pages/landing/LandingPage';
 
 const createdRouter = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const createdRouter = createBrowserRouter([
       {
         path: 'search/result',
         element: <SearchResult />,
+      },
+      {
+        path: 'landing/:id',
+        element: <LandingPage />,
       },
     ],
   },

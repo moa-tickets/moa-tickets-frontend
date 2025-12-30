@@ -60,3 +60,19 @@ export type FilterDataStructure = {
   setDateFrom: (from: Date | undefined) => void;
   setDateTo: (to: Date | undefined) => void;
 };
+
+export type DetailMenu = {
+  menuName: string;
+  component: React.ReactElement[];
+  eng: string;
+};
+
+export type DetailPageData = {
+  isLandingPage: boolean;
+  topDetailPageDesign: string[];
+  activeMenus: DetailMenu[];
+};
+
+export type DetailDataType = {
+  [key: number]: DetailPageData;
+};

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { cn } from '@/shared';
 import type { MainBannerSlide } from '@/entities/constant/mainBannerSlides';
 import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import { detailData } from '@/entities/constant/detailData';
 
 const BannerSlideItem = ({
   slide,
@@ -13,9 +14,17 @@ const BannerSlideItem = ({
 }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
+  const isLandingPage = Object.keys(detailData).includes(String(slide.id))
+    ? (detailData[slide.id].isLandingPage ?? false)
+    : false;
+
+  const getLinkPath = () => {
+    return isLandingPage ? `/landing/${slide.id}` : `/detail/${slide.id}`;
+  };
+
   return (
     <Link
-      to={slide.linkUrl}
+      to={getLinkPath()}
       onClick={onLinkClick}
       onDragStart={(e) => e.preventDefault()}
       draggable={false}
