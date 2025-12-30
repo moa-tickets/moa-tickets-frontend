@@ -43,3 +43,20 @@ export type RecommendKeywordsType = {
     contents: RecommendKeywordItem[];
   };
 };
+
+export type DateRange = {
+  from: Date | undefined;
+  to: Date | undefined;
+};
+
+export type FilterDataStructure = {
+  genre: string[];
+  addGenre: (genre: string) => void;
+  removeGenre: (genre: string) => void;
+  saleStatus: string[];
+  addSaleStatus: (status: string) => void;
+  removeSaleStatus: (status: string) => void;
+  dateRange: DateRange;
+  setDateFrom: (from: Date | undefined) => void;
+  setDateTo: (to: Date | undefined) => void;
+};
