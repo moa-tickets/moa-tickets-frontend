@@ -3,7 +3,7 @@ export const concertRankSlides = [
     id: 1,
     title: '뮤지컬 데스노트(The Musical Death Note)',
     location: '디큐브 링크아트센터',
-    date: ['2025.10.14', '20226.5.10'],
+    date: ['2025.10.14', '2026.5.10'],
     imgUrl: '/concert-rank-banner/concert_rank_banner_1.gif',
   },
   {
