@@ -2,11 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/shared';
 import Icon from '@/shared/lib/Icon';
 import SearchRankingBar from './SearchRankingBar';
+import { useNavigate } from 'react-router-dom';
 
 const SearchBar = () => {
   const autoCompleteBox = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isAutoCompleteOpen, setIsAutoCompleteOpen] = useState<boolean>(false);
+  const [searchWords, setSearchWords] = useState<string>('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const outsideClickListener = (event: MouseEvent | TouchEvent) => {
@@ -42,8 +45,16 @@ const SearchBar = () => {
           onFocus={() => setIsAutoCompleteOpen(true)}
           onBlur={() => setIsAutoCompleteOpen(false)}
           ref={inputRef}
+          value={searchWords}
+          onChange={(e) => setSearchWords(e.target.value)}
         />
-        <button>
+        <button
+          onClick={() => {
+            navigate(`/search/result?q=${searchWords}`);
+          }}
+          className={cn('cursor-pointer disabled:opacity-45')}
+          disabled={!searchWords.trim()}
+        >
           <Icon ICON="SEARCH_ICON" className={cn('w-7 h-7 fill-none')} />
         </button>
       </div>

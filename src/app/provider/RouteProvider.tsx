@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import MainLayout from '@/shared/components/layouts/MainLayout';
 import MainPage from '@/pages/main/MainPage';
+import SearchResult from '@/pages/search-result/SearchResult';
 
 const createdRouter = createBrowserRouter([
   {
@@ -11,6 +12,10 @@ const createdRouter = createBrowserRouter([
       {
         index: true,
         element: <MainPage />,
+      },
+      {
+        path: 'search/result',
+        element: <SearchResult />,
       },
     ],
   },
