@@ -1,5 +1,6 @@
 import type { ConcertRankSlide } from '@/entities/types/types';
 import { cn } from '@/shared/lib/utils';
+import { Link } from 'react-router-dom';
 
 const SlideCard = ({
   item,
@@ -9,7 +10,7 @@ const SlideCard = ({
   className?: string;
 }) => {
   return (
-    <div className={cn('slide__card', className)}>
+    <Link to={`concert/${item.id}`} className={cn('slide__card', className)}>
       <div
         className={cn(
           'slide__card__image w-full h-[288px] relative mb-[20px] mt-[30px] rounded-[16px] overflow-hidden',
@@ -18,7 +19,8 @@ const SlideCard = ({
         <img
           src={item.imgUrl}
           alt={item.title}
-          className={cn('w-full h-full object-cover')}
+          className={cn('w-full h-full object-cover pointer-events-none')}
+          draggable={false}
         />
         <span
           className={cn(
@@ -57,7 +59,7 @@ const SlideCard = ({
           단독판매
         </div>
       )}
-    </div>
+    </Link>
   );
 };
 

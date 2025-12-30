@@ -35,7 +35,8 @@ const SlidePlayCard = ({
           <img
             src={item.thumbnailUrl}
             alt={item.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover pointer-events-none"
+            draggable={false}
           />
         </div>
         <div className={cn('title text-[18px] font-bold flex-1')}>

@@ -28,3 +28,17 @@ export type PlayListItem = {
 export type PlayListMocksType = {
   [key: string]: PlayListItem[];
 };
+
+export type RecommendKeywordItem = {
+  imgUrl: string;
+  title: string;
+  location: string;
+  date: string[];
+};
+
+export type RecommendKeywordsType = {
+  [key: string]: {
+    icons: string;
+    contents: RecommendKeywordItem[];
+  };
+};
