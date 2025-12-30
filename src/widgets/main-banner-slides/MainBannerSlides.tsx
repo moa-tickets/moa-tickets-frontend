@@ -105,7 +105,7 @@ const MainBannerSlides = () => {
             onDragStart={(e) => e.preventDefault()}
             draggable={false}
             className={cn(
-              'slide__each__wrapper flex-shrink-0 basis-full w-full h-full cursor-grab active:cursor-grabbing',
+              'slide__each__wrapper relative flex-shrink-0 basis-full w-full h-full cursor-grab active:cursor-grabbing',
             )}
           >
             <img
@@ -114,35 +114,50 @@ const MainBannerSlides = () => {
               className={cn('w-full h-full object-cover')}
               draggable={false}
             />
+            <div className="image__text absolute inset-0 z-[50]">
+              <div
+                className="image__text__inner max-w-[1380px] mx-auto h-full"
+                style={{ color: slide.textColor }}
+              >
+                <h1 className="mt-[80px] text-[40px] font-bold mb-[10px]">
+                  {slide.bigText.split('|').map((text, index) => (
+                    <span key={index} className={'block'}>
+                      {text}
+                    </span>
+                  ))}
+                </h1>
+                <h2 className="text-[20px] mb-[30px]">{slide.middleText}</h2>
+                <span className="block">{slide.smallText}</span>
+                <span className="block">{slide.dateText}</span>
+              </div>
+            </div>
           </Link>
         ))}
       </div>
-      <ul
-        className={cn(
-          'absolute flex gap-2 items-center bottom-[30px] left-[30px]',
-        )}
-      >
-        {mainBannerSlides.map((slide) => (
-          <li
-            key={slide.id}
-            className={cn(
-              'w-[60px] h-[60px] rounded-[20px] overflow-hidden',
-              currentIndex === slide.id - 1 ? 'border-2 border-white' : '',
-            )}
-          >
-            <button
-              className={cn('cursor-pointer w-full h-full')}
-              onClick={() => goToSlide(slide.id - 1)}
+      <div className={cn('absolute bottom-[30px] left-0 w-full')}>
+        <ul className="max-w-[1380px] mx-auto flex gap-2 items-center">
+          {mainBannerSlides.map((slide) => (
+            <li
+              key={slide.id}
+              className={cn(
+                'w-[60px] h-[60px] rounded-[20px] overflow-hidden',
+                currentIndex === slide.id - 1 ? 'border-2 border-white' : '',
+              )}
             >
-              <img
-                src={slide.smallClick}
-                alt={`Thumbnail ${slide.id}`}
-                className={cn('w-full h-full object-cover')}
-              />
-            </button>
-          </li>
-        ))}
-      </ul>
+              <button
+                className={cn('cursor-pointer w-full h-full')}
+                onClick={() => goToSlide(slide.id - 1)}
+              >
+                <img
+                  src={slide.smallClick}
+                  alt={`Thumbnail ${slide.id}`}
+                  className={cn('w-full h-full object-cover')}
+                />
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </section>
   );
 };

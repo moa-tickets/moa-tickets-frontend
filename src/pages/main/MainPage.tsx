@@ -15,6 +15,7 @@ const MainPage = () => {
         isAll={'오픈 예정 공연 전체보기'}
       />
       <MainContentsWrapper title="플레이" isTab />
+      <MainContentsWrapper title="추천 키워드" isTab />
     </div>
   );
 };
