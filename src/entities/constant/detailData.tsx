@@ -34,6 +34,11 @@ export const detailData: DetailDataType = {
     date: '2026.01.30 ~2026.02.08',
     age: '8세이상 관람가능',
     price: {
+      VIP: 200000,
+      R석: 150000,
+      S석: 132000,
+      A석: 110000,
+      B석: 90000,
       all: 132000,
     },
     benefits: ['무이자할부'],
