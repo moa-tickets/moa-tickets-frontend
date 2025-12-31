@@ -3,8 +3,11 @@ import { cn } from '@/shared';
 import { mainBannerSlides } from '@/entities/constant/mainBannerSlides';
 import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
 import BannerSlideItem from './BannerSlideItem';
+import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
+import { useModalStore } from '@/entities/stores/useModalStore';
 
 const MainBannerSlides = () => {
+  const { isOpen, title, message, closeModal } = useModalStore();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isTransitioning, setIsTransitioning] = useState<boolean>(true);
   const startX = useRef<number>(0);
@@ -79,7 +82,14 @@ const MainBannerSlides = () => {
   }, [currentIndex]);
 
   return (
-    <section
+    <>
+      <ConfirmModal
+        isOpen={isOpen}
+        onClose={closeModal}
+        title={title}
+        message={message}
+      />
+      <section
       className={cn(
         'main__banner__slides w-full h-[500px] flex overflow-hidden relative cursor-grab active:cursor-grabbing',
       )}
@@ -132,6 +142,7 @@ const MainBannerSlides = () => {
         </ul>
       </div>
     </section>
+    </>
   );
 };
 

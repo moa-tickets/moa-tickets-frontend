@@ -3,6 +3,7 @@ import MainLayout from '@/shared/components/layouts/MainLayout';
 import MainPage from '@/pages/main/MainPage';
 import SearchResult from '@/pages/search-result/SearchResult';
 import LandingPage from '@/pages/landing/LandingPage';
+import DetailPage from '@/pages/detail/DetailPage';
 
 const createdRouter = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const createdRouter = createBrowserRouter([
       {
         path: 'landing/:id',
         element: <LandingPage />,
+      },
+      {
+        path: 'detail/:id',
+        element: <DetailPage />,
       },
     ],
   },

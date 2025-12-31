@@ -21,11 +21,11 @@ const CouponReserve = () => {
     },
     {
       id: 2,
-      imgSrc: '/coupon_reserve/coupon_reserve_1.png',
-      genre: '연극',
-      title: '그때도 오늘2: 꽃신',
-      description: '김혜은/안소희 등이 선보이는 2인극',
-      sale: '20%|직장인 할인',
+      imgSrc: '/coupon_reserve/coupon_reserve_2.png',
+      genre: '전시',
+      title: '클림트와 리치오디의 기적',
+      description: '리치오디 미술관의 기적적인 이야기',
+      sale: '40%|얼리버드',
     },
     {
       id: 3,

@@ -68,9 +68,46 @@ export type DetailMenu = {
 };
 
 export type DetailPageData = {
-  isLandingPage: boolean;
-  topDetailPageDesign: string[];
-  activeMenus: DetailMenu[];
+  isLandingPage?: boolean;
+  topDetailPageDesign?: string[];
+  activeMenus?: DetailMenu[];
+  concertTitle?: string;
+  genre?: string;
+  loc?: string;
+  date?: string;
+  age?: string;
+  thumbnail?: string;
+  price?: {
+    [key: string]: number;
+    all?: number;
+  };
+  benefits?: string[];
+  delivery?: {
+    date: string;
+    details?: string;
+    addressLink?: string;
+  };
+  ticketOpening?: {
+    membership?: {
+      label: string;
+      date: string;
+      daysLeft: string;
+    };
+    general?: {
+      label: string;
+      date: string;
+      daysLeft: string;
+    };
+    notice?: string;
+  };
+  badges?: {
+    exclusive?: boolean;
+    safeBooking?: boolean;
+    waiting?: boolean;
+  };
+  ticketcast?: boolean;
+  likeCount?: number;
+  detailPageDesign?: string;
 };
 
 export type DetailDataType = {

@@ -170,6 +170,25 @@ const ICON_DATAS = {
       </>
     ),
   },
+  CLOSE_SMALL: {
+    rect: '0 0 14 14',
+    svgChild: (
+      <path
+        d="M3.5 3.5L10.5 10.5M10.5 3.5L3.5 10.5"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+      />
+    ),
+  },
+  ARROW_RIGHT: {
+    rect: '0 0 5 7',
+    svgChild: <path d="M0 0L5 3.5L0 7V0Z" fill="currentColor" />,
+  },
+  ARROW_RIGHT_SMALL: {
+    rect: '0 0 4 7',
+    svgChild: <path d="M0 0L4 3.5L0 7V0Z" fill="currentColor" />,
+  },
 };
 
 export type IconList = keyof typeof ICON_DATAS;
