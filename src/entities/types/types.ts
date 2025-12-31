@@ -78,7 +78,7 @@ export type DetailPageData = {
   age?: string;
   thumbnail?: string;
   price?: {
-    [key: string]: number;
+    [key: string]: number | undefined;
     all?: number;
   };
   benefits?: string[];

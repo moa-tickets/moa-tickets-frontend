@@ -35,7 +35,7 @@ const LandingPage = () => {
               className={cn('landing__section')}
             >
               <ActiveMenu menuNames={menuNames!} menuIds={menuIds!} />
-              {menuComp.component.map((comp: React.ReactNode, i: number) => {
+              {menuComp.component.map((comp: React.ReactNode) => {
                 return comp;
               })}
             </section>
@@ -45,7 +45,7 @@ const LandingPage = () => {
               id={menuComp.eng}
               className={cn('landing__section')}
             >
-              {menuComp.component.map((comp: React.ReactNode, i: number) => {
+              {menuComp.component.map((comp: React.ReactNode) => {
                 return comp;
               })}
             </section>
