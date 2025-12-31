@@ -1,0 +1,33 @@
+/* Coupon Swiper Progress Bar Styles */
+.coupon-swiper {
+  padding-bottom: 20px;
+}
+
+/* Progress bar를 밑으로 이동 */
+.coupon-swiper .swiper-pagination {
+  bottom: 0;
+  top: auto;
+  width: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Progress bar 높이 및 스타일 */
+.coupon-swiper .swiper-pagination-progressbar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 0;
+}
+
+/* Progress bar 채워지는 부분 색상 */
+.coupon-swiper .swiper-pagination-progressbar-fill {
+  background: #b0ff41;
+  border-radius: 0;
+}
+
+/* 반응형 조정 */
+@media (max-width: 1024px) {
+  .coupon-swiper .swiper-pagination-progressbar {
+    height: 2px;
+  }
+}

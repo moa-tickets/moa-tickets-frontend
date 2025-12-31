@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { cn } from '@/shared';
 import type { MainBannerSlide } from '@/entities/constant/mainBannerSlides';
 import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import { detailData } from '@/entities/constant/detailData';
+import { useModalStore } from '@/entities/stores/useModalStore';
 
 const BannerSlideItem = ({
   slide,
@@ -12,11 +14,33 @@ const BannerSlideItem = ({
   onLinkClick: (e: React.MouseEvent) => void;
 }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const openModal = useModalStore((state) => state.openModal);
+
+  const isLandingPage = Object.keys(detailData).includes(String(slide.id))
+    ? (detailData[slide.id].isLandingPage ?? false)
+    : false;
+
+  const isReady = slide.id === 1 || slide.id === 6;
+
+  const linkPath = isReady
+    ? isLandingPage
+      ? `/landing/${slide.id}`
+      : `/detail/${slide.id}`
+    : '#';
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (!isReady) {
+      e.preventDefault();
+      openModal('주의사항', '준비중인 페이지입니다.');
+      return;
+    }
+    onLinkClick(e);
+  };
 
   return (
     <Link
-      to={slide.linkUrl}
-      onClick={onLinkClick}
+      to={linkPath}
+      onClick={handleClick}
       onDragStart={(e) => e.preventDefault()}
       draggable={false}
       className={cn(
