@@ -189,6 +189,32 @@ const ICON_DATAS = {
     rect: '0 0 4 7',
     svgChild: <path d="M0 0L4 3.5L0 7V0Z" fill="currentColor" />,
   },
+  ARROW_LEFT_PAGINATION: {
+    rect: '0 0 6 11',
+    svgChild: (
+      <path
+        d="M1.09348 0L9 7.95298L1 16"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        transform="scale(0.6, 0.6) translate(-1, -2)"
+      />
+    ),
+  },
+  ARROW_RIGHT_PAGINATION: {
+    rect: '0 0 6 11',
+    svgChild: (
+      <path
+        d="M1.09348 0L9 7.95298L1 16"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        transform="scale(0.6, 0.6) translate(-1, -2)"
+      />
+    ),
+  },
 };
 
 export type IconList = keyof typeof ICON_DATAS;
