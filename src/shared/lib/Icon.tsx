@@ -5,7 +5,11 @@ const Icon = ({ ICON, className }: { ICON: IconList; className: string }) => {
   const iconData = ICON_DATAS[ICON];
 
   return (
-    <svg viewBox={iconData.rect} className={className}>
+    <svg
+      viewBox={iconData.rect}
+      className={className}
+      style={{ display: 'block' }}
+    >
       {iconData.svgChild}
     </svg>
   );
