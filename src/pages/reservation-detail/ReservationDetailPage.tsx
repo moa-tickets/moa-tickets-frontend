@@ -2,7 +2,6 @@ import { useParams, Link } from 'react-router-dom';
 import { cn } from '@/shared';
 import { reservationDetailData } from '@/entities/constant/reservationData';
 import { detailData } from '@/entities/constant/detailData';
-import Icon from '@/shared/lib/Icon';
 import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
 
 const ReservationDetailPage = () => {
