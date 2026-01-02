@@ -3,7 +3,7 @@ import { detailData } from '@/entities/constant/detailData';
 import { reviewData } from '@/entities/constant/reviewData';
 import { cn } from '@/shared';
 import DetailDescription from '@/widgets/detail-description/DetailDescription';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/shared/components/ui/button';
 import Icon from '@/shared/lib/Icon';
 import PriceModal from '@/shared/components/price-modal/PriceModal';
@@ -12,6 +12,7 @@ import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
 
 const DetailPage = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('공연정보');
   const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
@@ -19,6 +20,12 @@ const DetailPage = () => {
 
   const detailPageData = detailData[Number(id)];
   const reviewPageData = reviewData[Number(id)];
+
+  // 예매하기 버튼 클릭 핸들러
+  const handleReservationClick = () => {
+    // 예약 선택 페이지로 이동
+    navigate(`/detail/${id}/booking`);
+  };
 
   if (!detailPageData || detailPageData.isLandingPage) {
     return null;
@@ -341,6 +348,7 @@ const DetailPage = () => {
 
             {/* Reservation Button */}
             <Button
+              onClick={handleReservationClick}
               className={cn(
                 'w-full h-[54px] bg-[#4154FF] text-white text-[18px] font-bold rounded-[10px] border border-[#4154FF] hover:bg-[#4154FF]/90 cursor-pointer',
               )}
