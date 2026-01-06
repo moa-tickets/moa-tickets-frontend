@@ -29,12 +29,13 @@ const BannerSlideItem = ({
     : '#';
 
   const handleClick = (e: React.MouseEvent) => {
+    onLinkClick(e);
+    if (e.defaultPrevented) return;
+
     if (!isReady) {
       e.preventDefault();
       openModal('주의사항', '준비중인 페이지입니다.');
-      return;
     }
-    onLinkClick(e);
   };
 
   return (

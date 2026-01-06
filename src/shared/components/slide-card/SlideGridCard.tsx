@@ -20,7 +20,7 @@ const SlideGridCard = ({ item }: { item: WillOpenGridItem }) => {
         <p className="text-[#4A90D9] font-semibold text-sm mb-2">{item.date}</p>
 
         {/* 제목 */}
-        <h3 className="text-gray-900 font-medium text-sm leading-snug mb-1 line-clamp-2">
+        <h3 className="text-gray-900 font-medium text-sm leading-snug mb-1 truncate">
           {item.title}
         </h3>
 

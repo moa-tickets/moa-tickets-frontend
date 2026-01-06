@@ -9,6 +9,10 @@ import ReservationPage from '@/pages/reservation/ReservationPage';
 import ReservationDetailPage from '@/pages/reservation-detail/ReservationDetailPage';
 import BookingPage from '@/pages/booking/BookingPage';
 import PaymentPage from '@/pages/payment/PaymentPage';
+import InquiryPage from '@/pages/inquiry/InquiryPage';
+import InquiryWrite from '@/pages/inquiry-write/InquiryWrite';
+import LoginPage from '@/pages/login/LoginPage';
+import LoginCallback from '@/pages/login-callback/LoginCallback';
 
 const createdRouter = createBrowserRouter([
   {
@@ -19,6 +23,14 @@ const createdRouter = createBrowserRouter([
       {
         index: true,
         element: <MainPage />,
+      },
+      {
+        path: 'login',
+        element: <LoginPage />,
+      },
+      {
+        path: 'login-callback',
+        element: <LoginCallback />,
       },
       {
         path: 'search/result',
@@ -41,6 +53,10 @@ const createdRouter = createBrowserRouter([
         element: <PaymentPage />,
       },
       {
+        path: 'inquiry-write',
+        element: <InquiryWrite />,
+      },
+      {
         path: 'mypage',
         element: <MyPageLayout />,
         children: [
@@ -51,6 +67,10 @@ const createdRouter = createBrowserRouter([
           {
             path: 'reservation/:reservationId',
             element: <ReservationDetailPage />,
+          },
+          {
+            path: 'inquiry',
+            element: <InquiryPage />,
           },
         ],
       },
