@@ -4,11 +4,6 @@ import axios from 'axios';
 import { cn } from '@/shared';
 import { detailData } from '@/entities/constant/detailData';
 import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
-import {
-  addReservation,
-  type ReservationItem,
-  type ReservationDetailData,
-} from '@/entities/constant/reservationData';
 
 import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 
@@ -130,7 +125,7 @@ const PaymentPage = () => {
     } catch {
       created = `customer_${Date.now()}`;
     }
-  
+
     sessionStorage.setItem('toss_customer_key', created);
     return created;
   };
