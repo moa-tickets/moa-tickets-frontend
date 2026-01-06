@@ -107,6 +107,7 @@ const BookingPage = () => {
         date: selectedDate,
         seats: selectedSeats,
         totalPrice: totalPrice,
+        holdToken: "hold_WNDUg4kY90KQdmjYZZqdLA"
       },
     });
   };
