@@ -57,17 +57,17 @@ const InquiryPage = () => {
             {data.contents.map((inquiry: InquiryDetail) => (
               <li
                 key={inquiry.id}
-                className="w-full p-[20px] border border-solid border-[#eee] rounded-[8px] mb-[10px]"
+                className="w-full p-[20px] border border-solid border-[#eee] rounded-[8px] mb-[10px] group hover:bg-black transition duration-600"
               >
                 <Link
                   to="/"
-                  className="inline-flex flex-col gap-[5px] relative w-full"
+                  className="inline-flex flex-col gap-[5px] relative w-full "
                 >
                   <div className="flex items-center gap-[16px] w-1/2">
-                    <span className="text-[14px] font-bold block mb-[2px] inline-block overflow-hidden whitespace-nowrap text-ellipsis">
+                    <span className="text-[14px] font-bold block mb-[2px] inline-block overflow-hidden whitespace-nowrap text-ellipsis group-hover:text-white">
                       {inquiry.title}
                     </span>
-                    <span className="text-[12px] text-[#888] px-3 py-1 bg-black rounded-[8px] inline-block text-white">
+                    <span className="text-[12px] text-[#888] px-3 py-1 bg-black rounded-[8px] inline-block text-white group-hover:bg-white group-hover:text-black">
                       답변 없음
                     </span>
                   </div>
@@ -78,10 +78,10 @@ const InquiryPage = () => {
                     {inquiry.createdAt.split('T')[0]}
                   </div>
                   <div className="flex absolute right-0 gap-[16px]">
-                    <button className="text-[12px] px-2 py-1 bg-black text-white rounded-[6px] cursor-pointer">
+                    <button className="text-[12px] px-2 py-1 bg-black text-white rounded-[6px] cursor-pointer group-hover:bg-white group-hover:text-black transition duration-600">
                       수정하기
                     </button>
-                    <button className="text-[12px] px-2 py-1 bg-black text-white rounded-[6px] cursor-pointer">
+                    <button className="text-[12px] px-2 py-1 bg-black text-white rounded-[6px] cursor-pointer group-hover:bg-white group-hover:text-black transition duration-600 ">
                       삭제하기
                     </button>
                   </div>
