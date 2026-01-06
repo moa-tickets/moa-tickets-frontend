@@ -1,5 +1,3 @@
-import { sv } from 'date-fns/locale';
-
 const ICON_DATAS = {
   SEARCH_ICON: {
     rect: '0 0 24 24',
