@@ -113,3 +113,37 @@ export type DetailPageData = {
 export type DetailDataType = {
   [key: number]: DetailPageData;
 };
+
+export interface InquiryFunction extends InquiryData {
+  setInquiryData: (inquiryData: InquiryData) => void;
+}
+
+export type InquiryData = {
+  status: string;
+  message: string;
+  data: InquiryItem;
+  timestamp: string;
+};
+
+export type InquiryItem = {
+  contents: InquiryDetail[];
+  first: boolean;
+  last: boolean;
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+};
+
+export type InquiryDetail = {
+  id: number;
+  title: string;
+  content: string;
+  faqType: string;
+  createdAt: string;
+};
+
+export type LoginData = {
+  isLoggedIn: boolean;
+  setIsLoggedIn: (status: boolean) => void;
+};
