@@ -13,6 +13,8 @@ import InquiryPage from '@/pages/inquiry/InquiryPage';
 import InquiryWrite from '@/pages/inquiry-write/InquiryWrite';
 import LoginPage from '@/pages/login/LoginPage';
 import LoginCallback from '@/pages/login-callback/LoginCallback';
+import PaymentSuccessPage from '@/pages/payment/PaymentSuccessPage'
+import PaymentFailPage from '@/pages/payment/PaymentFailPage'
 
 const createdRouter = createBrowserRouter([
   {
@@ -73,6 +75,14 @@ const createdRouter = createBrowserRouter([
             element: <InquiryPage />,
           },
         ],
+      },
+      {
+        path: 'payments/success',
+        element: <PaymentSuccessPage />,
+      },
+      {
+        path: 'payments/fail',
+        element: <PaymentFailPage />,
       },
     ],
   },
