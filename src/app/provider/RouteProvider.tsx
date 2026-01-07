@@ -9,6 +9,7 @@ import ReservationPage from '@/pages/reservation/ReservationPage';
 import ReservationDetailPage from '@/pages/reservation-detail/ReservationDetailPage';
 import BookingPage from '@/pages/booking/BookingPage';
 import PaymentPage from '@/pages/payment/PaymentPage';
+import StreamPage from '@/pages/stream/StreamPage.tsx';
 
 const createdRouter = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const createdRouter = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: 'live/:playbackId',
+    element: <StreamPage />,
   },
 ]);
 
