@@ -143,7 +143,24 @@ export type InquiryDetail = {
   createdAt: string;
 };
 
+export type InquiryDetailResponse = {
+  status: string;
+  message: string;
+  data: InquiryDetail;
+  timestamp: string;
+};
+
 export type LoginData = {
   isLoggedIn: boolean;
+  userData: {
+    email: string;
+    nickname: string;
+    seller: boolean;
+  };
+  setUserData: (data: {
+    email: string;
+    nickname: string;
+    seller: boolean;
+  }) => void;
   setIsLoggedIn: (status: boolean) => void;
 };
