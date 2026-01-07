@@ -7,10 +7,10 @@ import { useLoginDataFunction } from '@/features/login/useLoginDataFunction';
 import { useEffect } from 'react';
 import ConfirmModal from '../confirm-modal/ConfirmModal';
 import { useModalStore } from '@/entities/stores/useModalStore';
-import { checkAuthCookie } from '@/shared/lib/cookieUtils';
+import { checkAuthCookie, clearAuthCookies } from '@/shared/lib/cookieUtils';
 
 const BottomHeader = () => {
-  const { isLoggedIn, userData, setIsLoggedIn } = useLoginData();
+  const { isLoggedIn, userData, setIsLoggedIn, setUserData } = useLoginData();
   const navigate = useNavigate();
   const { isOpen, title, message, openModal, closeModal } = useModalStore();
 
@@ -20,6 +20,21 @@ const BottomHeader = () => {
 
   const handleModalClose = () => {
     closeModal();
+  };
+
+  const handleLogout = () => {
+    // 쿠키 제거
+    clearAuthCookies();
+
+    // 상태 업데이트
+    setIsLoggedIn(false);
+    setUserData({ email: '', nickname: '', seller: false });
+
+    // localStorage에서 로그인 정보 제거
+    localStorage.removeItem('login-storage');
+
+    // 메인 페이지로 리다이렉트
+    navigate('/');
   };
 
   const goInquiry = () => {
@@ -79,6 +94,7 @@ const BottomHeader = () => {
                 <Icon ICON="PROFILE" className={'w-5 h-5 fill-none'} />
               }
               text={'로그아웃'}
+              onNavigate={handleLogout}
             />
           ) : (
             <IconButton

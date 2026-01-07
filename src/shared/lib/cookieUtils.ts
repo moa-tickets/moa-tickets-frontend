@@ -35,3 +35,41 @@ export const checkAuthCookie = (): boolean => {
 
   return authCookieNames.some((name) => hasCookie(name));
 };
+
+/**
+ * 쿠키 제거 함수
+ */
+export const deleteCookie = (
+  name: string,
+  path: string = '/',
+  domain?: string,
+): void => {
+  let cookieString = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path};`;
+  if (domain) {
+    cookieString += ` domain=${domain};`;
+  }
+  document.cookie = cookieString;
+};
+
+/**
+ * 모든 인증 관련 쿠키 제거
+ */
+export const clearAuthCookies = (): void => {
+  const authCookieNames = [
+    'accessToken',
+    'refreshToken',
+    'sessionId',
+    'token',
+    'auth',
+    'access_token',
+    'refresh_token',
+    'Authorization',
+  ];
+
+  authCookieNames.forEach((name) => {
+    // 다양한 경로와 도메인에서 쿠키 제거 시도
+    deleteCookie(name, '/');
+    deleteCookie(name, '/', globalThis.location.hostname);
+    deleteCookie(name, '/', `.${globalThis.location.hostname}`);
+  });
+};
