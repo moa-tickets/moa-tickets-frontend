@@ -14,7 +14,7 @@ export const useLoginDataFunction = () => {
   const goSeller = useMutation({
     mutationFn: async () => {
       await axios.post(
-        'https://app.moaticket.dev/api/members/seller',
+        'https://app.moatickets.dev/api/members/seller',
         {},
         { withCredentials: true },
       );
@@ -23,7 +23,7 @@ export const useLoginDataFunction = () => {
 
   const getLoginData = useMutation<UserData>({
     mutationFn: async () => {
-      const res = await axios.get('https://app.moaticket.dev/api/members/me', {
+      const res = await axios.get('https://app.moatickets.dev/api/members/me', {
         withCredentials: true,
       });
       return res.data;

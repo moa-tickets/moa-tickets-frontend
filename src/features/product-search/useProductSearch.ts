@@ -26,7 +26,7 @@ export const useProductSearch = () => {
   >({
     mutationFn: async ({ query }: { query: string }) => {
       const response = await axios.get(
-        `https://app.moaticket.dev/api/product/concertList`,
+        `https://app.moatickets.dev/api/product/concertList`,
         {
           params: {
             searchValue: query,
@@ -62,7 +62,7 @@ export const useProductSearch = () => {
   const productPostTest = useMutation({
     mutationFn: async () => {
       const response = await axios.post(
-        `https://app.moaticket.dev/api/product/concert`,
+        `https://app.moatickets.dev/api/product/concert`,
         {
           hallId: 0,
           concertName: '10cm 콘서트',
@@ -90,7 +90,7 @@ export const useProductSearch = () => {
   const getConcertDetail = useMutation<ConcertDetailType, Error, number>({
     mutationFn: async (concertId: number) => {
       const response = await axios.get(
-        `https://app.moaticket.dev/api/product/detail/${concertId}`,
+        `https://app.moatickets.dev/api/product/detail/${concertId}`,
         {
           withCredentials: true,
         },
@@ -112,7 +112,7 @@ export const useProductSearch = () => {
   const getSessionTickets = useMutation<TicketType[], Error, number>({
     mutationFn: async (sessionId: number) => {
       const response = await axios.get(
-        `https://app.moaticket.dev/api/sessions/${sessionId}/tickets`,
+        `https://app.moatickets.dev/api/sessions/${sessionId}/tickets`,
         {
           withCredentials: true,
         },
@@ -145,7 +145,7 @@ export const useProductSearch = () => {
       ticketIds: number[];
     }) => {
       const response = await axios.post(
-        `https://app.moaticket.dev/api/tickets/hold`,
+        `https://app.moatickets.dev/api/tickets/hold`,
         {
           sessionId,
           ticketIds,

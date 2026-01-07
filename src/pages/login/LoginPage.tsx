@@ -1,6 +1,6 @@
 const LoginPage = () => {
   const goLogin = () => {
-    window.location.href = 'https://app.moaticket.dev/login/google';
+    window.location.href = 'https://app.moatickets.dev/login/google';
   };
 
   return (

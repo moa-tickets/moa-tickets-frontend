@@ -54,7 +54,7 @@ const PaymentPage = () => {
   // 위젯 인스턴스 저장
   const widgetsRef = useRef<any>(null);
 
-  const apiBaseUrl = 'https://app.moaticket.dev';
+  const apiBaseUrl = 'https://app.moatickets.dev';
   const tossClientKey = import.meta.env.VITE_TOSS_CLIENT_KEY as string;
 
   const successUrl = useMemo(() => {
