@@ -17,6 +17,7 @@ const LoginCallback = () => {
       getLoginData.mutate();
       navigate('/');
     } else {
+      console.log('no auth cookie');
       setIsLoggedIn(false);
       navigate('/login');
     }
