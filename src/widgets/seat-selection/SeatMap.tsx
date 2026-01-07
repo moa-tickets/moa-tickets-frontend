@@ -50,11 +50,11 @@ const SeatMap = ({
         const seatId = `${row}-${i}`;
         const isOccupied = Math.random() < 0.2; // 20% 확률로 예약됨
         
-        // 좌석 번호에 따라 섹션 결정 (중앙이 VIP, 양쪽이 일반석)
-        let section = '일반석';
-        if (i >= 8 && i <= 13) {
+        // 좌석 번호에 따라 섹션 결정 (중앙이 VIP, 양쪽이 R석, 끝이 S석)
+        let section = 'S석';
+        if (i >= 5 && i <= 8) {
           section = 'VIP';
-        } else if (i >= 5 && i <= 16) {
+        } else if (i >= 3 && i <= 10) {
           section = 'R석';
         }
         

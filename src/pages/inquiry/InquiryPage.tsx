@@ -60,7 +60,7 @@ const InquiryPage = () => {
                 className="w-full p-[20px] border border-solid border-[#eee] rounded-[8px] mb-[10px] group hover:bg-black transition duration-600"
               >
                 <Link
-                  to="/"
+                  to={`/mypage/inquiry/${inquiry.id}`}
                   className="inline-flex flex-col gap-[5px] relative w-full "
                 >
                   <div className="flex items-center gap-[16px] w-1/2">
@@ -78,10 +78,22 @@ const InquiryPage = () => {
                     {inquiry.createdAt.split('T')[0]}
                   </div>
                   <div className="flex absolute right-0 gap-[16px]">
-                    <button className="text-[12px] px-2 py-1 bg-black text-white rounded-[6px] cursor-pointer group-hover:bg-white group-hover:text-black transition duration-600">
+                    <button
+                      className="text-[12px] px-2 py-1 bg-black text-white rounded-[6px] cursor-pointer group-hover:bg-white group-hover:text-black transition duration-600"
+                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                    >
                       수정하기
                     </button>
-                    <button className="text-[12px] px-2 py-1 bg-black text-white rounded-[6px] cursor-pointer group-hover:bg-white group-hover:text-black transition duration-600 ">
+                    <button
+                      className="text-[12px] px-2 py-1 bg-black text-white rounded-[6px] cursor-pointer group-hover:bg-white group-hover:text-black transition duration-600 "
+                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                    >
                       삭제하기
                     </button>
                   </div>
@@ -94,7 +106,8 @@ const InquiryPage = () => {
       {data.totalPages > 0 && (
         <Pagination
           currentPage={currentPage}
-          totalPages={data.totalPages}
+          totalPages={data.last ? data.page + 1 : data.totalPages}
+          isLast={data.last}
           onPageChange={handlePageChange}
         />
       )}

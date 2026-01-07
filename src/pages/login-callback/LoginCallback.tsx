@@ -10,7 +10,7 @@ const LoginCallback = () => {
   useEffect(() => {
     const checkLogin = async () => {
       const res = await axios.get(
-        'http://localhost:8080/test/api/auth/status',
+        'https://app.moatickets.dev/test/api/auth/status',
         {
           withCredentials: true,
         },
