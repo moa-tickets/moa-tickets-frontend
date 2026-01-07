@@ -23,4 +23,14 @@ export const mypageMenus = [
       },
     ],
   },
+  {
+    id: 3,
+    parentMenu: '1:1 문의 내역',
+    child: [
+      {
+        childMenu: '문의 내역|문의 신청 보기',
+        childLink: '/mypage/inquiry|/mypage/selectInquiry',
+      },
+    ],
+  },
 ];
