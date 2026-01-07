@@ -1,6 +1,6 @@
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef, useMemo } from 'react';
-import axios from 'axios';
+import { api } from '@/shared/lib/api';
 import { cn } from '@/shared';
 import { detailData } from '@/entities/constant/detailData';
 import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
@@ -54,7 +54,6 @@ const PaymentPage = () => {
   // 위젯 인스턴스 저장
   const widgetsRef = useRef<any>(null);
 
-  const apiBaseUrl = 'http://localhost:8080';
   const tossClientKey = import.meta.env.VITE_TOSS_CLIENT_KEY as string;
 
   const successUrl = useMemo(() => {
@@ -187,18 +186,13 @@ const PaymentPage = () => {
     console.log('holdToken type:', typeof holdTokenValue);
     console.log('holdToken value:', holdTokenValue);
     console.log('original holdToken:', bookingData.holdToken);
-    console.log('Request URL:', `${apiBaseUrl}/api/payments/prepare`);
+    console.log('Request URL:', `/api/payments/prepare`);
 
-    const res = await axios.post(
-      `${apiBaseUrl}/api/payments/prepare`,
-      requestBody,
-      {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    const res = await api.post('/payments/prepare', requestBody, {
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+    });
     console.log('Payment prepare response:', res.data);
     return res.data as PrepareResponse;
   };
@@ -234,13 +228,7 @@ const PaymentPage = () => {
 
   const releaseHold = async (holdToken: string) => {
     try {
-      await axios.post(
-        `${apiBaseUrl}/api/holds/${holdToken}/release`,
-        {},
-        {
-          withCredentials: true,
-        },
-      );
+      await api.post(`/holds/${holdToken}/release`, {});
       console.log('좌석 선점 해제 완료');
     } catch (error) {
       console.error('좌석 선점 해제 실패:', error);

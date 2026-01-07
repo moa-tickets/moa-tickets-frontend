@@ -1,7 +1,7 @@
 // src/pages/payment/PaymentSuccessPage.tsx
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import { api } from '@/shared/lib/api';
 import { cn } from '@/shared';
 
 type ConfirmResponse = {
@@ -14,8 +14,6 @@ type ConfirmResponse = {
 const PaymentSuccessPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string;
 
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -37,11 +35,11 @@ const PaymentSuccessPage = () => {
           return;
         }
 
-        const res = await axios.post(
-          `${apiBaseUrl}/api/payments/confirm`,
-          { paymentKey, orderId, amount },
-          { withCredentials: true },
-        );
+        const res = await api.post('/payments/confirm', {
+          paymentKey,
+          orderId,
+          amount,
+        });
 
         const data = res.data as ConfirmResponse;
         if (!data?.paymentId) {
@@ -62,7 +60,7 @@ const PaymentSuccessPage = () => {
     };
 
     run();
-  }, [apiBaseUrl, paymentKey, orderId, amount, navigate]);
+  }, [paymentKey, orderId, amount, navigate]);
 
   return (
     <div className={cn('max-w-[1280px] mx-auto px-[40px] py-[40px]')}>
