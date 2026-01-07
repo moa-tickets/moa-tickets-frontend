@@ -5,7 +5,7 @@ import axios from 'axios';
 export const useAnswer = () => {
   const readAnswer = useMutation<AnswerData>({
     mutationFn: async () => {
-      const response = await axios.get('http://localhost:8080/api/answer', {
+      const response = await axios.get('https://app.moaticket.dev/api/answer', {
         withCredentials: true,
       });
       console.log(response.data);

@@ -19,7 +19,7 @@ export const useInquiry = () => {
       // UI는 1-based, API는 0-based이므로 변환 필요
       const apiPage = currentPage - 1;
       const response = await axios.get(
-        `http://localhost:8080/api/inquiry?page=${apiPage}`,
+        `https://app.moaticket.dev/api/inquiry?page=${apiPage}`,
         {
           withCredentials: true,
         },
@@ -37,7 +37,7 @@ export const useInquiry = () => {
   const goInquiry = useMutation<void, Error, FormData, { onSuccess?: () => void }>({
     mutationFn: async (formData: FormData) => {
       const response = await axios.post(
-        'http://localhost:8080/api/inquiry',
+        'https://app.moaticket.dev/api/inquiry',
         formData,
         { withCredentials: true },
       );
@@ -48,7 +48,7 @@ export const useInquiry = () => {
   const getInquiryDetail = useMutation<InquiryDetailResponse, Error, number>({
     mutationFn: async (inquiryId: number) => {
       const response = await axios.get(
-        `http://localhost:8080/api/inquiry/${inquiryId}`,
+        `https://app.moaticket.dev/api/inquiry/${inquiryId}`,
         {
           withCredentials: true,
         },
@@ -67,7 +67,7 @@ export const useInquiry = () => {
   >({
     mutationFn: async ({ inquiryId, formData }) => {
       const response = await axios.put(
-        `http://localhost:8080/api/inquiry/${inquiryId}`,
+        `https://app.moaticket.dev/api/inquiry/${inquiryId}`,
         formData,
         { withCredentials: true },
       );
@@ -78,7 +78,7 @@ export const useInquiry = () => {
   const deleteInquiry = useMutation<InquiryDetailResponse, Error, number>({
     mutationFn: async (inquiryId: number) => {
       const response = await axios.delete(
-        `http://localhost:8080/api/inquiry/${inquiryId}`,
+        `https://app.moaticket.dev/api/inquiry/${inquiryId}`,
         {
           withCredentials: true,
         },
