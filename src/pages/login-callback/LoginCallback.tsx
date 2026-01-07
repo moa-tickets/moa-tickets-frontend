@@ -1,30 +1,25 @@
 import { useEffect } from 'react';
-import axios from 'axios';
 import { useLoginData } from '@/entities/stores/useLoginData';
 import { useNavigate } from 'react-router-dom';
+import { checkAuthCookie } from '@/shared/lib/cookieUtils';
+import { useLoginDataFunction } from '@/features/login/useLoginDataFunction';
 
 const LoginCallback = () => {
   const { setIsLoggedIn } = useLoginData();
   const navigate = useNavigate();
+  const { getLoginData } = useLoginDataFunction();
 
   useEffect(() => {
-    const checkLogin = async () => {
-      const res = await axios.get(
-        'https://app.moatickets.dev/test/api/auth/status',
-        {
-          withCredentials: true,
-        },
-      );
-      setIsLoggedIn(res.data.loggedIn);
+    const hasAuthCookie = checkAuthCookie();
 
-      if (res.data.loggedIn) {
-        navigate('/');
-      } else {
-        navigate('/login');
-      }
-    };
-
-    checkLogin();
+    if (hasAuthCookie) {
+      setIsLoggedIn(true);
+      getLoginData.mutate();
+      navigate('/');
+    } else {
+      setIsLoggedIn(false);
+      navigate('/login');
+    }
   }, []);
 
   return <div>진행중입니다...</div>;
