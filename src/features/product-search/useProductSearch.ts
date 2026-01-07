@@ -1,11 +1,23 @@
-import { type ConcertListType } from '@/entities/types/types';
+import {
+  type ConcertListType,
+  type ConcertDetailType,
+  type TicketType,
+} from '@/entities/types/types';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useState } from 'react';
 
 export const useProductSearch = () => {
   const [concertList, setConcertList] = useState<ConcertListType[]>([]);
+  const [concertDetail, setConcertDetail] = useState<ConcertDetailType | null>(
+    null,
+  );
   const [isLoading, setIsLoading] = useState(true);
+  const [isDetailLoading, setIsDetailLoading] = useState(false);
+  const [sessionTickets, setSessionTickets] = useState<TicketType[]>([]);
+  const [isTicketsLoading, setIsTicketsLoading] = useState(false);
+  const [holdToken, setHoldToken] = useState<string | null>(null);
+  const [isHolding, setIsHolding] = useState(false);
 
   const getSearchResults = useMutation<
     ConcertListType[],
@@ -75,10 +87,100 @@ export const useProductSearch = () => {
     },
   });
 
+  const getConcertDetail = useMutation<ConcertDetailType, Error, number>({
+    mutationFn: async (concertId: number) => {
+      const response = await axios.get(
+        `http://localhost:8080/api/product/detail/${concertId}`,
+        {
+          withCredentials: true,
+        },
+      );
+      return response.data;
+    },
+    onMutate: () => {
+      setIsDetailLoading(true);
+    },
+    onSuccess: (data: ConcertDetailType) => {
+      setConcertDetail(data);
+      setIsDetailLoading(false);
+    },
+    onError: () => {
+      setIsDetailLoading(false);
+    },
+  });
+
+  const getSessionTickets = useMutation<TicketType[], Error, number>({
+    mutationFn: async (sessionId: number) => {
+      const response = await axios.get(
+        `http://localhost:8080/api/sessions/${sessionId}/tickets`,
+        {
+          withCredentials: true,
+        },
+      );
+      return response.data;
+    },
+    onMutate: () => {
+      setIsTicketsLoading(true);
+    },
+    onSuccess: (data: TicketType[]) => {
+      setSessionTickets(data);
+      setIsTicketsLoading(false);
+    },
+    onError: () => {
+      setIsTicketsLoading(false);
+    },
+  });
+
+  // 좌석 임시 점유 API
+  const holdTickets = useMutation<
+    string,
+    Error,
+    { sessionId: number; ticketIds: number[] }
+  >({
+    mutationFn: async ({
+      sessionId,
+      ticketIds,
+    }: {
+      sessionId: number;
+      ticketIds: number[];
+    }) => {
+      const response = await axios.post(
+        `http://localhost:8080/api/tickets/hold`,
+        {
+          sessionId,
+          ticketIds,
+        },
+        {
+          withCredentials: true,
+        },
+      );
+      return response.data;
+    },
+    onMutate: () => {
+      setIsHolding(true);
+    },
+    onSuccess: (data: string) => {
+      setHoldToken(data);
+      setIsHolding(false);
+    },
+    onError: () => {
+      setIsHolding(false);
+    },
+  });
+
   return {
     getSearchResults,
     concertList,
     productPostTest,
     isLoading,
+    getConcertDetail,
+    concertDetail,
+    isDetailLoading,
+    getSessionTickets,
+    sessionTickets,
+    isTicketsLoading,
+    holdTickets,
+    holdToken,
+    isHolding,
   };
 };

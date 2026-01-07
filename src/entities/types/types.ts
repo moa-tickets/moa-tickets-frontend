@@ -9,6 +9,7 @@ export type ConcertRankSlide = {
 };
 
 export type ConcertListType = {
+  concertId: number;
   bookingOpen: string;
   concertDuration: string;
   concertEnd: string;
@@ -172,4 +173,28 @@ export type LoginData = {
     seller: boolean;
   }) => void;
   setIsLoggedIn: (status: boolean) => void;
+};
+
+export type ConcertSession = {
+  sessionId: number;
+  date: string;
+  price: number;
+};
+
+export type ConcertDetailType = {
+  age: number;
+  bookingOpen: string;
+  concertDuration: string;
+  concertEnd: string;
+  concertId: number;
+  concertName: string;
+  concertStart: string;
+  sessions: ConcertSession[];
+  thumbnail: string;
+};
+
+export type TicketType = {
+  ticketId: number;
+  seatNum: number;
+  state: string;
 };

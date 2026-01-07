@@ -1,4 +1,5 @@
 import type { ConcertListType } from '@/entities/types/types';
+import { Link } from 'react-router-dom';
 
 interface SearchResultListProps {
   data: ConcertListType[];
@@ -45,7 +46,11 @@ const SearchResultList = ({ data, isLoading }: SearchResultListProps) => {
   return (
     <div className="search__result__list grid grid-cols-3 grid-rows-2 gap-[20px] ml-[40px]">
       {data.map((item: ConcertListType) => (
-        <div key={item.concertName} className="inline-block">
+        <Link
+          key={item.concertName}
+          className="inline-block"
+          to={`/detail/${item.concertId}`}
+        >
           <div className="search__result__item__thumbnail w-full h-[250px] mb-[20px]">
             <img
               src={item.concertThumbnail}
@@ -62,7 +67,7 @@ const SearchResultList = ({ data, isLoading }: SearchResultListProps) => {
           <div className="search__result__item__start text-[14px] font-medium text-[#ccc]">
             {item.concertStart.split('T')[0]}
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );

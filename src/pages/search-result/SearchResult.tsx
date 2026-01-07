@@ -7,7 +7,8 @@ import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const SearchResult = () => {
-  const queryParams = useSearchParams();
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get('q');
 
   const { getSearchResults, productPostTest, concertList, isLoading } = useProductSearch();
   const { goSeller } = useLoginDataFunction();
@@ -15,8 +16,13 @@ const SearchResult = () => {
   useEffect(() => {
     goSeller.mutate();
     productPostTest.mutate();
-    getSearchResults.mutate({ query: queryParams[0].get('q')! });
   }, []);
+
+  useEffect(() => {
+    if (query) {
+      getSearchResults.mutate({ query });
+    }
+  }, [query]);
 
   console.log('concertList', concertList);
   console.log('isLoading', isLoading);

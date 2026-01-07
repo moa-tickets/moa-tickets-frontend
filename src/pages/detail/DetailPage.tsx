@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { detailData } from '@/entities/constant/detailData';
 import { reviewData } from '@/entities/constant/reviewData';
 import { cn } from '@/shared';
@@ -9,17 +9,48 @@ import Icon from '@/shared/lib/Icon';
 import PriceModal from '@/shared/components/price-modal/PriceModal';
 import NaverMapModal from '@/shared/components/naver-map-modal/NaverMapModal';
 import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import { useProductSearch } from '@/features/product-search/useProductSearch';
 
 const DetailPage = () => {
+  console.log('DetailPage rendered');
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('공연정보');
   const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const { getConcertDetail, concertDetail, isDetailLoading } =
+    useProductSearch();
 
   const detailPageData = detailData[Number(id)];
   const reviewPageData = reviewData[Number(id)];
+
+  // API 데이터에서 날짜 포맷팅
+  const formatDateRange = (start: string, end: string) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const formatDate = (d: Date) =>
+      `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+    return `${formatDate(startDate)} ~ ${formatDate(endDate)}`;
+  };
+
+  // API 데이터와 기존 데이터 병합
+  const mergedData = concertDetail
+    ? {
+        ...detailPageData,
+        concertTitle: concertDetail.concertName,
+        thumbnail: concertDetail.thumbnail,
+        age: `${concertDetail.age}세 이상 관람가능`,
+        date: formatDateRange(
+          concertDetail.concertStart,
+          concertDetail.concertEnd,
+        ),
+        price: {
+          ...detailPageData?.price,
+          all: concertDetail.sessions[0]?.price,
+        },
+      }
+    : detailPageData;
 
   // 예매하기 버튼 클릭 핸들러
   const handleReservationClick = () => {
@@ -27,22 +58,30 @@ const DetailPage = () => {
     navigate(`/detail/${id}/booking`);
   };
 
-  if (!detailPageData || detailPageData.isLandingPage) {
-    return null;
-  }
-
   const formatPrice = (price: number) => {
     return price.toLocaleString('ko-KR');
   };
+
+  useEffect(() => {
+    console.log(id);
+    getConcertDetail.mutate(Number(id));
+  }, [id]);
 
   return (
     <div className={cn('detail__page__all bg-white min-h-screen')}>
       <div
         className={cn('detail__page__wrapper max-w-[1280px] mx-auto px-[40px]')}
       >
+        {/* Loading State */}
+        {isDetailLoading && (
+          <div className={cn('flex justify-center items-center py-20')}>
+            <span>로딩 중...</span>
+          </div>
+        )}
+
         {/* Badges */}
         <div className={cn('flex gap-2 mt-[21px] mb-[20px]')}>
-          {detailPageData.badges?.exclusive && (
+          {mergedData?.badges?.exclusive && (
             <div
               className={cn(
                 'px-[6px] py-[4px] rounded-[6px] bg-[#F0F1FF] text-[#4154FF] text-[11px] font-bold flex items-center gap-1',
@@ -55,7 +94,7 @@ const DetailPage = () => {
               />
             </div>
           )}
-          {detailPageData.badges?.safeBooking && (
+          {mergedData?.badges?.safeBooking && (
             <div
               className={cn(
                 'px-[6px] py-[4px] rounded-[6px] bg-[#F4F4F5] text-[#7E7E81] text-[11px] font-bold flex items-center gap-1',
@@ -68,7 +107,7 @@ const DetailPage = () => {
               />
             </div>
           )}
-          {detailPageData.badges?.waiting && (
+          {mergedData?.badges?.waiting && (
             <div
               className={cn(
                 'px-[6px] py-[4px] rounded-[6px] bg-[#F4F4F5] text-[#7E7E81] text-[11px] font-bold flex items-center gap-1',
@@ -89,10 +128,10 @@ const DetailPage = () => {
             'text-[26px] font-bold text-[#222222] leading-[39px] mb-[12px]',
           )}
         >
-          {detailPageData.concertTitle}
+          {mergedData?.concertTitle}
         </h1>
         <div className={cn('genre text-[14px] text-[#666] mb-[28px]')}>
-          {detailPageData.genre}
+          {mergedData?.genre}
         </div>
 
         {/* Main Content Section */}
@@ -106,7 +145,7 @@ const DetailPage = () => {
               )}
             >
               <OptimizedImage
-                src={detailPageData.thumbnail || ''}
+                src={mergedData?.thumbnail || ''}
                 alt="Detail Info"
                 className={cn('w-full h-full')}
                 skeletonClassName="rounded-[15px]"
@@ -121,7 +160,7 @@ const DetailPage = () => {
                   dd={'장소'}
                   dt={
                     <div className={cn('flex items-center gap-1')}>
-                      <span>{detailPageData.loc}</span>
+                      <span>{mergedData?.loc}</span>
                       <Icon
                         ICON="ARROW_RIGHT"
                         className="w-[5px] h-[7px] text-[#666]"
@@ -135,7 +174,7 @@ const DetailPage = () => {
               <div className={cn('mb-[15px]')}>
                 <DetailDescription
                   dd={'공연기간'}
-                  dt={detailPageData.date || ''}
+                  dt={mergedData?.date || ''}
                 />
               </div>
 
@@ -143,7 +182,7 @@ const DetailPage = () => {
               <div className={cn('mb-[15px]')}>
                 <DetailDescription
                   dd={'관람연령'}
-                  dt={detailPageData.age || '8세이상 관람가능'}
+                  dt={mergedData?.age || '8세이상 관람가능'}
                 />
               </div>
 
@@ -172,7 +211,7 @@ const DetailPage = () => {
                         <span
                           className={cn('text-[14px] font-bold text-black')}
                         >
-                          {formatPrice(detailPageData.price?.all || 0)}원
+                          {formatPrice(mergedData?.price?.all || 0)}원
                         </span>
                       </div>
                     </div>
@@ -181,14 +220,13 @@ const DetailPage = () => {
               </div>
 
               {/* Benefits */}
-              {detailPageData.benefits &&
-                detailPageData.benefits.length > 0 && (
+              {mergedData?.benefits && mergedData.benefits.length > 0 && (
                   <div className={cn('mb-[15px]')}>
                     <DetailDescription
                       dd={'혜택'}
                       dt={
                         <div className={cn('flex items-center gap-1')}>
-                          {detailPageData.benefits.map((benefit) => (
+                          {mergedData.benefits.map((benefit) => (
                             <div
                               key={benefit}
                               className={cn(
@@ -209,7 +247,7 @@ const DetailPage = () => {
                 )}
 
               {/* Delivery */}
-              {detailPageData.delivery && (
+              {mergedData?.delivery && (
                 <div className={cn('mb-[15px]')}>
                   <DetailDescription
                     dd={'배송'}
@@ -220,18 +258,18 @@ const DetailPage = () => {
                             'text-[14px] leading-[30px] text-black',
                           )}
                         >
-                          {detailPageData.delivery.date}
+                          {mergedData.delivery.date}
                         </p>
-                        {detailPageData.delivery.details && (
+                        {mergedData.delivery.details && (
                           <p
                             className={cn(
                               'text-[13.6px] leading-[30px] text-[#666] mb-[15px]',
                             )}
                           >
-                            {detailPageData.delivery.details}
+                            {mergedData.delivery.details}
                           </p>
                         )}
-                        {detailPageData.delivery.addressLink && (
+                        {mergedData.delivery.addressLink && (
                           <button
                             type="button"
                             onClick={() => setIsMapModalOpen(true)}
@@ -239,7 +277,7 @@ const DetailPage = () => {
                               'cursor-pointer flex items-center gap-1 text-[14px] text-[#666] w-fit hover:underline',
                             )}
                           >
-                            <span>{detailPageData.delivery.addressLink}</span>
+                            <span>{mergedData.delivery.addressLink}</span>
                             <Icon
                               ICON="ARROW_RIGHT_SMALL"
                               className="w-[4px] h-[7px] text-[#666]"
@@ -257,7 +295,7 @@ const DetailPage = () => {
           {/* Right: Ticket Opening Info and Reservation Button */}
           <div className={cn('w-[340px] flex-shrink-0')}>
             {/* Ticket Opening Info Box */}
-            {detailPageData.ticketOpening && (
+            {mergedData?.ticketOpening && (
               <div
                 className={cn(
                   'border border-[#B6BDC7] rounded-[15px] p-[20px] mb-[20px]',
@@ -272,7 +310,7 @@ const DetailPage = () => {
                 </h3>
 
                 {/* Membership Pre-sale */}
-                {detailPageData.ticketOpening.membership && (
+                {mergedData.ticketOpening.membership && (
                   <div className={cn('mb-[20px]')}>
                     <div className={cn('flex items-start gap-[15px]')}>
                       <div
@@ -280,7 +318,7 @@ const DetailPage = () => {
                           'text-[26px] font-normal text-[#EF3E43] leading-[30px]',
                         )}
                       >
-                        {detailPageData.ticketOpening.membership.daysLeft}
+                        {mergedData.ticketOpening.membership.daysLeft}
                       </div>
                       <div className={cn('flex-1')}>
                         <div
@@ -288,14 +326,14 @@ const DetailPage = () => {
                             'text-[16px] font-normal text-black mb-[5px]',
                           )}
                         >
-                          {detailPageData.ticketOpening.membership.label}
+                          {mergedData.ticketOpening.membership.label}
                         </div>
                         <div
                           className={cn(
                             'text-[14px] font-normal text-[#666] leading-[18px]',
                           )}
                         >
-                          {detailPageData.ticketOpening.membership.date}
+                          {mergedData.ticketOpening.membership.date}
                         </div>
                       </div>
                     </div>
@@ -303,7 +341,7 @@ const DetailPage = () => {
                 )}
 
                 {/* General Ticket Opening */}
-                {detailPageData.ticketOpening.general && (
+                {mergedData.ticketOpening.general && (
                   <div className={cn('mb-[20px]')}>
                     <div className={cn('flex items-start gap-[15px]')}>
                       <div
@@ -311,7 +349,7 @@ const DetailPage = () => {
                           'text-[26px] font-normal text-[#EF3E43] leading-[30px]',
                         )}
                       >
-                        {detailPageData.ticketOpening.general.daysLeft}
+                        {mergedData.ticketOpening.general.daysLeft}
                       </div>
                       <div className={cn('flex-1')}>
                         <div
@@ -319,14 +357,14 @@ const DetailPage = () => {
                             'text-[16px] font-normal text-black mb-[5px]',
                           )}
                         >
-                          {detailPageData.ticketOpening.general.label}
+                          {mergedData.ticketOpening.general.label}
                         </div>
                         <div
                           className={cn(
                             'text-[14px] font-normal text-[#666] leading-[18px]',
                           )}
                         >
-                          {detailPageData.ticketOpening.general.date}
+                          {mergedData.ticketOpening.general.date}
                         </div>
                       </div>
                     </div>
@@ -334,13 +372,13 @@ const DetailPage = () => {
                 )}
 
                 {/* Notice */}
-                {detailPageData.ticketOpening.notice && (
+                {mergedData.ticketOpening.notice && (
                   <p
                     className={cn(
                       'text-[12px] font-normal text-[#666] text-center leading-[14px]',
                     )}
                   >
-                    {detailPageData.ticketOpening.notice}
+                    {mergedData.ticketOpening.notice}
                   </p>
                 )}
               </div>
@@ -360,7 +398,7 @@ const DetailPage = () => {
 
         {/* Ticketcast and Like Count */}
         <div className={cn('flex items-center gap-[88px] mb-[20px]')}>
-          {detailPageData.ticketcast && (
+          {mergedData?.ticketcast && (
             <div className={cn('flex items-center gap-[3px]')}>
               <div
                 className={cn('w-[23px] h-[15px] bg-contain bg-no-repeat')}
@@ -371,9 +409,9 @@ const DetailPage = () => {
               <span className={cn('text-[14px] text-black')}>티켓캐스트</span>
             </div>
           )}
-          {detailPageData.likeCount !== undefined && (
+          {mergedData?.likeCount !== undefined && (
             <div className={cn('text-[14px] font-bold text-black')}>
-              {detailPageData.likeCount}
+              {mergedData.likeCount}
             </div>
           )}
           <div className={cn('flex gap-[9px]')}>
@@ -412,10 +450,10 @@ const DetailPage = () => {
         </div>
 
         {/* Tab Content */}
-        {activeTab === '공연정보' && detailPageData.detailPageDesign && (
+        {activeTab === '공연정보' && mergedData?.detailPageDesign && (
           <div className={cn('w-[70%] mb-[20px]')}>
             <OptimizedImage
-              src={detailPageData.detailPageDesign}
+              src={mergedData.detailPageDesign}
               alt="Detail Page Design"
               className={cn('w-full h-auto')}
             />
@@ -669,20 +707,20 @@ const DetailPage = () => {
       </div>
 
       {/* Price Modal */}
-      {detailPageData.price && (
+      {mergedData?.price && (
         <PriceModal
           isOpen={isPriceModalOpen}
           onClose={() => setIsPriceModalOpen(false)}
-          prices={detailPageData.price}
+          prices={mergedData.price}
         />
       )}
 
       {/* Naver Map Modal */}
-      {detailPageData.delivery && detailPageData.loc && (
+      {mergedData?.delivery && mergedData?.loc && (
         <NaverMapModal
           isOpen={isMapModalOpen}
           onClose={() => setIsMapModalOpen(false)}
-          address={detailPageData.loc}
+          address={mergedData.loc}
         />
       )}
     </div>

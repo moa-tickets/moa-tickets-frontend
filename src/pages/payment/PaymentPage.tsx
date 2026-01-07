@@ -13,14 +13,18 @@ type Seat = {
   number: string;
   status: 'available' | 'selected' | 'occupied';
   section: string;
-  selectedPrice?: string;
+  ticketId?: number;
 };
 
 type BookingData = {
   date: string;
   seats: Seat[];
   totalPrice: number;
+  ticketPrice: number;
+  ticketIds: number[];
+  sessionId: number;
   holdToken: string;
+  concertName?: string;
 };
 
 type PrepareResponse = {
@@ -50,7 +54,7 @@ const PaymentPage = () => {
   // 위젯 인스턴스 저장
   const widgetsRef = useRef<any>(null);
 
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string;
+  const apiBaseUrl = 'http://localhost:8080';
   const tossClientKey = import.meta.env.VITE_TOSS_CLIENT_KEY as string;
 
   const successUrl = useMemo(() => {
@@ -90,7 +94,7 @@ const PaymentPage = () => {
     return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
   };
 
-  if (!detailPageData || detailPageData.isLandingPage || !bookingData) {
+  if (!detailPageData || !bookingData) {
     return (
       <div
         className={cn('max-w-[1280px] mx-auto px-[40px] py-[40px] text-center')}
@@ -130,12 +134,72 @@ const PaymentPage = () => {
     return created;
   };
 
+  const getHoldTokenValue = (token: unknown): string => {
+    console.log('getHoldTokenValue called with:', token, 'type:', typeof token);
+
+    if (typeof token === 'string') {
+      return token;
+    }
+    if (typeof token === 'object' && token !== null) {
+      const tokenObj = token as Record<string, unknown>;
+      console.log('tokenObj keys:', Object.keys(tokenObj));
+
+      // holdToken 객체 안에 holdToken 속성이 있는 경우
+      if ('holdToken' in tokenObj && typeof tokenObj.holdToken === 'string') {
+        console.log('Found holdToken in object:', tokenObj.holdToken);
+        return tokenObj.holdToken;
+      }
+      // token 속성이 있는 경우
+      if ('token' in tokenObj && typeof tokenObj.token === 'string') {
+        console.log('Found token in object:', tokenObj.token);
+        return tokenObj.token;
+      }
+      // value 속성이 있는 경우
+      if ('value' in tokenObj && typeof tokenObj.value === 'string') {
+        console.log('Found value in object:', tokenObj.value);
+        return tokenObj.value;
+      }
+
+      console.error(
+        'holdToken 객체에서 문자열 값을 찾을 수 없습니다:',
+        tokenObj,
+      );
+    }
+    // 객체를 String()으로 변환하면 [object Object]가 되므로 에러
+    console.error('holdToken이 올바른 형태가 아닙니다:', token);
+    throw new Error('holdToken 형식이 올바르지 않습니다.');
+  };
+
   const callPrepare = async (): Promise<PrepareResponse> => {
+    if (!bookingData.holdToken) {
+      throw new Error('holdToken이 없습니다.');
+    }
+
+    // holdToken을 올바르게 문자열로 변환
+    const holdTokenValue = getHoldTokenValue(bookingData.holdToken);
+
+    // { "holdToken": "string" } 형태로 전송
+    const requestBody = {
+      holdToken: holdTokenValue,
+    };
+
+    console.log('Payment prepare request:', JSON.stringify(requestBody));
+    console.log('holdToken type:', typeof holdTokenValue);
+    console.log('holdToken value:', holdTokenValue);
+    console.log('original holdToken:', bookingData.holdToken);
+    console.log('Request URL:', `${apiBaseUrl}/api/payments/prepare`);
+
     const res = await axios.post(
       `${apiBaseUrl}/api/payments/prepare`,
-      { holdToken: bookingData.holdToken },
-      { withCredentials: true },
+      requestBody,
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
     );
+    console.log('Payment prepare response:', res.data);
     return res.data as PrepareResponse;
   };
 
@@ -166,6 +230,37 @@ const PaymentPage = () => {
     });
 
     setWidgetReady(true);
+  };
+
+  const releaseHold = async (holdToken: string) => {
+    try {
+      await axios.post(
+        `${apiBaseUrl}/api/holds/${holdToken}/release`,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+      console.log('좌석 선점 해제 완료');
+    } catch (error) {
+      console.error('좌석 선점 해제 실패:', error);
+      // 실패해도 사용자에게 알리지 않고 진행 (이미 페이지를 떠나므로)
+    }
+  };
+
+  const handleBack = async () => {
+    // 좌석 선점 해제
+    if (bookingData?.holdToken) {
+      try {
+        const holdTokenValue = getHoldTokenValue(bookingData.holdToken);
+        console.log('Releasing hold with token:', holdTokenValue);
+        await releaseHold(holdTokenValue);
+      } catch (error) {
+        console.error('holdToken 변환 실패:', error);
+      }
+    }
+    // 예약 페이지로 이동
+    navigate(`/detail/${id}/booking`);
   };
 
   const handlePayment = async () => {
@@ -314,7 +409,7 @@ const PaymentPage = () => {
             )}
           >
             <h2 className={cn('text-[24px] font-bold mb-[20px]')}>
-              {detailPageData.concertTitle}
+              {bookingData.concertName || detailPageData.concertTitle}
             </h2>
             <div className={cn('text-[14px] text-[#666] mb-[20px]')}>
               {detailPageData.genre}
@@ -366,7 +461,9 @@ const PaymentPage = () => {
 
           {/* Selected Seats */}
           <div
-            className={cn('border border-[#ECEDF2] rounded-[15px] p-[30px]')}
+            className={cn(
+              'border border-[#ECEDF2] rounded-[15px] p-[30px] mb-[30px]',
+            )}
           >
             <h3 className={cn('text-[20px] font-bold mb-[20px]')}>
               선택한 좌석
@@ -380,16 +477,82 @@ const PaymentPage = () => {
                   )}
                 >
                   <span className={cn('text-[#242428]')}>
-                    {seat.section}석 {seat.row}열 {seat.number}번
+                    {seat.row}열 {seat.number}번
                   </span>
                   <span className={cn('text-[#242428] font-medium')}>
-                    {detailPageData.price?.[seat.section]
-                      ? formatPrice(detailPageData.price[seat.section] ?? 0)
-                      : 0}
-                    원
+                    {formatPrice(bookingData.ticketPrice)}원
                   </span>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Booking Summary */}
+          <div
+            className={cn('border border-[#ECEDF2] rounded-[15px] p-[30px]')}
+          >
+            <h3 className={cn('text-[20px] font-bold mb-[20px]')}>
+              예약 정보 요약
+            </h3>
+            <div className={cn('space-y-[12px]')}>
+              <div className={cn('flex items-start gap-[10px] text-[14px]')}>
+                <span className={cn('w-[100px] text-[#62676C] flex-shrink-0')}>
+                  공연명
+                </span>
+                <span className={cn('flex-1 text-[#242428] font-medium')}>
+                  {bookingData.concertName || detailPageData.concertTitle}
+                </span>
+              </div>
+              <div className={cn('flex items-start gap-[10px] text-[14px]')}>
+                <span className={cn('w-[100px] text-[#62676C] flex-shrink-0')}>
+                  관람일시
+                </span>
+                <span className={cn('flex-1 text-[#242428]')}>
+                  {bookingData.date}
+                </span>
+              </div>
+              <div className={cn('flex items-start gap-[10px] text-[14px]')}>
+                <span className={cn('w-[100px] text-[#62676C] flex-shrink-0')}>
+                  좌석 수
+                </span>
+                <span className={cn('flex-1 text-[#242428]')}>
+                  {bookingData.seats.length}매
+                </span>
+              </div>
+              <div className={cn('flex items-start gap-[10px] text-[14px]')}>
+                <span className={cn('w-[100px] text-[#62676C] flex-shrink-0')}>
+                  좌석 정보
+                </span>
+                <span className={cn('flex-1 text-[#242428]')}>
+                  {bookingData.seats
+                    .map((seat) => `${seat.row}열 ${seat.number}번`)
+                    .join(', ')}
+                </span>
+              </div>
+              <div className={cn('flex items-start gap-[10px] text-[14px]')}>
+                <span className={cn('w-[100px] text-[#62676C] flex-shrink-0')}>
+                  티켓 단가
+                </span>
+                <span className={cn('flex-1 text-[#242428]')}>
+                  {formatPrice(bookingData.ticketPrice)}원
+                </span>
+              </div>
+              <div
+                className={cn(
+                  'flex items-start gap-[10px] text-[14px] pt-[12px] border-t border-[#ECEDF2]',
+                )}
+              >
+                <span
+                  className={cn(
+                    'w-[100px] text-[#242428] font-bold flex-shrink-0',
+                  )}
+                >
+                  총 결제금액
+                </span>
+                <span className={cn('flex-1 text-[#FA2828] font-bold')}>
+                  {formatPrice(bookingData.totalPrice)}원
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -516,7 +679,7 @@ const PaymentPage = () => {
 
             {/* Back Button */}
             <button
-              onClick={() => navigate(`/detail/${id}/booking`)}
+              onClick={handleBack}
               className={cn(
                 'w-full h-[54px] mt-[12px] border border-[#CFD0D7] text-[#242428] text-[18px] font-bold rounded-[10px] hover:bg-[#F8F9FA] cursor-pointer',
               )}

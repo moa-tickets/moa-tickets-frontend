@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/shared';
 import { detailData } from '@/entities/constant/detailData';
 import SeatMap from '@/widgets/seat-selection/SeatMap';
+import { useProductSearch } from '@/features/product-search/useProductSearch';
 
 type Seat = {
   id: string;
@@ -10,19 +11,66 @@ type Seat = {
   number: string;
   status: 'available' | 'selected' | 'occupied';
   section: string;
-  selectedPrice?: string; // 선택한 가격 등급
+  ticketId?: number;
 };
 
 const BookingPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const detailPageData = detailData[Number(id)];
+  const {
+    getConcertDetail,
+    concertDetail,
+    getSessionTickets,
+    sessionTickets,
+    isTicketsLoading,
+    holdTickets,
+    isHolding,
+  } = useProductSearch();
+
+  // API에서 콘서트 상세 정보 가져오기
+  useEffect(() => {
+    if (id) {
+      getConcertDetail.mutate(Number(id));
+    }
+  }, [id]);
+
+  // 세션 날짜 포맷팅
+  const formatSessionDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}.${month}.${day} ${hours}:${minutes}`;
+  };
+
+  // 공연기간 포맷팅
+  const formatDateRange = (start: string, end: string) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const formatDate = (d: Date) =>
+      `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+    return `${formatDate(startDate)} ~ ${formatDate(endDate)}`;
+  };
 
   const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedSessionId, setSelectedSessionId] = useState<number | null>(
+    null,
+  );
+  const [selectedSessionPrice, setSelectedSessionPrice] = useState<number>(0);
   const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
   const [timeLeft, setTimeLeft] = useState<number>(600); // 10분(600초) 타이머
   const [isTimerActive, setIsTimerActive] = useState<boolean>(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // 세션 선택 시 좌석 정보 가져오기
+  useEffect(() => {
+    if (selectedSessionId !== null) {
+      getSessionTickets.mutate(selectedSessionId);
+    }
+  }, [selectedSessionId]);
 
   // 타이머 효과
   useEffect(() => {
@@ -55,13 +103,11 @@ const BookingPage = () => {
     };
   }, [isTimerActive, timeLeft]);
 
-  if (!detailPageData || detailPageData.isLandingPage) {
-    return null;
-  }
-
   const formatPrice = (price: number) => {
     return price.toLocaleString('ko-KR');
   };
+
+  const MAX_SEATS = 4; // 최대 선택 가능 좌석 수
 
   const handleSeatSelect = (seat: Seat) => {
     setSelectedSeats((prev) => {
@@ -75,12 +121,16 @@ const BookingPage = () => {
         }
         return newSeats;
       }
+      // 최대 좌석 수 제한
+      if (prev.length >= MAX_SEATS) {
+        alert(`최대 ${MAX_SEATS}개의 좌석만 선택할 수 있습니다.`);
+        return prev;
+      }
       const newSeats = [
         ...prev,
         {
           ...seat,
           status: 'selected' as const,
-          selectedPrice: seat.section, // 기본값으로 섹션 설정
         },
       ];
       // 첫 좌석 선택 시 타이머 시작
@@ -92,34 +142,52 @@ const BookingPage = () => {
     });
   };
 
-  const handlePriceChange = (seatId: string, priceType: string) => {
-    setSelectedSeats((prev) =>
-      prev.map((s) =>
-        s.id === seatId ? { ...s, selectedPrice: priceType } : s,
-      ),
+  const handleBooking = () => {
+    if (selectedSessionId === null) return;
+
+    // 선택된 좌석의 ticketId 목록 추출 (최대 4개)
+    const ticketIds = selectedSeats
+      .map((seat) => seat.ticketId)
+      .filter((ticketId): ticketId is number => ticketId !== undefined)
+      .slice(0, 4);
+
+    if (ticketIds.length === 0) {
+      alert('좌석을 선택해주세요.');
+      return;
+    }
+
+    console.log('Hold request:', { sessionId: selectedSessionId, ticketIds });
+
+    // 좌석 임시 점유 API 호출
+    holdTickets.mutate(
+      { sessionId: selectedSessionId, ticketIds },
+      {
+        onSuccess: (token) => {
+          // 성공 시 결제 페이지로 이동
+          navigate(`/detail/${id}/payment`, {
+            state: {
+              date: selectedDate,
+              seats: selectedSeats,
+              totalPrice: totalPrice,
+              ticketPrice: selectedSessionPrice,
+              ticketIds: ticketIds,
+              sessionId: selectedSessionId,
+              holdToken: token,
+              concertName: concertDetail?.concertName,
+            },
+          });
+        },
+        onError: () => {
+          alert('좌석 점유에 실패했습니다. 다시 시도해주세요.');
+        },
+      },
     );
   };
 
-  const handleBooking = () => {
-    // 결제 확인 페이지로 이동
-    navigate(`/detail/${id}/payment`, {
-      state: {
-        date: selectedDate,
-        seats: selectedSeats,
-        totalPrice: totalPrice,
-        holdToken: "hold_WNDUg4kY90KQdmjYZZqdLA"
-      },
-    });
-  };
-
-  // 선택된 좌석의 총 가격 계산
+  // 선택된 좌석의 총 가격 계산 (세션 가격 기준)
   const calculateTotalPrice = () => {
-    if (!detailPageData.price || selectedSeats.length === 0) return 0;
-    return selectedSeats.reduce((total, seat) => {
-      const priceType = seat.selectedPrice || seat.section;
-      const price = detailPageData.price?.[priceType];
-      return total + (price ?? 0);
-    }, 0);
+    if (selectedSeats.length === 0) return 0;
+    return selectedSeats.length * selectedSessionPrice;
   };
 
   const totalPrice = calculateTotalPrice();
@@ -174,7 +242,12 @@ const BookingPage = () => {
                   공연기간
                 </span>
                 <span className={cn('flex-1 text-[#242428]')}>
-                  {detailPageData.date}
+                  {concertDetail
+                    ? formatDateRange(
+                        concertDetail.concertStart,
+                        concertDetail.concertEnd,
+                      )
+                    : detailPageData.date}
                 </span>
               </div>
               <div className={cn('flex items-start gap-[10px] text-[14px]')}>
@@ -182,7 +255,9 @@ const BookingPage = () => {
                   관람연령
                 </span>
                 <span className={cn('flex-1 text-[#242428]')}>
-                  {detailPageData.age}
+                  {concertDetail
+                    ? `${concertDetail.age}세 이상 관람가능`
+                    : detailPageData.age}
                 </span>
               </div>
             </div>
@@ -198,15 +273,27 @@ const BookingPage = () => {
               <select
                 id="booking-date"
                 value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
+                onChange={(e) => {
+                  const selected = concertDetail?.sessions.find(
+                    (s) => formatSessionDate(s.date) === e.target.value,
+                  );
+                  setSelectedDate(e.target.value);
+                  setSelectedSessionId(selected?.sessionId ?? null);
+                  setSelectedSessionPrice(selected?.price ?? 0);
+                }}
                 className={cn(
                   'w-full px-[12px] py-[10px] border border-[#ECEDF2] rounded-[6px] text-[14px]',
                 )}
               >
                 <option value="">날짜를 선택하세요</option>
-                <option value="2026.01.30 18:00">2026.01.30 18:00</option>
-                <option value="2026.01.31 18:00">2026.01.31 18:00</option>
-                <option value="2026.02.01 18:00">2026.02.01 18:00</option>
+                {concertDetail?.sessions.map((session) => (
+                  <option
+                    key={session.sessionId}
+                    value={formatSessionDate(session.date)}
+                  >
+                    {formatSessionDate(session.date)}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -222,6 +309,8 @@ const BookingPage = () => {
               <SeatMap
                 onSeatSelect={handleSeatSelect}
                 selectedSeats={selectedSeats}
+                tickets={sessionTickets}
+                isLoading={isTicketsLoading}
               />
             </div>
           )}
@@ -277,66 +366,27 @@ const BookingPage = () => {
                   선택한 좌석
                 </h4>
                 <div className={cn('space-y-[12px]')}>
-                  {selectedSeats.map((seat) => {
-                    const priceType = seat.selectedPrice || seat.section;
-                    const selectedPriceValue =
-                      detailPageData.price?.[priceType] ?? 0;
-
-                    return (
-                      <div
-                        key={seat.id}
-                        className={cn(
-                          'p-[12px] bg-[#F8F9FA] rounded-[6px] space-y-[8px]',
-                        )}
-                      >
-                        <div
-                          className={cn(
-                            'flex justify-between items-center text-[14px]',
-                          )}
-                        >
-                          <span className={cn('text-[#242428] font-medium')}>
-                            {seat.row}열 {seat.number}번
-                          </span>
-                          <span className={cn('text-[#242428] font-medium')}>
-                            {formatPrice(selectedPriceValue)}원
-                          </span>
-                        </div>
-                        <div>
-                          <label
-                            htmlFor={`price-${seat.id}`}
-                            className={cn(
-                              'block text-[12px] text-[#62676C] mb-[4px]',
-                            )}
-                          >
-                            가격 등급 선택
-                          </label>
-                          <select
-                            id={`price-${seat.id}`}
-                            value={priceType}
-                            onChange={(e) =>
-                              handlePriceChange(seat.id, e.target.value)
-                            }
-                            className={cn(
-                              'w-full px-[8px] py-[6px] border border-[#ECEDF2] rounded-[4px] text-[12px]',
-                            )}
-                          >
-                            {detailPageData.price &&
-                              Object.keys(detailPageData.price)
-                                .filter((key) => key !== 'all')
-                                .map((pType) => {
-                                  const price =
-                                    detailPageData.price?.[pType] ?? 0;
-                                  return (
-                                    <option key={pType} value={pType}>
-                                      {pType}석 - {formatPrice(price)}원
-                                    </option>
-                                  );
-                                })}
-                          </select>
-                        </div>
-                      </div>
-                    );
-                  })}
+                  {selectedSeats.map((seat) => (
+                  <div
+                    key={seat.id}
+                    className={cn(
+                      'p-[12px] bg-[#F8F9FA] rounded-[6px]',
+                    )}
+                  >
+                    <div
+                      className={cn(
+                        'flex justify-between items-center text-[14px]',
+                      )}
+                    >
+                      <span className={cn('text-[#242428] font-medium')}>
+                        {seat.row}열 {seat.number}번
+                      </span>
+                      <span className={cn('text-[#242428] font-medium')}>
+                        {formatPrice(selectedSessionPrice)}원
+                      </span>
+                    </div>
+                  </div>
+                ))}
                 </div>
               </div>
             )}
@@ -370,12 +420,12 @@ const BookingPage = () => {
             {/* Booking Button */}
             <button
               onClick={handleBooking}
-              disabled={!selectedDate || selectedSeats.length === 0}
+              disabled={!selectedDate || selectedSeats.length === 0 || isHolding}
               className={cn(
                 'w-full h-[54px] bg-[#4154FF] text-white text-[18px] font-bold rounded-[10px] border border-[#4154FF] hover:bg-[#4154FF]/90 cursor-pointer disabled:bg-[#CCCCCC] disabled:cursor-not-allowed',
               )}
             >
-              예약하기
+              {isHolding ? '좌석 점유 중...' : '예약하기'}
             </button>
           </div>
         </div>
