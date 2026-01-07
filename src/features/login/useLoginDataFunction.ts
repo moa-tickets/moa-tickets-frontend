@@ -13,7 +13,7 @@ export const useLoginDataFunction = () => {
 
   const getLoginData = useMutation<UserData>({
     mutationFn: async () => {
-      const res = await axios.get('https://app.moatickets.dev/api/members/me', {
+      const res = await axios.get('http://localhost:8080/api/members/me', {
         withCredentials: true,
       });
       return res.data;
