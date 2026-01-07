@@ -13,7 +13,7 @@ export const useLoginDataFunction = () => {
 
   const goSeller = useMutation({
     mutationFn: async () => {
-      const res = await axios.post(
+      await axios.post(
         'https://app.moaticket.dev/api/members/seller',
         {},
         { withCredentials: true },

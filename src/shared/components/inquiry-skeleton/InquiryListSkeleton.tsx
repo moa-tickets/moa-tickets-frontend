@@ -1,5 +1,3 @@
-import { cn } from '@/shared';
-
 const InquiryItemSkeleton = () => {
   return (
     <li className="w-full p-[20px] border border-solid border-[#eee] rounded-[8px] mb-[10px]">

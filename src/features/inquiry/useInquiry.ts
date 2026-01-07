@@ -34,7 +34,12 @@ export const useInquiry = () => {
     },
   });
 
-  const goInquiry = useMutation<void, Error, FormData, { onSuccess?: () => void }>({
+  const goInquiry = useMutation<
+    void,
+    Error,
+    FormData,
+    { onSuccess?: () => void }
+  >({
     mutationFn: async (formData: FormData) => {
       const response = await axios.post(
         'https://app.moaticket.dev/api/inquiry',
