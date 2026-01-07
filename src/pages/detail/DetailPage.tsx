@@ -63,9 +63,10 @@ const DetailPage = () => {
   };
 
   useEffect(() => {
-    console.log(id);
     getConcertDetail.mutate(Number(id));
   }, [id]);
+
+  console.log(mergedData);
 
   return (
     <div className={cn('detail__page__all bg-white min-h-screen')}>
@@ -221,30 +222,30 @@ const DetailPage = () => {
 
               {/* Benefits */}
               {mergedData?.benefits && mergedData.benefits.length > 0 && (
-                  <div className={cn('mb-[15px]')}>
-                    <DetailDescription
-                      dd={'혜택'}
-                      dt={
-                        <div className={cn('flex items-center gap-1')}>
-                          {mergedData.benefits.map((benefit) => (
-                            <div
-                              key={benefit}
-                              className={cn(
-                                'py-[3px] bg-white text-black text-[16px] font-normal',
-                              )}
-                            >
-                              {benefit}
-                            </div>
-                          ))}
-                          <Icon
-                            ICON="ARROW_RIGHT"
-                            className="w-[5px] h-[7px] text-[#666]"
-                          />
-                        </div>
-                      }
-                    />
-                  </div>
-                )}
+                <div className={cn('mb-[15px]')}>
+                  <DetailDescription
+                    dd={'혜택'}
+                    dt={
+                      <div className={cn('flex items-center gap-1')}>
+                        {mergedData.benefits.map((benefit) => (
+                          <div
+                            key={benefit}
+                            className={cn(
+                              'py-[3px] bg-white text-black text-[16px] font-normal',
+                            )}
+                          >
+                            {benefit}
+                          </div>
+                        ))}
+                        <Icon
+                          ICON="ARROW_RIGHT"
+                          className="w-[5px] h-[7px] text-[#666]"
+                        />
+                      </div>
+                    }
+                  />
+                </div>
+              )}
 
               {/* Delivery */}
               {mergedData?.delivery && (
