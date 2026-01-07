@@ -30,6 +30,7 @@ export const checkAuthCookie = (): boolean => {
     'auth',
     'access_token',
     'refresh_token',
+    'Authorization',
   ];
 
   return authCookieNames.some((name) => hasCookie(name));
