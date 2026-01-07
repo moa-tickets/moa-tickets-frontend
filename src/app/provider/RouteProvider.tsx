@@ -9,6 +9,7 @@ import ReservationPage from '@/pages/reservation/ReservationPage';
 import ReservationDetailPage from '@/pages/reservation-detail/ReservationDetailPage';
 import BookingPage from '@/pages/booking/BookingPage';
 import PaymentPage from '@/pages/payment/PaymentPage';
+import StreamPage from '@/pages/stream/StreamPage.tsx';
 import InquiryPage from '@/pages/inquiry/InquiryPage';
 import InquiryWrite from '@/pages/inquiry-write/InquiryWrite';
 import LoginPage from '@/pages/login/LoginPage';
@@ -18,6 +19,7 @@ import PaymentFailPage from '@/pages/payment/PaymentFailPage';
 import SelectInquiry from '@/pages/select-inquiry/SelectInquiry';
 import InquiryDetail from '@/pages/inquiry-detail/InquiryDetail';
 import ProtectedRoute from '@/shared/components/ProtectedRoute';
+
 
 const createdRouter = createBrowserRouter([
   {
@@ -101,6 +103,10 @@ const createdRouter = createBrowserRouter([
         element: <PaymentFailPage />,
       },
     ],
+  },
+  {
+    path: 'live/:playbackId',
+    element: <StreamPage />,
   },
 ]);
 
