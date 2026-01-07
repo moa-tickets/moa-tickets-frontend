@@ -8,6 +8,15 @@ export type ConcertRankSlide = {
   privateSale?: boolean;
 };
 
+export type ConcertListType = {
+  bookingOpen: string;
+  concertDuration: string;
+  concertEnd: string;
+  concertName: string;
+  concertStart: string;
+  concertThumbnail: string;
+};
+
 export type WillOpenGridItem = {
   imageUrl: string;
   date: string;

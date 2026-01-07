@@ -4,7 +4,7 @@ import Icon from '@/shared/lib/Icon';
 import { useNavigate } from 'react-router-dom';
 import { useLoginData } from '@/entities/stores/useLoginData';
 import { useLoginDataFunction } from '@/features/login/useLoginDataFunction';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ConfirmModal from '../confirm-modal/ConfirmModal';
 import { useModalStore } from '@/entities/stores/useModalStore';
 import { checkAuthCookie, clearAuthCookies } from '@/shared/lib/cookieUtils';
@@ -13,6 +13,7 @@ const BottomHeader = () => {
   const { isLoggedIn, userData, setIsLoggedIn, setUserData } = useLoginData();
   const navigate = useNavigate();
   const { isOpen, title, message, openModal, closeModal } = useModalStore();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const goLogin = () => {
     navigate('/login');
@@ -22,19 +23,32 @@ const BottomHeader = () => {
     closeModal();
   };
 
-  const handleLogout = () => {
-    // 쿠키 제거
-    clearAuthCookies();
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
 
-    // 상태 업데이트
-    setIsLoggedIn(false);
-    setUserData({ email: '', nickname: '', seller: false });
+    setIsLoggingOut(true);
 
-    // localStorage에서 로그인 정보 제거
-    localStorage.removeItem('login-storage');
+    try {
+      // 3초 로딩
+      await new Promise((resolve) => setTimeout(resolve, 3000));
 
-    // 메인 페이지로 리다이렉트
-    navigate('/');
+      // 쿠키 제거
+      clearAuthCookies();
+
+      // 상태 업데이트
+      setIsLoggedIn(false);
+      setUserData({ email: '', nickname: '', seller: false });
+
+      // localStorage에서 로그인 정보 제거
+      localStorage.removeItem('login-storage');
+
+      // 메인 페이지로 리다이렉트
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   const goInquiry = () => {
@@ -93,8 +107,9 @@ const BottomHeader = () => {
               iconComponent={
                 <Icon ICON="PROFILE" className={'w-5 h-5 fill-none'} />
               }
-              text={'로그아웃'}
+              text={isLoggingOut ? '로그아웃 중...' : '로그아웃'}
               onNavigate={handleLogout}
+              disabled={isLoggingOut}
             />
           ) : (
             <IconButton

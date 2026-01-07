@@ -1,6 +1,6 @@
 import { cn } from '@/shared';
 import Icon from '@/shared/lib/Icon';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const InquiryInput = ({
   label,
@@ -11,6 +11,7 @@ const InquiryInput = ({
   value,
   onChangeInput,
   onChangeTextArea,
+  onChangeSelector,
   touch,
   touched,
   isError,
@@ -19,20 +20,37 @@ const InquiryInput = ({
   label: string;
   className: string;
   htmlsFor?: string;
-  type: 'input' | 'selector' | 'textarea';
-  placeholder: string;
+  type: 'input' | 'selector' | 'textarea' | 'file';
+  placeholder?: string;
   value?: string;
   onChangeInput?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeTextArea?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChangeSelector?: (changedValue: string) => void;
   touch?: () => void;
   touched?: boolean;
   isError?: boolean;
   errorMessage?: string;
 }) => {
   const faqTypes = ['예약문의', '결제문의', '취소/환불문의', '기타문의'];
-  const [isNotPlaceholder, setIsNotPlaceholder] = useState(false);
+  const [isNotPlaceholder, setIsNotPlaceholder] = useState(!!value);
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
-  const [selectedType, setSelectedType] = useState(placeholder);
+  const [selectedType, setSelectedType] = useState(value || placeholder);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const prevValueRef = useRef<string | undefined>(value);
+
+  // value가 변경되면 selectedType 업데이트 (실제로 값이 변경되었을 때만)
+  useEffect(() => {
+    if (type === 'selector' && prevValueRef.current !== value) {
+      if (value) {
+        setSelectedType(value);
+        setIsNotPlaceholder(true);
+      } else {
+        setSelectedType(placeholder || '');
+        setIsNotPlaceholder(false);
+      }
+      prevValueRef.current = value;
+    }
+  }, [value, placeholder, type]);
 
   return (
     <div className={cn('inquiry__input flex flex-col mb-[20px]', className)}>
@@ -108,6 +126,7 @@ const InquiryInput = ({
                     onClick={() => {
                       setIsSelectorOpen(false);
                       setSelectedType(type);
+                      onChangeSelector?.(type);
                     }}
                   >
                     {type}
@@ -116,6 +135,28 @@ const InquiryInput = ({
               ))}
             </ul>
           )}
+        </div>
+      )}
+      {type === 'file' && (
+        <div className={cn('s3__connect mb-[50px]')}>
+          <input
+            type="file"
+            className="file__input hidden"
+            ref={fileInputRef}
+          />
+          <div
+            className={cn(
+              'se__connect__button__wrapper w-full h-[200px] border border-solid border-[#ccc] rounded-[8px] p-[20px]',
+            )}
+          >
+            <button
+              type="button"
+              className="text-[14px] bg-[#4154ff] rounded-[8px] px-[10px] py-[5px] text-white cursor-pointer"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              첨부하기
+            </button>
+          </div>
         </div>
       )}
     </div>

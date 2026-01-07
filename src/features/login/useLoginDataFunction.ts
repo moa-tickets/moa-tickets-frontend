@@ -11,6 +11,16 @@ type UserData = {
 export const useLoginDataFunction = () => {
   const { setUserData, setIsLoggedIn } = useLoginData();
 
+  const goSeller = useMutation({
+    mutationFn: async () => {
+      const res = await axios.post(
+        'http://localhost:8080/api/members/seller',
+        {},
+        { withCredentials: true },
+      );
+    },
+  });
+
   const getLoginData = useMutation<UserData>({
     mutationFn: async () => {
       const res = await axios.get('http://localhost:8080/api/members/me', {
@@ -29,5 +39,5 @@ export const useLoginDataFunction = () => {
     },
   });
 
-  return { getLoginData };
+  return { getLoginData, goSeller };
 };

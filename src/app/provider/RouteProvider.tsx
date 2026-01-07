@@ -11,6 +11,7 @@ import BookingPage from '@/pages/booking/BookingPage';
 import PaymentPage from '@/pages/payment/PaymentPage';
 import InquiryPage from '@/pages/inquiry/InquiryPage';
 import InquiryWrite from '@/pages/inquiry-write/InquiryWrite';
+import InquiryEdit from '@/pages/inquiry-edit/InquiryEdit';
 import LoginPage from '@/pages/login/LoginPage';
 import LoginCallback from '@/pages/login-callback/LoginCallback';
 import PaymentSuccessPage from '@/pages/payment/PaymentSuccessPage';
@@ -87,6 +88,10 @@ const createdRouter = createBrowserRouter([
               {
                 path: 'inquiry/:inquiryId',
                 element: <InquiryDetail />,
+              },
+              {
+                path: 'inquiry/:inquiryId/edit',
+                element: <InquiryEdit />,
               },
             ],
           },

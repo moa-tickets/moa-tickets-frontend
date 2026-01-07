@@ -5,15 +5,21 @@ const IconButton = ({
   iconComponent,
   text,
   onNavigate,
+  disabled = false,
 }: {
   iconComponent: React.ReactNode;
   text: string;
   onNavigate?: () => void;
+  disabled?: boolean;
 }) => {
   return (
     <button
-      className={cn('flex items-center gap-2 cursor-pointer group')}
+      className={cn(
+        'flex items-center gap-2 cursor-pointer group',
+        disabled && 'opacity-50 cursor-not-allowed',
+      )}
       onClick={onNavigate}
+      disabled={disabled}
     >
       {iconComponent}
       <span className="text-[14px] group-hover:underline">{text}</span>

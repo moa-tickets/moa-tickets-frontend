@@ -2,14 +2,22 @@ import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/shared';
 import Icon from '@/shared/lib/Icon';
 import SearchRankingBar from './SearchRankingBar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const SearchBar = () => {
   const autoCompleteBox = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isAutoCompleteOpen, setIsAutoCompleteOpen] = useState<boolean>(false);
-  const [searchWords, setSearchWords] = useState<string>('');
+  const [searchParams] = useSearchParams();
+  const [searchWords, setSearchWords] = useState<string>(
+    searchParams.get('q') || '',
+  );
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const queryValue = searchParams.get('q') || '';
+    setSearchWords(queryValue);
+  }, [searchParams]);
 
   useEffect(() => {
     const outsideClickListener = (event: MouseEvent | TouchEvent) => {

@@ -24,6 +24,8 @@ export const useInquiry = () => {
           withCredentials: true,
         },
       );
+      // 의도적인 3초 지연 (스켈레톤 효과 테스트용)
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       return response.data;
     },
     onSuccess: (data: InquiryData) => {
@@ -32,7 +34,7 @@ export const useInquiry = () => {
     },
   });
 
-  const goInquiry = useMutation<void, Error, FormData>({
+  const goInquiry = useMutation<void, Error, FormData, { onSuccess?: () => void }>({
     mutationFn: async (formData: FormData) => {
       const response = await axios.post(
         'http://localhost:8080/api/inquiry',
@@ -40,9 +42,6 @@ export const useInquiry = () => {
         { withCredentials: true },
       );
       return response.data;
-    },
-    onSuccess: () => {
-      navigate('/mypage/inquiry');
     },
   });
 
@@ -61,11 +60,46 @@ export const useInquiry = () => {
     },
   });
 
+  const updateInquiry = useMutation<
+    void,
+    Error,
+    { inquiryId: number; formData: FormData }
+  >({
+    mutationFn: async ({ inquiryId, formData }) => {
+      const response = await axios.put(
+        `http://localhost:8080/api/inquiry/${inquiryId}`,
+        formData,
+        { withCredentials: true },
+      );
+      return response.data;
+    },
+  });
+
+  const deleteInquiry = useMutation<InquiryDetailResponse, Error, number>({
+    mutationFn: async (inquiryId: number) => {
+      const response = await axios.delete(
+        `http://localhost:8080/api/inquiry/${inquiryId}`,
+        {
+          withCredentials: true,
+        },
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      navigate('/mypage/inquiry');
+      readInquiry.mutate(1);
+    },
+  });
+
   return {
     goInquiry,
     goInquiryLoading: goInquiry.isPending,
     readInquiry,
     getInquiryDetail,
     inquiryDetail,
+    updateInquiry,
+    updateInquiryLoading: updateInquiry.isPending,
+    deleteInquiry,
+    deleteInquiryLoading: deleteInquiry.isPending,
   };
 };
