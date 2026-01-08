@@ -2,8 +2,6 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { api } from '@/shared/lib/api';
 import { cn } from '@/shared';
-import { detailData } from '@/entities/constant/detailData';
-import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
 import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
 
 import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
@@ -40,7 +38,6 @@ const PaymentPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const bookingData = location.state as BookingData | null;
-  const detailPageData = detailData[Number(id)];
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number>(() => {
@@ -112,7 +109,7 @@ const PaymentPage = () => {
     return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
   };
 
-  if (!detailPageData || !bookingData) {
+  if (!bookingData) {
     return (
       <div
         className={cn('max-w-[1280px] mx-auto px-[40px] py-[40px] text-center')}
@@ -436,30 +433,11 @@ const PaymentPage = () => {
             )}
           >
             <h2 className={cn('text-[24px] font-bold mb-[20px]')}>
-              {bookingData.concertName || detailPageData.concertTitle}
+              {bookingData.concertName}
             </h2>
-            <div className={cn('text-[14px] text-[#666] mb-[20px]')}>
-              {detailPageData.genre}
-            </div>
 
             {/* Concert Details */}
             <div className={cn('space-y-[12px] mb-[20px]')}>
-              <div className={cn('flex items-start gap-[10px] text-[14px]')}>
-                <span className={cn('w-[80px] text-[#62676C] flex-shrink-0')}>
-                  장소
-                </span>
-                <span className={cn('flex-1 text-[#242428]')}>
-                  {detailPageData.loc}
-                </span>
-              </div>
-              <div className={cn('flex items-start gap-[10px] text-[14px]')}>
-                <span className={cn('w-[80px] text-[#62676C] flex-shrink-0')}>
-                  공연기간
-                </span>
-                <span className={cn('flex-1 text-[#242428]')}>
-                  {detailPageData.date}
-                </span>
-              </div>
               <div className={cn('flex items-start gap-[10px] text-[14px]')}>
                 <span className={cn('w-[80px] text-[#62676C] flex-shrink-0')}>
                   관람일시
@@ -469,21 +447,6 @@ const PaymentPage = () => {
                 </span>
               </div>
             </div>
-
-            {/* Thumbnail */}
-            {detailPageData.thumbnail && (
-              <div
-                className={cn(
-                  'w-full h-[300px] border border-[#DADEE3] rounded-[15px] overflow-hidden',
-                )}
-              >
-                <OptimizedImage
-                  src={detailPageData.thumbnail}
-                  alt={detailPageData.concertTitle || 'Concert thumbnail'}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
           </div>
 
           {/* Selected Seats */}
@@ -527,7 +490,7 @@ const PaymentPage = () => {
                   공연명
                 </span>
                 <span className={cn('flex-1 text-[#242428] font-medium')}>
-                  {bookingData.concertName || detailPageData.concertTitle}
+                  {bookingData.concertName}
                 </span>
               </div>
               <div className={cn('flex items-start gap-[10px] text-[14px]')}>
