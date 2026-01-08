@@ -29,7 +29,7 @@ const SearchResultList = ({ data, isLoading }: SearchResultListProps) => {
     );
   }
 
-  if (data.length === 0) {
+  if (!Array.isArray(data) || data.length === 0) {
     return (
       <div className="search__result__empty flex flex-col items-center justify-center w-full py-[80px] ml-[40px]">
         <div className="text-[60px] mb-[20px]">🔍</div>
