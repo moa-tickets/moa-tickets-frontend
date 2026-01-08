@@ -1,17 +1,19 @@
 import { useEffect } from 'react';
 import { cn } from '@/shared';
 import Icon from '@/shared/lib/Icon';
+import type { ConcertSession } from '@/entities/types/types';
 
 interface PriceModalProps {
   isOpen: boolean;
   onClose: () => void;
-  prices: {
+  sessions?: ConcertSession[];
+  prices?: {
     [key: string]: number | undefined;
     all?: number;
   };
 }
 
-const PriceModal = ({ isOpen, onClose, prices }: PriceModalProps) => {
+const PriceModal = ({ isOpen, onClose, sessions, prices }: PriceModalProps) => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -30,9 +32,27 @@ const PriceModal = ({ isOpen, onClose, prices }: PriceModalProps) => {
     return price.toLocaleString('ko-KR') + '원';
   };
 
-  const priceEntries = Object.entries(prices).filter(
-    ([key, value]) => key !== 'all' && value !== undefined,
-  );
+  // sessions 데이터가 있으면 그것을 사용, 없으면 prices 객체 사용
+  const getUniqueSessionPrices = () => {
+    if (!sessions || sessions.length === 0) return null;
+
+    const uniquePrices = Array.from(
+      new Set(sessions.map((session) => session.price)),
+    ).sort((a, b) => a - b);
+
+    return uniquePrices;
+  };
+
+  const uniqueSessionPrices = getUniqueSessionPrices();
+
+  const priceEntries =
+    sessions && sessions.length > 0
+      ? sessions.map((session) => [`${session.date}`, session.price])
+      : prices
+        ? Object.entries(prices).filter(
+            ([key, value]) => key !== 'all' && value !== undefined,
+          )
+        : [];
 
   return (
     <div
@@ -74,20 +94,33 @@ const PriceModal = ({ isOpen, onClose, prices }: PriceModalProps) => {
 
         {/* Price List */}
         <div className={cn('flex flex-col gap-[16px] mb-[30px]')}>
-          {priceEntries.map(([seatType, price]) => (
-            <div
-              key={seatType}
-              className={cn(
-                'flex items-center justify-between py-[12px] border-b border-[#DFDFE0]',
-              )}
-            >
-              <span className={cn('text-[16px] text-black')}>{seatType}</span>
-              <span className={cn('text-[16px] font-bold text-black')}>
-                {formatPrice(price)}
-              </span>
-            </div>
-          ))}
-          {prices.all && (
+          {uniqueSessionPrices && uniqueSessionPrices.length > 0
+            ? uniqueSessionPrices.map((price) => (
+                <div
+                  key={price}
+                  className={cn(
+                    'flex items-center justify-between py-[12px] border-b border-[#DFDFE0]',
+                  )}
+                >
+                  <span className={cn('text-[16px] font-bold text-black')}>
+                    {formatPrice(price)}
+                  </span>
+                </div>
+              ))
+            : priceEntries.map(([label, price]) => (
+                <div
+                  key={label}
+                  className={cn(
+                    'flex items-center justify-between py-[12px] border-b border-[#DFDFE0]',
+                  )}
+                >
+                  <span className={cn('text-[16px] text-black')}>{label}</span>
+                  <span className={cn('text-[16px] font-bold text-black')}>
+                    {formatPrice(price as number)}
+                  </span>
+                </div>
+              ))}
+          {prices?.all && (
             <div
               className={cn(
                 'flex items-center justify-between py-[12px] border-t-2 border-[#DFDFE0] pt-[16px]',

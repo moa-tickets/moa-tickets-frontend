@@ -26,7 +26,10 @@ export const useProductSearch = () => {
   >({
     mutationFn: async ({ query }: { query: string }) => {
       const params = { searchValue: query };
-      console.log('Request URL:', api.defaults.baseURL + '/product/concertList');
+      console.log(
+        'Request URL:',
+        api.defaults.baseURL + '/product/concertList',
+      );
       console.log('Request params:', params);
       const response = await api.get('/product/concertList', { params });
       console.log('Response data:', response.data);
@@ -73,6 +76,7 @@ export const useProductSearch = () => {
   const getConcertDetail = useMutation<ConcertDetailType, Error, number>({
     mutationFn: async (concertId: number) => {
       const response = await api.get(`/product/detail/${concertId}`);
+      console.log('Concert Detail Response:', response.data);
       return response.data;
     },
     onMutate: () => {

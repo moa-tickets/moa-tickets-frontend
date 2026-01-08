@@ -4,7 +4,7 @@ import SelectPeriod from '@/widgets/select-period/SelectPeriod';
 import ReservationTable from '@/widgets/reservation-table/ReservationTable';
 import Pagination from '@/shared/components/pagination/Pagination';
 import TicketCancelNotice from '@/widgets/ticket-cancel-notice/TicketCancelNotice';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   useBookings,
   type RangeType,
@@ -45,13 +45,12 @@ const ReservationPage = () => {
   };
 
   // API 호출
-  const { data, isLoading, refetch } = useBookings(buildFilterParams());
+  const { data, isLoading } = useBookings(buildFilterParams());
 
-  // 조회 버튼 핸들러
-  const handleSearch = () => {
-    setCurrentPage(0); // 페이지 초기화
-    refetch();
-  };
+  // 필터 변경 시 페이지 초기화
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [selectedRange, selectedBasis, selectedYear, selectedMonth]);
 
   // 페이지 변경 핸들러
   const handlePageChange = (page: number) => {
@@ -88,7 +87,6 @@ const ReservationPage = () => {
         onYearChange={setSelectedYear}
         selectedMonth={selectedMonth}
         onMonthChange={setSelectedMonth}
-        onSearch={handleSearch}
       />
       <div
         className={cn(
@@ -100,11 +98,13 @@ const ReservationPage = () => {
         이용해주세요.
       </div>
       <ReservationTable data={bookings} isLoading={isLoading} />
-      <Pagination
-        currentPage={currentPage + 1}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage + 1}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
       <TicketCancelNotice />
     </div>
   );

@@ -16,6 +16,7 @@ export type ConcertListType = {
   concertName: string;
   concertStart: string;
   concertThumbnail: string;
+  hallName?: string;
 };
 
 export type WillOpenGridItem = {
@@ -189,8 +190,10 @@ export type ConcertDetailType = {
   concertId: number;
   concertName: string;
   concertStart: string;
+  concertThumbnail?: string;
+  hallName?: string;
   sessions: ConcertSession[];
-  thumbnail: string;
+  thumbnail?: string;
 };
 
 export type TicketType = {

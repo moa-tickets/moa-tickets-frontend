@@ -18,7 +18,7 @@ export const useInquiry = () => {
     mutationFn: async (currentPage: number) => {
       // UI는 1-based, API는 0-based이므로 변환 필요
       const apiPage = currentPage - 1;
-      const response = await api.get(`/inquiry?page=${apiPage}`);
+      const response = await api.get(`/faq/questions?page=${apiPage}`);
       // 의도적인 3초 지연 (스켈레톤 효과 테스트용)
       await new Promise((resolve) => setTimeout(resolve, 3000));
       return response.data;
@@ -36,14 +36,14 @@ export const useInquiry = () => {
     { onSuccess?: () => void }
   >({
     mutationFn: async (formData: FormData) => {
-      const response = await api.post('/inquiry', formData);
+      const response = await api.post('/faq/questions', formData);
       return response.data;
     },
   });
 
   const getInquiryDetail = useMutation<InquiryDetailResponse, Error, number>({
     mutationFn: async (inquiryId: number) => {
-      const response = await api.get(`/inquiry/${inquiryId}`);
+      const response = await api.get(`faq/questions/${inquiryId}`);
       return response.data;
     },
     onSuccess: (data: InquiryDetailResponse) => {
@@ -64,7 +64,7 @@ export const useInquiry = () => {
 
   const deleteInquiry = useMutation<InquiryDetailResponse, Error, number>({
     mutationFn: async (inquiryId: number) => {
-      const response = await api.delete(`/inquiry/${inquiryId}`);
+      const response = await api.delete(`/faq/questions/${inquiryId}`);
       return response.data;
     },
     onSuccess: () => {

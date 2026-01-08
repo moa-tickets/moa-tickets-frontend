@@ -12,8 +12,6 @@ type SelectPeriodProps = {
   onYearChange: (year: number) => void;
   selectedMonth: number | null;
   onMonthChange: (month: number | null) => void;
-  // 조회 버튼
-  onSearch: () => void;
 };
 
 const rangeOptions: { label: string; value: RangeType }[] = [
@@ -37,7 +35,6 @@ const SelectPeriod = ({
   onYearChange,
   selectedMonth,
   onMonthChange,
-  onSearch,
 }: SelectPeriodProps) => {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
@@ -55,7 +52,7 @@ const SelectPeriod = ({
   };
 
   return (
-    <div className={cn('select__period flex flex-col mt-[30px] gap-[30px]')}>
+    <div className={cn('select__period flex flex-col mt-[30px] gap-[20px]')}>
       {/* 기간별 조회 */}
       <div className={cn('flex items-center gap-[20px]')}>
         <span className={cn('text-[14px] w-[80px]')}>기간별 조회</span>
@@ -140,15 +137,6 @@ const SelectPeriod = ({
           </select>
         </div>
       </div>
-
-      <button
-        onClick={onSearch}
-        className={cn(
-          'w-[100px] py-[4px] text-center rounded-[5px] border border-solid border-black hover:bg-black hover:text-white cursor-pointer transition-all duration-600',
-        )}
-      >
-        조회
-      </button>
     </div>
   );
 };

@@ -62,7 +62,7 @@ const SearchResultList = ({ data, isLoading }: SearchResultListProps) => {
             {item.concertName}
           </div>
           <div className="search__result__item__place text-[14px] font-medium mb-[10px]">
-            {item.concertDuration.split('T')[0]}
+            {item.hallName || '장소 미정'}
           </div>
           <div className="search__result__item__start text-[14px] font-medium text-[#ccc]">
             {item.concertStart.split('T')[0]}

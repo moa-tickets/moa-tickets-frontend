@@ -1,0 +1,45 @@
+
+<!-- saved from url=(0027)https://pixel.itemscout.io/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!-- Google tag (gtag.js) -->
+		<script async="" src="./js"></script>
+		<script>
+  			window.dataLayer = window.dataLayer || [];
+  			function gtag(){dataLayer.push(arguments);}
+  			// gtag('js', new Date());
+			// gtag('config', 'G-8BV38XT3V0', { 'send_page_view': false, 'cookie_flags': 'samesite=none;secure' });
+			var isGtagInit = false;	
+			window.addEventListener('message', receiveMessage);
+			function receiveMessage(e) {
+				if(e.data.source === 'itemscout-extension') {
+					if(e.data.message === 'setUserId') {
+						if(!isGtagInit) {
+						// console.log(e.data.data);
+							isGtagInit = true;
+							gtag('js', new Date());
+							gtag('config', 'G-8BV38XT3V0', { 'send_page_view': false, 'cookie_flags': 'samesite=none;secure', 'user_id': e.data.data });
+						}
+					} else {
+						if(!isGtagInit) {
+							isGtagInit = true;
+							gtag('js', new Date());
+							gtag('config', 'G-8BV38XT3V0', { 'send_page_view': false, 'cookie_flags': 'samesite=none;secure' });
+						}
+						gtag('event', e.data.message, e.data.data);
+					}
+					// console.log('chrome extension ', e.data);
+				}
+			}
+		</script>
+
+		<style>
+			body {
+				background-color: transparent;
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+	
+
+</body></html>

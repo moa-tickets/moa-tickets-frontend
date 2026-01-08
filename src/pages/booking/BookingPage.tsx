@@ -319,31 +319,72 @@ const BookingPage = () => {
               >
                 관람일시
               </label>
-              <select
-                id="booking-date"
-                value={selectedDate}
-                onChange={(e) => {
-                  const selected = concertDetail?.sessions.find(
-                    (s) => formatSessionDate(s.date) === e.target.value,
-                  );
-                  setSelectedDate(e.target.value);
-                  setSelectedSessionId(selected?.sessionId ?? null);
-                  setSelectedSessionPrice(selected?.price ?? 0);
-                }}
-                className={cn(
-                  'w-full px-[12px] py-[10px] border border-[#ECEDF2] rounded-[6px] text-[14px]',
-                )}
-              >
-                <option value="">날짜를 선택하세요</option>
-                {concertDetail?.sessions.map((session) => (
-                  <option
-                    key={session.sessionId}
-                    value={formatSessionDate(session.date)}
+              <div className={cn('relative w-full')}>
+                <button
+                  className={cn(
+                    'w-full px-[12px] py-[10px] border border-[#ECEDF2] rounded-[6px] text-[14px]',
+                    'text-left flex items-center justify-between bg-white hover:border-[#BDBEC7]',
+                  )}
+                  onClick={() => {
+                    const dropdown = document.getElementById(
+                      'booking-date-dropdown',
+                    );
+                    if (dropdown) {
+                      dropdown.classList.toggle('hidden');
+                    }
+                  }}
+                >
+                  <span>{selectedDate || '날짜를 선택하세요'}</span>
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    {formatSessionDate(session.date)}
-                  </option>
-                ))}
-              </select>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                    />
+                  </svg>
+                </button>
+                <div
+                  id="booking-date-dropdown"
+                  className={cn(
+                    'hidden absolute top-full left-0 right-0 mt-[2px]',
+                    'border border-[#ECEDF2] rounded-[6px] bg-white shadow-lg z-10',
+                  )}
+                >
+                  <div className={cn('max-h-[300px] overflow-y-auto')}>
+                    {concertDetail?.sessions.map((session) => (
+                      <button
+                        key={session.sessionId}
+                        onClick={() => {
+                          const dateStr = formatSessionDate(session.date);
+                          setSelectedDate(dateStr);
+                          setSelectedSessionId(session.sessionId);
+                          setSelectedSessionPrice(session.price);
+                          const dropdown = document.getElementById(
+                            'booking-date-dropdown',
+                          );
+                          if (dropdown) {
+                            dropdown.classList.add('hidden');
+                          }
+                        }}
+                        className={cn(
+                          'w-full text-left px-[12px] py-[10px] text-[14px] hover:bg-[#F5F5F5]',
+                          'border-b border-[#ECEDF2] last:border-b-0',
+                          selectedDate === formatSessionDate(session.date) &&
+                            'bg-[#F0F1FF] font-bold',
+                        )}
+                      >
+                        {formatSessionDate(session.date)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 

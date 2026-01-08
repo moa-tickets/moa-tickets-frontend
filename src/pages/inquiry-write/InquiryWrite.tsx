@@ -185,19 +185,8 @@ const InquiryWrite = ({
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append(
-      'dto',
-      new Blob(
-        [
-          JSON.stringify({
-            title: state.title.value,
-            content: state.content.value,
-            option: state.type.value,
-          }),
-        ],
-        { type: 'application/json' },
-      ),
-    );
+    formData.append('title', state.title.value);
+    formData.append('content', state.content.value);
 
     if (mode === 'edit' && inquiryId) {
       updateInquiry.mutate(
@@ -223,72 +212,74 @@ const InquiryWrite = ({
         isOpen={isModalOpen}
         onClose={handleModalClose}
         title="완료되었습니다"
-        message={mode === 'edit' ? '문의가 수정되었습니다.' : '문의가 등록되었습니다.'}
+        message={
+          mode === 'edit' ? '문의가 수정되었습니다.' : '문의가 등록되었습니다.'
+        }
         confirmText="확인"
       />
       <div className={cn('inquiry__write__page')}>
         <div className={cn('max-w-[700px] mx-auto')}>
-        <form onSubmit={buttonSubmit}>
-          <h1 className={cn('mt-[26px] mb-[36px] text-[22px] font-bold')}>
-            {mode === 'edit' ? '문의 수정하기' : '1:1 문의하기'}
-          </h1>
-          <InquiryInput
-            label="문의 제목"
-            type="input"
-            placeholder="제목을 입력해주세요"
-            className="inquiry__input__title"
-            htmlsFor={'inquiry-title'}
-            value={state.title.value}
-            onChangeInput={(e: React.ChangeEvent<HTMLInputElement>) =>
-              dispatch({ type: 'TITLE_CHANGE', payload: e.target.value })
-            }
-            touch={() => dispatch({ type: 'TITLE_TOUCHED' })}
-            touched={state.title.isTouched}
-            isError={state.title.isError}
-            errorMessage={state.title.errorMessage}
-          />
-          <InquiryInput
-            label="문의 내용"
-            type="textarea"
-            placeholder="내용을 입력해주세요"
-            className="inquiry__input__content"
-            htmlsFor={'inquiry-content'}
-            value={state.content.value}
-            onChangeTextArea={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-              dispatch({ type: 'CONTENT_CHANGE', payload: e.target.value })
-            }
-            touch={() => dispatch({ type: 'CONTENT_TOUCHED' })}
-            touched={state.content.isTouched}
-            isError={state.content.isError}
-            errorMessage={state.content.errorMessage}
-          />
-          <InquiryInput
-            label="문의 유형"
-            type="selector"
-            placeholder="문의 유형을 선택해주세요"
-            className="inquiry__input__type"
-            value={state.type.value}
-            onChangeSelector={(changedValue: string) =>
-              dispatch({ type: 'TYPE_CHANGE', payload: changedValue })
-            }
-          />
-          <InquiryInput
-            label="첨부 파일"
-            type="file"
-            className="inquiry__file"
-          />
-          <button
-            className="text-[14px] w-full py-[10px] mb-[60px] bg-blue-500 rounded-[6px] text-white disabled:opacity-45 cursor-pointer"
-            type="submit"
-            disabled={
-              isLoading ||
-              !state.title.value ||
-              !state.content.value ||
-              !state.type.value
-            }
-          >
-            {getButtonText()}
-          </button>
+          <form onSubmit={buttonSubmit}>
+            <h1 className={cn('mt-[26px] mb-[36px] text-[22px] font-bold')}>
+              {mode === 'edit' ? '문의 수정하기' : '1:1 문의하기'}
+            </h1>
+            <InquiryInput
+              label="문의 제목"
+              type="input"
+              placeholder="제목을 입력해주세요"
+              className="inquiry__input__title"
+              htmlsFor={'inquiry-title'}
+              value={state.title.value}
+              onChangeInput={(e: React.ChangeEvent<HTMLInputElement>) =>
+                dispatch({ type: 'TITLE_CHANGE', payload: e.target.value })
+              }
+              touch={() => dispatch({ type: 'TITLE_TOUCHED' })}
+              touched={state.title.isTouched}
+              isError={state.title.isError}
+              errorMessage={state.title.errorMessage}
+            />
+            <InquiryInput
+              label="문의 내용"
+              type="textarea"
+              placeholder="내용을 입력해주세요"
+              className="inquiry__input__content"
+              htmlsFor={'inquiry-content'}
+              value={state.content.value}
+              onChangeTextArea={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                dispatch({ type: 'CONTENT_CHANGE', payload: e.target.value })
+              }
+              touch={() => dispatch({ type: 'CONTENT_TOUCHED' })}
+              touched={state.content.isTouched}
+              isError={state.content.isError}
+              errorMessage={state.content.errorMessage}
+            />
+            <InquiryInput
+              label="문의 유형"
+              type="selector"
+              placeholder="문의 유형을 선택해주세요"
+              className="inquiry__input__type"
+              value={state.type.value}
+              onChangeSelector={(changedValue: string) =>
+                dispatch({ type: 'TYPE_CHANGE', payload: changedValue })
+              }
+            />
+            <InquiryInput
+              label="첨부 파일"
+              type="file"
+              className="inquiry__file"
+            />
+            <button
+              className="text-[14px] w-full py-[10px] mb-[60px] bg-blue-500 rounded-[6px] text-white disabled:opacity-45 cursor-pointer"
+              type="submit"
+              disabled={
+                isLoading ||
+                !state.title.value ||
+                !state.content.value ||
+                !state.type.value
+              }
+            >
+              {getButtonText()}
+            </button>
           </form>
         </div>
       </div>

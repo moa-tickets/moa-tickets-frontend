@@ -82,7 +82,7 @@ const MainContentsWrapper = ({
           />
         )}
         {isAll && (
-          <button className="flex items-center gap-5 text-center mx-auto mt-[70px] px-[30px] py-[18px] border border-[#dddddd] rounded-[26px] cursor-pointer hover:border-none hover:bg-black hover:text-white transition-all duration-600">
+          <button className="flex items-center gap-5 text-center mx-auto mt-[70px] px-[30px] py-[18px] border border-[#dddddd] rounded-[26px] cursor-pointer hover:bg-black hover:text-white transition-all duration-600">
             <span>{isAll}</span>
             <Icon
               ICON={'RIGHT'}
