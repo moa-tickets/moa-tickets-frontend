@@ -25,18 +25,11 @@ export const useProductSearch = () => {
     { query: string }
   >({
     mutationFn: async ({ query }: { query: string }) => {
-      const response = await api.get('/product/concertList', {
-        params: {
-          searchValue: query,
-          sortBy: 'date',
-          sortOrder: 'desc',
-          pageable: {
-            page: 0,
-            size: 1,
-            sort: ['string'],
-          },
-        },
-      });
+      const params = { searchValue: query };
+      console.log('Request URL:', api.defaults.baseURL + '/product/concertList');
+      console.log('Request params:', params);
+      const response = await api.get('/product/concertList', { params });
+      console.log('Response data:', response.data);
       return response.data;
     },
     onMutate: () => {

@@ -1,4 +1,3 @@
-import { useLoginDataFunction } from '@/features/login/useLoginDataFunction';
 import { useProductSearch } from '@/features/product-search/useProductSearch';
 import { cn } from '@/shared';
 import SearchFilter from '@/widgets/search-filter/SearchFilter';
@@ -10,13 +9,7 @@ const SearchResult = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q');
 
-  const { getSearchResults, productPostTest, concertList, isLoading } = useProductSearch();
-  const { goSeller } = useLoginDataFunction();
-
-  useEffect(() => {
-    goSeller.mutate();
-    productPostTest.mutate();
-  }, []);
+  const { getSearchResults, concertList, isLoading } = useProductSearch();
 
   useEffect(() => {
     if (query) {
