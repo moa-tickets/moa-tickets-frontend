@@ -58,8 +58,8 @@ const ReservationPage = () => {
     setCurrentPage(page - 1); // UI는 1부터, API는 0부터
   };
 
-  const bookings = data?.data?.contents ?? [];
-  const totalPages = data?.data?.totalPages ?? 1;
+  const bookings = data?.items ?? [];
+  const totalPages = data?.totalPages ?? 1;
 
   return (
     <div className={cn('reservation__page max-w-[1080px] mx-auto')}>

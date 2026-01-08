@@ -3,27 +3,20 @@ import { useQuery } from '@tanstack/react-query';
 
 // API 응답 타입
 export type BookingItem = {
-  bookingId: number;
+  orderId: string;
   concertName: string;
   sessionDate: string;
   ticketCount: number;
   paidAt: string;
-  status: string;
+  paymentState: string;
 };
 
 export type BookingsResponse = {
-  status: string;
-  message: string;
-  data: {
-    contents: BookingItem[];
-    first: boolean;
-    last: boolean;
-    page: number;
-    size: number;
-    totalElements: number;
-    totalPages: number;
-  };
-  timestamp: string;
+  items: BookingItem[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
 };
 
 // 필터 타입
@@ -66,5 +59,50 @@ export const useBookings = (params: BookingFilterParams) => {
     queryKey: ['bookings', params],
     queryFn: () => fetchBookings(params),
     staleTime: 1000 * 60 * 5, // 5분
+  });
+};
+
+// 예약 상세 타입
+export type BookingDetailData = {
+  orderId: string;
+  concertName: string;
+  concertThumbnail: string;
+  concertDuration: string;
+  concertStart: string;
+  concertEnd: string;
+  concertAge: number;
+  hallName: string;
+  sessionDate: string;
+  ticketCount: number;
+  seats: {
+    seatNum: number;
+    ticketId: number;
+  }[];
+  amount: number;
+  paidAt: string;
+  canceledAt: string | null;
+  paymentState: string;
+};
+
+export type BookingDetailResponse = {
+  status: string;
+  message: string;
+  data: BookingDetailData;
+  timestamp: string;
+};
+
+// 예약 상세 API 호출 함수
+const fetchBookingDetail = async (orderId: string): Promise<BookingDetailResponse> => {
+  const response = await api.get(`/bookings/me/${orderId}`);
+  return response.data;
+};
+
+// 예약 상세 훅
+export const useBookingDetail = (orderId: string) => {
+  return useQuery({
+    queryKey: ['booking', orderId],
+    queryFn: () => fetchBookingDetail(orderId),
+    enabled: !!orderId,
+    staleTime: 1000 * 60 * 5,
   });
 };

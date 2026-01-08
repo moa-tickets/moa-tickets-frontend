@@ -42,12 +42,12 @@ const PaymentSuccessPage = () => {
         });
 
         const data = res.data as ConfirmResponse;
-        if (!data?.paymentId) {
+        if (!data?.orderId) {
           setErrorMsg('결제 확인 응답이 올바르지 않습니다.');
           return;
         }
 
-        navigate(`/mypage/reservation/${data.paymentId}`, { replace: true });
+        navigate(`/mypage/reservation/${data.orderId}`, { replace: true });
       } catch (e: any) {
         const msg =
           e?.response?.data?.message ||

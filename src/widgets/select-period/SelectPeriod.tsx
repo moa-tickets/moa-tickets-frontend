@@ -54,13 +54,6 @@ const SelectPeriod = ({
     }
   };
 
-  // 월별 필터 선택 시 기간별 필터 초기화
-  const handleMonthFilterChange = () => {
-    if (selectedRange) {
-      onRangeChange(null);
-    }
-  };
-
   return (
     <div className={cn('select__period flex flex-col mt-[30px] gap-[30px]')}>
       {/* 기간별 조회 */}
@@ -93,7 +86,6 @@ const SelectPeriod = ({
             value={selectedBasis}
             onChange={(e) => {
               onBasisChange(e.target.value as BasisType);
-              handleMonthFilterChange();
             }}
             className={cn(
               'px-[12px] py-[6px] border border-[#ECEDF2] rounded-[2px] text-[12px] cursor-pointer w-[100px]',
@@ -111,7 +103,6 @@ const SelectPeriod = ({
             value={selectedYear}
             onChange={(e) => {
               onYearChange(Number(e.target.value));
-              handleMonthFilterChange();
             }}
             className={cn(
               'px-[12px] py-[6px] border border-[#ECEDF2] rounded-[2px] text-[12px] cursor-pointer w-[80px]',
@@ -129,8 +120,12 @@ const SelectPeriod = ({
             value={selectedMonth ?? ''}
             onChange={(e) => {
               const value = e.target.value;
-              onMonthChange(value ? Number(value) : null);
-              handleMonthFilterChange();
+              const monthValue = value ? Number(value) : null;
+              onMonthChange(monthValue);
+              // 월을 선택하면 기간별 필터 해제
+              if (monthValue !== null) {
+                onRangeChange(null);
+              }
             }}
             className={cn(
               'px-[12px] py-[6px] border border-[#ECEDF2] rounded-[2px] text-[12px] cursor-pointer w-[70px]',

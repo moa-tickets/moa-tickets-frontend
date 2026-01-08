@@ -74,19 +74,19 @@ const ReservationTable = ({ data, isLoading }: ReservationTableProps) => {
         </thead>
         <tbody>
           {data.map((item) => (
-            <tr key={item.bookingId} className={cn('border-b border-[#CFD0D7]')}>
+            <tr key={item.orderId} className={cn('border-b border-[#CFD0D7]')}>
               <td
                 className={cn(
                   'px-[20px] py-[14px] text-[14px] text-[#62676C] text-center',
                 )}
               >
                 <Link
-                  to={`/mypage/reservation/${item.bookingId}`}
+                  to={`/mypage/reservation/${item.orderId}`}
                   className={cn(
                     'hover:underline cursor-pointer text-[#FA2828]',
                   )}
                 >
-                  {item.bookingId}
+                  {item.orderId.slice(-8)}
                 </Link>
               </td>
               <td
