@@ -3,8 +3,8 @@ import {
   type InquiryData,
   type InquiryDetailResponse,
 } from '@/entities/types/types';
+import { api } from '@/shared/lib/api';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,12 +18,7 @@ export const useInquiry = () => {
     mutationFn: async (currentPage: number) => {
       // UI는 1-based, API는 0-based이므로 변환 필요
       const apiPage = currentPage - 1;
-      const response = await axios.get(
-        `https://app.moatickets.dev/api/inquiry?page=${apiPage}`,
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await api.get(`/inquiry?page=${apiPage}`);
       // 의도적인 3초 지연 (스켈레톤 효과 테스트용)
       await new Promise((resolve) => setTimeout(resolve, 3000));
       return response.data;
@@ -41,23 +36,14 @@ export const useInquiry = () => {
     { onSuccess?: () => void }
   >({
     mutationFn: async (formData: FormData) => {
-      const response = await axios.post(
-        'https://app.moatickets.dev/api/inquiry',
-        formData,
-        { withCredentials: true },
-      );
+      const response = await api.post('/inquiry', formData);
       return response.data;
     },
   });
 
   const getInquiryDetail = useMutation<InquiryDetailResponse, Error, number>({
     mutationFn: async (inquiryId: number) => {
-      const response = await axios.get(
-        `https://app.moatickets.dev/api/inquiry/${inquiryId}`,
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await api.get(`/inquiry/${inquiryId}`);
       return response.data;
     },
     onSuccess: (data: InquiryDetailResponse) => {
@@ -71,23 +57,14 @@ export const useInquiry = () => {
     { inquiryId: number; formData: FormData }
   >({
     mutationFn: async ({ inquiryId, formData }) => {
-      const response = await axios.put(
-        `https://app.moatickets.dev/api/inquiry/${inquiryId}`,
-        formData,
-        { withCredentials: true },
-      );
+      const response = await api.put(`/inquiry/${inquiryId}`, formData);
       return response.data;
     },
   });
 
   const deleteInquiry = useMutation<InquiryDetailResponse, Error, number>({
     mutationFn: async (inquiryId: number) => {
-      const response = await axios.delete(
-        `https://app.moatickets.dev/api/inquiry/${inquiryId}`,
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await api.delete(`/inquiry/${inquiryId}`);
       return response.data;
     },
     onSuccess: () => {

@@ -3,8 +3,8 @@ import {
   type ConcertDetailType,
   type TicketType,
 } from '@/entities/types/types';
+import { api } from '@/shared/lib/api';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { useState } from 'react';
 
 export const useProductSearch = () => {
@@ -25,22 +25,18 @@ export const useProductSearch = () => {
     { query: string }
   >({
     mutationFn: async ({ query }: { query: string }) => {
-      const response = await axios.get(
-        `https://app.moatickets.dev/api/product/concertList`,
-        {
-          params: {
-            searchValue: query,
-            sortBy: 'date',
-            sortOrder: 'desc',
-            pageable: {
-              page: 0,
-              size: 1,
-              sort: ['string'],
-            },
+      const response = await api.get('/product/concertList', {
+        params: {
+          searchValue: query,
+          sortBy: 'date',
+          sortOrder: 'desc',
+          pageable: {
+            page: 0,
+            size: 1,
+            sort: ['string'],
           },
-          withCredentials: true,
         },
-      );
+      });
       return response.data;
     },
     onMutate: () => {
@@ -61,40 +57,29 @@ export const useProductSearch = () => {
 
   const productPostTest = useMutation({
     mutationFn: async () => {
-      const response = await axios.post(
-        `https://app.moatickets.dev/api/product/concert`,
-        {
-          hallId: 0,
-          concertName: '10cm 콘서트',
-          concertDuration: '2026-01-07T08:44:48.454Z',
-          age: 8,
-          bookingOpen: '2026-01-07T08:44:48.454Z',
-          concertStart: '2026-01-07T08:44:48.454Z',
-          concertEnd: '2026-01-07T08:44:48.454Z',
-          thumbnail: '/small_banner/hosinogen.gif',
-          sessions: [
-            {
-              date: '2026-01-07T08:44:48.454Z',
-              price: 0,
-            },
-          ],
-        },
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await api.post('/product/concert', {
+        hallId: 0,
+        concertName: '10cm 콘서트',
+        concertDuration: '2026-01-07T08:44:48.454Z',
+        age: 8,
+        bookingOpen: '2026-01-07T08:44:48.454Z',
+        concertStart: '2026-01-07T08:44:48.454Z',
+        concertEnd: '2026-01-07T08:44:48.454Z',
+        thumbnail: '/small_banner/hosinogen.gif',
+        sessions: [
+          {
+            date: '2026-01-07T08:44:48.454Z',
+            price: 0,
+          },
+        ],
+      });
       console.log(response.data);
     },
   });
 
   const getConcertDetail = useMutation<ConcertDetailType, Error, number>({
     mutationFn: async (concertId: number) => {
-      const response = await axios.get(
-        `https://app.moatickets.dev/api/product/detail/${concertId}`,
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await api.get(`/product/detail/${concertId}`);
       return response.data;
     },
     onMutate: () => {
@@ -111,12 +96,7 @@ export const useProductSearch = () => {
 
   const getSessionTickets = useMutation<TicketType[], Error, number>({
     mutationFn: async (sessionId: number) => {
-      const response = await axios.get(
-        `https://app.moatickets.dev/api/sessions/${sessionId}/tickets`,
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await api.get(`/sessions/${sessionId}/tickets`);
       return response.data;
     },
     onMutate: () => {
@@ -144,16 +124,10 @@ export const useProductSearch = () => {
       sessionId: number;
       ticketIds: number[];
     }) => {
-      const response = await axios.post(
-        `https://app.moatickets.dev/api/tickets/hold`,
-        {
-          sessionId,
-          ticketIds,
-        },
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await api.post('/tickets/hold', {
+        sessionId,
+        ticketIds,
+      });
       return response.data;
     },
     onMutate: () => {
