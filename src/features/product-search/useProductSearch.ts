@@ -97,13 +97,17 @@ export const useProductSearch = () => {
     },
     onMutate: () => {
       setIsTicketsLoading(true);
+      // 새 요청 시 기존 데이터 초기화
+      setSessionTickets([]);
     },
     onSuccess: (data: TicketType[]) => {
       console.log('Setting sessionTickets, count:', data?.length);
-      setSessionTickets(data);
+      // 배열인지 확인 후 설정
+      setSessionTickets(Array.isArray(data) ? data : []);
       setIsTicketsLoading(false);
     },
     onError: () => {
+      setSessionTickets([]);
       setIsTicketsLoading(false);
     },
   });
