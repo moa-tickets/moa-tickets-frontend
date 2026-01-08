@@ -69,7 +69,6 @@ const PaymentPage = () => {
     onClose?: () => void;
   }>({ isOpen: false, title: '', message: '' });
 
-  const apiBaseUrl = 'http://localhost:8080';
   const tossClientKey = import.meta.env.VITE_TOSS_CLIENT_KEY as string;
 
   const successUrl = useMemo(() => {
