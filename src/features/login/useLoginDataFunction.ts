@@ -1,6 +1,6 @@
 import { useLoginData } from '@/entities/stores/useLoginData';
+import { api } from '@/shared/lib/api';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 
 type UserData = {
   email: string;
@@ -13,19 +13,13 @@ export const useLoginDataFunction = () => {
 
   const goSeller = useMutation({
     mutationFn: async () => {
-      const res = await axios.post(
-        'http://localhost:8080/api/members/seller',
-        {},
-        { withCredentials: true },
-      );
+      await api.post('/members/seller', {});
     },
   });
 
   const getLoginData = useMutation<UserData>({
     mutationFn: async () => {
-      const res = await axios.get('http://localhost:8080/api/members/me', {
-        withCredentials: true,
-      });
+      const res = await api.get('/members/me');
       return res.data;
     },
     onSuccess: (data: UserData) => {

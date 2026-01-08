@@ -3,8 +3,8 @@ import {
   type ConcertDetailType,
   type TicketType,
 } from '@/entities/types/types';
+import { api } from '@/shared/lib/api';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { useState } from 'react';
 
 export const useProductSearch = () => {
@@ -25,9 +25,7 @@ export const useProductSearch = () => {
     { query: string }
   >({
     mutationFn: async ({ query }: { query: string }) => {
-      const response = await axios.get(
-        `http://localhost:8080/api/product/concertList`,
-        {
+      const response = await api.get(`/product/concertList`, {
           params: {
             searchValue: query,
             sortBy: 'date',
@@ -38,9 +36,7 @@ export const useProductSearch = () => {
               sort: ['string'],
             },
           },
-          withCredentials: true,
-        },
-      );
+        });
       return response.data;
     },
     onMutate: () => {
@@ -61,9 +57,7 @@ export const useProductSearch = () => {
 
   const productPostTest = useMutation({
     mutationFn: async () => {
-      const response = await axios.post(
-        `http://localhost:8080/api/product/concert`,
-        {
+      const response = await api.post(`/product/concert`, {
           hallId: 0,
           concertName: '10cm 콘서트',
           concertDuration: '2026-01-07T08:44:48.454Z',
@@ -78,23 +72,14 @@ export const useProductSearch = () => {
               price: 0,
             },
           ],
-        },
-        {
-          withCredentials: true,
-        },
-      );
+        });
       console.log(response.data);
     },
   });
 
   const getConcertDetail = useMutation<ConcertDetailType, Error, number>({
     mutationFn: async (concertId: number) => {
-      const response = await axios.get(
-        `http://localhost:8080/api/product/detail/${concertId}`,
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await api.get(`/product/detail/${concertId}`);
       return response.data;
     },
     onMutate: () => {
@@ -111,12 +96,7 @@ export const useProductSearch = () => {
 
   const getSessionTickets = useMutation<TicketType[], Error, number>({
     mutationFn: async (sessionId: number) => {
-      const response = await axios.get(
-        `http://localhost:8080/api/sessions/${sessionId}/tickets`,
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await api.get(`/sessions/${sessionId}/tickets`);
       return response.data;
     },
     onMutate: () => {
@@ -144,16 +124,10 @@ export const useProductSearch = () => {
       sessionId: number;
       ticketIds: number[];
     }) => {
-      const response = await axios.post(
-        `http://localhost:8080/api/tickets/hold`,
-        {
+      const response = await api.post(`/tickets/hold`, {
           sessionId,
           ticketIds,
-        },
-        {
-          withCredentials: true,
-        },
-      );
+        });
       return response.data;
     },
     onMutate: () => {

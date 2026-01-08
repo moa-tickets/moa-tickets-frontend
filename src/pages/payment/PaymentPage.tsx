@@ -1,9 +1,10 @@
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef, useMemo } from 'react';
-import axios from 'axios';
+import { api } from '@/shared/lib/api';
 import { cn } from '@/shared';
 import { detailData } from '@/entities/constant/detailData';
 import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
 
 import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 
@@ -24,6 +25,7 @@ type BookingData = {
   ticketIds: number[];
   sessionId: number;
   holdToken: string;
+  expireTime?: string;
   concertName?: string;
 };
 
@@ -40,10 +42,15 @@ const PaymentPage = () => {
   const bookingData = location.state as BookingData | null;
   const detailPageData = detailData[Number(id)];
 
-  const [paymentMethod, setPaymentMethod] = useState<string>('card');
-
   const [isProcessing, setIsProcessing] = useState(false);
-  const [timeLeft, setTimeLeft] = useState<number>(600); // 10분(600초) 타이머
+  const [timeLeft, setTimeLeft] = useState<number>(() => {
+    if (bookingData?.expireTime) {
+      const expireDate = new Date(bookingData.expireTime).getTime();
+      const now = Date.now();
+      return Math.max(0, Math.floor((expireDate - now) / 1000));
+    }
+    return 600; // 기본값 10분
+  });
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // 위젯/결제 준비 상태
@@ -54,7 +61,18 @@ const PaymentPage = () => {
   // 위젯 인스턴스 저장
   const widgetsRef = useRef<any>(null);
 
-  const apiBaseUrl = 'http://localhost:8080';
+  // 모달 상태
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onClose?: () => void;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+  });
+
   const tossClientKey = import.meta.env.VITE_TOSS_CLIENT_KEY as string;
 
   const successUrl = useMemo(() => {
@@ -70,9 +88,13 @@ const PaymentPage = () => {
       timerRef.current = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
-            // 시간 만료 시 이전 페이지로 이동
-            alert('결제 시간이 만료되었습니다. 다시 예약해주세요.');
-            navigate(`/detail/${id}/booking`);
+            // 시간 만료 시 모달 표시
+            setModalState({
+              isOpen: true,
+              title: '시간 만료',
+              message: '결제 시간이 만료되었습니다.\n다시 예약해주세요.',
+              onClose: () => navigate(`/detail/${id}/booking`),
+            });
             return 0;
           }
           return prev - 1;
@@ -187,25 +209,24 @@ const PaymentPage = () => {
     console.log('holdToken type:', typeof holdTokenValue);
     console.log('holdToken value:', holdTokenValue);
     console.log('original holdToken:', bookingData.holdToken);
-    console.log('Request URL:', `${apiBaseUrl}/api/payments/prepare`);
+    console.log('Request URL:', `/api/payments/prepare`);
 
-    const res = await axios.post(
-      `${apiBaseUrl}/api/payments/prepare`,
-      requestBody,
-      {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    const res = await api.post('/payments/prepare', requestBody, {
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+    });
     console.log('Payment prepare response:', res.data);
     return res.data as PrepareResponse;
   };
 
   const initWidget = async (info: PrepareResponse) => {
     if (!tossClientKey) {
-      alert('VITE_TOSS_CLIENT_KEY가 설정되지 않았습니다.');
+      setModalState({
+        isOpen: true,
+        title: '설정 오류',
+        message: 'VITE_TOSS_CLIENT_KEY가 설정되지 않았습니다.',
+      });
       return;
     }
 
@@ -234,13 +255,7 @@ const PaymentPage = () => {
 
   const releaseHold = async (holdToken: string) => {
     try {
-      await axios.post(
-        `${apiBaseUrl}/api/holds/${holdToken}/release`,
-        {},
-        {
-          withCredentials: true,
-        },
-      );
+      await api.post(`/holds/${holdToken}/release`, {});
       console.log('좌석 선점 해제 완료');
     } catch (error) {
       console.error('좌석 선점 해제 실패:', error);
@@ -284,12 +299,16 @@ const PaymentPage = () => {
       setPrepareInfo(info);
       await initWidget(info);
     } catch (e: any) {
-      // requestPayment()는 사용자 취소 등으로 reject 될 수 있음 → UX상 alert만 최소 처리
+      // requestPayment()는 사용자 취소 등으로 reject 될 수 있음
       const msg =
         e?.message ||
         e?.response?.data?.message ||
         '결제 요청 중 오류가 발생했습니다.';
-      alert(msg);
+      setModalState({
+        isOpen: true,
+        title: '결제 오류',
+        message: msg,
+      });
     } finally {
       setIsProcessing(false);
     }
@@ -387,10 +406,22 @@ const PaymentPage = () => {
   //   }, 2000);
   // };
 
+  const handleModalClose = () => {
+    const callback = modalState.onClose;
+    setModalState({ isOpen: false, title: '', message: '' });
+    callback?.();
+  };
+
   return (
     <div
       className={cn('payment__page max-w-[1280px] mx-auto px-[40px] py-[40px]')}
     >
+      <ConfirmModal
+        isOpen={modalState.isOpen}
+        onClose={handleModalClose}
+        title={modalState.title}
+        message={modalState.message}
+      />
       {/* Header */}
       <div className={cn('mb-[30px]')}>
         <h1 className={cn('text-[30px] font-bold mb-[10px]')}>결제 확인</h1>
@@ -630,28 +661,6 @@ const PaymentPage = () => {
                   {formatPrice(bookingData.totalPrice)}원
                 </span>
               </div>
-            </div>
-
-            {/* Payment Method */}
-            <div className={cn('mb-[30px]')}>
-              <label
-                htmlFor="payment-method"
-                className={cn('block text-[14px] font-bold mb-[12px]')}
-              >
-                결제수단
-              </label>
-              <select
-                id="payment-method"
-                value={paymentMethod}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-                className={cn(
-                  'w-full px-[12px] py-[10px] border border-[#ECEDF2] rounded-[6px] text-[14px]',
-                )}
-              >
-                <option value="card">신용카드</option>
-                <option value="bank">무통장입금</option>
-                <option value="phone">휴대폰 결제</option>
-              </select>
             </div>
 
             {/* Payment Button */}

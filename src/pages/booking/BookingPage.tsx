@@ -4,6 +4,7 @@ import { cn } from '@/shared';
 import { detailData } from '@/entities/constant/detailData';
 import SeatMap from '@/widgets/seat-selection/SeatMap';
 import { useProductSearch } from '@/features/product-search/useProductSearch';
+import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
 
 type Seat = {
   id: string;
@@ -65,6 +66,17 @@ const BookingPage = () => {
   const [isTimerActive, setIsTimerActive] = useState<boolean>(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // 모달 상태
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+  });
+
   // 세션 선택 시 좌석 정보 가져오기
   useEffect(() => {
     if (selectedSessionId !== null) {
@@ -81,7 +93,11 @@ const BookingPage = () => {
             setIsTimerActive(false);
             // 시간 만료 시 좌석 선택 취소
             setSelectedSeats([]);
-            alert('좌석 선택 시간이 만료되었습니다. 다시 선택해주세요.');
+            setModalState({
+              isOpen: true,
+              title: '시간 만료',
+              message: '좌석 선택 시간이 만료되었습니다.\n다시 선택해주세요.',
+            });
             return 0;
           }
           return prev - 1;
@@ -123,7 +139,11 @@ const BookingPage = () => {
       }
       // 최대 좌석 수 제한
       if (prev.length >= MAX_SEATS) {
-        alert(`최대 ${MAX_SEATS}개의 좌석만 선택할 수 있습니다.`);
+        setModalState({
+          isOpen: true,
+          title: '좌석 선택 제한',
+          message: `최대 ${MAX_SEATS}개의 좌석만 선택할 수 있습니다.`,
+        });
         return prev;
       }
       const newSeats = [
@@ -152,7 +172,11 @@ const BookingPage = () => {
       .slice(0, 4);
 
     if (ticketIds.length === 0) {
-      alert('좌석을 선택해주세요.');
+      setModalState({
+        isOpen: true,
+        title: '좌석 선택 필요',
+        message: '좌석을 선택해주세요.',
+      });
       return;
     }
 
@@ -178,7 +202,11 @@ const BookingPage = () => {
           });
         },
         onError: () => {
-          alert('좌석 점유에 실패했습니다. 다시 시도해주세요.');
+          setModalState({
+            isOpen: true,
+            title: '점유 실패',
+            message: '좌석 점유에 실패했습니다.\n다시 시도해주세요.',
+          });
         },
       },
     );
@@ -203,6 +231,12 @@ const BookingPage = () => {
     <div
       className={cn('booking__page max-w-[1280px] mx-auto px-[40px] py-[40px]')}
     >
+      <ConfirmModal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ isOpen: false, title: '', message: '' })}
+        title={modalState.title}
+        message={modalState.message}
+      />
       {/* Header */}
       <div className={cn('mb-[30px]')}>
         <h1 className={cn('text-[30px] font-bold mb-[10px]')}>예약하기</h1>
