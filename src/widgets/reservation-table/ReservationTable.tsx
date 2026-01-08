@@ -1,8 +1,39 @@
 import { Link } from 'react-router-dom';
 import { cn } from '@/shared';
-import type { ReservationItem } from '@/entities/constant/reservationData';
+import type { BookingItem } from '@/features/booking/useBookings';
 
-const ReservationTable = ({ data }: { data: ReservationItem[] }) => {
+type ReservationTableProps = {
+  data: BookingItem[];
+  isLoading?: boolean;
+};
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${year}.${month}.${day} ${hours}:${minutes}`;
+};
+
+const ReservationTable = ({ data, isLoading }: ReservationTableProps) => {
+  if (isLoading) {
+    return (
+      <div className={cn('border-t border-[#ECEDF2] mt-[10px] py-[40px] text-center text-[14px] text-[#62676C]')}>
+        로딩 중...
+      </div>
+    );
+  }
+
+  if (!data || data.length === 0) {
+    return (
+      <div className={cn('border-t border-[#ECEDF2] mt-[10px] py-[40px] text-center text-[14px] text-[#62676C]')}>
+        예매 내역이 없습니다.
+      </div>
+    );
+  }
+
   return (
     <div className={cn('border-t border-[#ECEDF2] mt-[10px] overflow-x-auto')}>
       <table className={cn('w-full table-fixed min-w-[600px]')}>
@@ -43,42 +74,42 @@ const ReservationTable = ({ data }: { data: ReservationItem[] }) => {
         </thead>
         <tbody>
           {data.map((item) => (
-            <tr key={item.id} className={cn('border-b border-[#CFD0D7]')}>
+            <tr key={item.bookingId} className={cn('border-b border-[#CFD0D7]')}>
               <td
                 className={cn(
                   'px-[20px] py-[14px] text-[14px] text-[#62676C] text-center',
                 )}
               >
                 <Link
-                  to={`/mypage/reservation/${item.id}`}
+                  to={`/mypage/reservation/${item.bookingId}`}
                   className={cn(
                     'hover:underline cursor-pointer text-[#FA2828]',
                   )}
                 >
-                  {item.id}
+                  {item.bookingId}
                 </Link>
               </td>
               <td
                 className={cn(
                   'px-[20px] py-[14px] text-[14px] text-[#62676C] truncate',
                 )}
-                title={item.ticketName}
+                title={item.concertName}
               >
-                {item.ticketName}
+                {item.concertName}
               </td>
               <td
                 className={cn(
                   'px-[20px] py-[14px] text-[14px] text-[#62676C] text-center',
                 )}
               >
-                {item.viewingDateTime}
+                {formatDate(item.sessionDate)}
               </td>
               <td
                 className={cn(
                   'px-[20px] py-[14px] text-[14px] text-[#62676C] text-center',
                 )}
               >
-                {item.quantity}
+                {item.ticketCount}매
               </td>
             </tr>
           ))}
