@@ -89,13 +89,17 @@ export const useProductSearch = () => {
 
   const getSessionTickets = useMutation<TicketType[], Error, number>({
     mutationFn: async (sessionId: number) => {
+      console.log('Fetching tickets for session:', sessionId);
       const response = await api.get(`/sessions/${sessionId}/tickets`);
+      console.log('Tickets response:', response.data);
+      console.log('Tickets count:', response.data?.length);
       return response.data;
     },
     onMutate: () => {
       setIsTicketsLoading(true);
     },
     onSuccess: (data: TicketType[]) => {
+      console.log('Setting sessionTickets, count:', data?.length);
       setSessionTickets(data);
       setIsTicketsLoading(false);
     },
