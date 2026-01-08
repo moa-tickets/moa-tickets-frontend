@@ -1,6 +1,7 @@
 const LoginPage = () => {
   const goLogin = () => {
-    window.location.href = 'https://app.moatickets.dev/login/google';
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
+    window.location.href = `${baseUrl}/login/google`;
   };
 
   return (
