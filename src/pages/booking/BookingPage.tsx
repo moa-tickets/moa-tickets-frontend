@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/shared';
-import { detailData } from '@/entities/constant/detailData';
 import SeatMap from '@/widgets/seat-selection/SeatMap';
 import { useProductSearch } from '@/features/product-search/useProductSearch';
 import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
@@ -18,10 +17,10 @@ type Seat = {
 const BookingPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const detailPageData = detailData[Number(id)];
   const {
     getConcertDetail,
     concertDetail,
+    isDetailLoading,
     getSessionTickets,
     sessionTickets,
     isTicketsLoading,
@@ -227,6 +226,37 @@ const BookingPage = () => {
     return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
   };
 
+  // 로딩 중이거나 데이터가 없는 경우
+  if (isDetailLoading) {
+    return (
+      <div
+        className={cn('max-w-[1280px] mx-auto px-[40px] py-[40px] text-center')}
+      >
+        <p className={cn('text-[16px] text-[#62676C]')}>로딩 중...</p>
+      </div>
+    );
+  }
+
+  if (!concertDetail) {
+    return (
+      <div
+        className={cn('max-w-[1280px] mx-auto px-[40px] py-[40px] text-center')}
+      >
+        <p className={cn('text-[16px] text-[#62676C]')}>
+          공연 정보를 찾을 수 없습니다.
+        </p>
+        <button
+          onClick={() => navigate('/')}
+          className={cn(
+            'mt-[20px] px-[24px] py-[12px] bg-[#4154FF] text-white rounded-[6px] text-[14px] hover:bg-[#4154FF]/90',
+          )}
+        >
+          홈으로 돌아가기
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div
       className={cn('booking__page max-w-[1280px] mx-auto px-[40px] py-[40px]')}
@@ -255,33 +285,20 @@ const BookingPage = () => {
             )}
           >
             <h2 className={cn('text-[24px] font-bold mb-[20px]')}>
-              {detailPageData.concertTitle}
+              {concertDetail.concertName}
             </h2>
-            <div className={cn('text-[14px] text-[#666] mb-[20px]')}>
-              {detailPageData.genre}
-            </div>
 
             {/* Concert Details */}
             <div className={cn('space-y-[12px] mb-[20px]')}>
               <div className={cn('flex items-start gap-[10px] text-[14px]')}>
                 <span className={cn('w-[80px] text-[#62676C] flex-shrink-0')}>
-                  장소
-                </span>
-                <span className={cn('flex-1 text-[#242428]')}>
-                  {detailPageData.loc}
-                </span>
-              </div>
-              <div className={cn('flex items-start gap-[10px] text-[14px]')}>
-                <span className={cn('w-[80px] text-[#62676C] flex-shrink-0')}>
                   공연기간
                 </span>
                 <span className={cn('flex-1 text-[#242428]')}>
-                  {concertDetail
-                    ? formatDateRange(
-                        concertDetail.concertStart,
-                        concertDetail.concertEnd,
-                      )
-                    : detailPageData.date}
+                  {formatDateRange(
+                    concertDetail.concertStart,
+                    concertDetail.concertEnd,
+                  )}
                 </span>
               </div>
               <div className={cn('flex items-start gap-[10px] text-[14px]')}>
@@ -289,9 +306,7 @@ const BookingPage = () => {
                   관람연령
                 </span>
                 <span className={cn('flex-1 text-[#242428]')}>
-                  {concertDetail
-                    ? `${concertDetail.age}세 이상 관람가능`
-                    : detailPageData.age}
+                  {concertDetail.age}세 이상 관람가능
                 </span>
               </div>
             </div>
@@ -401,26 +416,24 @@ const BookingPage = () => {
                 </h4>
                 <div className={cn('space-y-[12px]')}>
                   {selectedSeats.map((seat) => (
-                  <div
-                    key={seat.id}
-                    className={cn(
-                      'p-[12px] bg-[#F8F9FA] rounded-[6px]',
-                    )}
-                  >
                     <div
-                      className={cn(
-                        'flex justify-between items-center text-[14px]',
-                      )}
+                      key={seat.id}
+                      className={cn('p-[12px] bg-[#F8F9FA] rounded-[6px]')}
                     >
-                      <span className={cn('text-[#242428] font-medium')}>
-                        {seat.row}열 {seat.number}번
-                      </span>
-                      <span className={cn('text-[#242428] font-medium')}>
-                        {formatPrice(selectedSessionPrice)}원
-                      </span>
+                      <div
+                        className={cn(
+                          'flex justify-between items-center text-[14px]',
+                        )}
+                      >
+                        <span className={cn('text-[#242428] font-medium')}>
+                          {seat.row}열 {seat.number}번
+                        </span>
+                        <span className={cn('text-[#242428] font-medium')}>
+                          {formatPrice(selectedSessionPrice)}원
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
                 </div>
               </div>
             )}
@@ -454,7 +467,9 @@ const BookingPage = () => {
             {/* Booking Button */}
             <button
               onClick={handleBooking}
-              disabled={!selectedDate || selectedSeats.length === 0 || isHolding}
+              disabled={
+                !selectedDate || selectedSeats.length === 0 || isHolding
+              }
               className={cn(
                 'w-full h-[54px] bg-[#4154FF] text-white text-[18px] font-bold rounded-[10px] border border-[#4154FF] hover:bg-[#4154FF]/90 cursor-pointer disabled:bg-[#CCCCCC] disabled:cursor-not-allowed',
               )}
