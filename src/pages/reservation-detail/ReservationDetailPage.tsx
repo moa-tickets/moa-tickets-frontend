@@ -174,7 +174,7 @@ const ReservationDetailPage = () => {
                 좌석 정보
               </h3>
               <div className={cn('flex flex-wrap gap-[8px]')}>
-                {detail.seats.map((seat) => (
+                {detail.seats.map((seat: { ticketId: number; seatNum: number }) => (
                   <span
                     key={seat.ticketId}
                     className={cn(
