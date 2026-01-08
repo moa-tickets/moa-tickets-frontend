@@ -7,6 +7,7 @@ import Icon from '@/shared/lib/Icon';
 import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
 import { useProductSearch } from '@/features/product-search/useProductSearch';
 import PriceModal from '@/shared/components/price-modal/PriceModal';
+import ConcertReviews from '@/widgets/concert-reviews/ConcertReviews';
 
 const DetailPage = () => {
   console.log('DetailPage rendered');
@@ -209,6 +210,8 @@ const DetailPage = () => {
             </button>
           ))}
         </div>
+
+        {activeTab === '공연후기' && <ConcertReviews />}
       </div>
 
       <PriceModal
