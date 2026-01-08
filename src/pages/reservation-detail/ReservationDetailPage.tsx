@@ -250,13 +250,23 @@ const ReservationDetailPage = () => {
           목록으로
         </Link>
         {detail.paymentState === 'PAID' && (
-          <button
-            className={cn(
-              'px-[24px] py-[12px] bg-[#FA2828] text-white rounded-[6px] text-[14px] hover:bg-[#E02020] transition-colors',
-            )}
-          >
-            예매 취소
-          </button>
+          <>
+            <button
+              className={cn(
+                'px-[24px] py-[12px] bg-[#FA2828] text-white rounded-[6px] text-[14px] hover:bg-[#E02020] transition-colors',
+              )}
+            >
+              예매 취소
+            </button>
+            <Link
+              to="/live/20260102-aaaaaaaaaaaa"
+              className={cn(
+                'px-[24px] py-[12px] bg-[#4154FF] text-white rounded-[6px] text-[14px] hover:bg-[#3344DD] transition-colors',
+              )}
+            >
+              라이브 보러가기
+            </Link>
+          </>
         )}
       </div>
     </div>
