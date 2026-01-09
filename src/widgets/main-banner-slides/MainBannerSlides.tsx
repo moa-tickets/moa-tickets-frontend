@@ -1,10 +1,10 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { cn } from '@/shared';
 import { mainBannerSlides } from '@/entities/constant/mainBannerSlides';
-import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
 import BannerSlideItem from './BannerSlideItem';
 import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
 import { useModalStore } from '@/entities/stores/useModalStore';
+import ClickedBannerThumbnails from './ClickedBannerThumbnails';
 
 const MainBannerSlides = () => {
   const { isOpen, title, message, closeModal } = useModalStore();
@@ -14,17 +14,26 @@ const MainBannerSlides = () => {
   const isDragging = useRef<boolean>(false);
   const hasDragged = useRef<boolean>(false);
 
-  const goToSlide = (nextIndex: number) => {
-    const length = mainBannerSlides.length;
-    const isLooping =
-      (currentIndex === length - 1 && nextIndex === 0) ||
-      (currentIndex === 0 && nextIndex === length - 1);
+  const goToSlide = useCallback((nextIndex: number) => {
+    setCurrentIndex((prev) => {
+      const length = mainBannerSlides.length;
+      const isLooping =
+        (prev === length - 1 && nextIndex === 0) ||
+        (prev === 0 && nextIndex === length - 1);
 
-    if (isLooping) {
-      setIsTransitioning(false);
-    }
-    setCurrentIndex(nextIndex);
-  };
+      if (isLooping) {
+        setIsTransitioning(false);
+      }
+      return nextIndex;
+    });
+  }, []);
+
+  const handleThumbnailClick = useCallback(
+    (index: number) => {
+      goToSlide(index);
+    },
+    [goToSlide],
+  );
 
   // 트랜지션 복구
   useEffect(() => {
@@ -36,40 +45,41 @@ const MainBannerSlides = () => {
     }
   }, [isTransitioning, currentIndex]);
 
-  const handleDragStart = (clientX: number) => {
+  const handleDragStart = useCallback((clientX: number) => {
     isDragging.current = true;
     hasDragged.current = false;
     startX.current = clientX;
-  };
+  }, []);
 
-  const handleDragEnd = (clientX: number) => {
-    if (!isDragging.current) return;
-    isDragging.current = false;
+  const handleDragEnd = useCallback(
+    (clientX: number) => {
+      if (!isDragging.current) return;
+      isDragging.current = false;
 
-    const diff = startX.current - clientX;
-    const threshold = 50;
+      const diff = startX.current - clientX;
+      const threshold = 50;
 
-    if (Math.abs(diff) > threshold) {
-      hasDragged.current = true;
-    }
+      if (Math.abs(diff) > threshold) {
+        hasDragged.current = true;
+      }
 
-    if (diff > threshold) {
-      // 왼쪽으로 드래그 -> 다음 슬라이드
-      const nextIndex = (currentIndex + 1) % mainBannerSlides.length;
-      goToSlide(nextIndex);
-    } else if (diff < -threshold) {
-      // 오른쪽으로 드래그 -> 이전 슬라이드
-      const nextIndex =
-        (currentIndex - 1 + mainBannerSlides.length) % mainBannerSlides.length;
-      goToSlide(nextIndex);
-    }
-  };
+      const length = mainBannerSlides.length;
+      if (diff > threshold) {
+        // 왼쪽으로 드래그 -> 다음 슬라이드
+        setCurrentIndex((prev) => (prev + 1) % length);
+      } else if (diff < -threshold) {
+        // 오른쪽으로 드래그 -> 이전 슬라이드
+        setCurrentIndex((prev) => (prev - 1 + length) % length);
+      }
+    },
+    [],
+  );
 
-  const handleLinkClick = (e: React.MouseEvent) => {
+  const handleLinkClick = useCallback((e: React.MouseEvent) => {
     if (hasDragged.current) {
       e.preventDefault();
     }
-  };
+  }, []);
 
   // 자동 슬라이드
   useEffect(() => {
@@ -79,7 +89,7 @@ const MainBannerSlides = () => {
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [currentIndex]);
+  }, [currentIndex, goToSlide]);
 
   return (
     <>
@@ -90,58 +100,38 @@ const MainBannerSlides = () => {
         message={message}
       />
       <section
-      className={cn(
-        'main__banner__slides w-full h-[500px] flex overflow-hidden relative cursor-grab active:cursor-grabbing',
-      )}
-      onMouseDown={(e) => handleDragStart(e.clientX)}
-      onMouseUp={(e) => handleDragEnd(e.clientX)}
-      onMouseLeave={(e) => handleDragEnd(e.clientX)}
-      onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
-      onTouchEnd={(e) => handleDragEnd(e.changedTouches[0].clientX)}
-      aria-roledescription="carousel"
-      aria-label="Main Banner Slides"
-    >
-      <div
         className={cn(
-          'slides__wrapper flex',
-          isTransitioning && 'transition-transform duration-500 ease-in-out',
+          'main__banner__slides w-full h-[500px] flex overflow-hidden relative cursor-grab active:cursor-grabbing',
         )}
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        onMouseDown={(e) => handleDragStart(e.clientX)}
+        onMouseUp={(e) => handleDragEnd(e.clientX)}
+        onMouseLeave={(e) => handleDragEnd(e.clientX)}
+        onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
+        onTouchEnd={(e) => handleDragEnd(e.changedTouches[0].clientX)}
+        aria-roledescription="carousel"
+        aria-label="Main Banner Slides"
       >
-        {mainBannerSlides.map((slide) => (
-          <BannerSlideItem
-            key={slide.id}
-            slide={slide}
-            onLinkClick={handleLinkClick}
-          />
-        ))}
-      </div>
-      <div className={cn('absolute bottom-[30px] left-0 w-full')}>
-        <ul className="max-w-[1380px] mx-auto flex gap-2 items-center">
+        <div
+          className={cn(
+            'slides__wrapper flex',
+            isTransitioning && 'transition-transform duration-500 ease-in-out',
+          )}
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
           {mainBannerSlides.map((slide) => (
-            <li
+            <BannerSlideItem
               key={slide.id}
-              className={cn(
-                'w-[60px] h-[60px] rounded-[20px] overflow-hidden',
-                currentIndex === slide.id - 1 ? 'border-2 border-white' : '',
-              )}
-            >
-              <button
-                className={cn('cursor-pointer w-full h-full')}
-                onClick={() => goToSlide(slide.id - 1)}
-              >
-                <OptimizedImage
-                  src={slide.smallClick}
-                  alt={`Thumbnail ${slide.id}`}
-                  className={cn('w-full h-full')}
-                  skeletonClassName="rounded-[20px]"
-                />
-              </button>
-            </li>
+              slide={slide}
+              onLinkClick={handleLinkClick}
+            />
           ))}
-        </ul>
-      </div>
-    </section>
+        </div>
+        <ClickedBannerThumbnails
+          slides={mainBannerSlides}
+          currentIndex={currentIndex}
+          onSelect={handleThumbnailClick}
+        />
+      </section>
     </>
   );
 };
