@@ -28,7 +28,6 @@ const ClickedBannerThumbnailItem = React.memo(
             src={slide.smallClick}
             alt={`Thumbnail ${slide.id}`}
             className="w-full h-full"
-            skeletonClassName="rounded-[20px]"
           />
         </button>
       </li>
