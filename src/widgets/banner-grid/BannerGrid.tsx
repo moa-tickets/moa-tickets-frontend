@@ -18,7 +18,6 @@ const BannerGrid = () => {
             src={'/grid-banner/grid_banner_1.gif'}
             alt="grid-banner-1"
             className={cn('w-full h-full')}
-            skeletonClassName="rounded-md"
           />
         </button>
         <button
@@ -30,7 +29,6 @@ const BannerGrid = () => {
             src={'/grid-banner/grid_banner_2.gif'}
             alt="grid-banner-2"
             className={cn('w-full h-full')}
-            skeletonClassName="rounded-md"
           />
         </button>
         <button
@@ -42,7 +40,6 @@ const BannerGrid = () => {
             src={'/grid-banner/grid_banner_3.gif'}
             alt="grid-banner-3"
             className={cn('w-full h-full')}
-            skeletonClassName="rounded-md"
           />
         </button>
         <button
@@ -54,7 +51,6 @@ const BannerGrid = () => {
             src={'/grid-banner/grid_banner_4.gif'}
             alt="grid-banner-4"
             className={cn('w-full h-full')}
-            skeletonClassName="rounded-md"
           />
         </button>
         <button
@@ -66,7 +62,6 @@ const BannerGrid = () => {
             src={'/grid-banner/grid_banner_5.gif'}
             alt="grid-banner-5"
             className={cn('w-full h-full')}
-            skeletonClassName="rounded-md"
           />
         </button>
         <button
@@ -78,7 +73,6 @@ const BannerGrid = () => {
             src={'/grid-banner/grid_banner_6.gif'}
             alt="grid-banner-6"
             className={cn('w-full h-full')}
-            skeletonClassName="rounded-md"
           />
         </button>
       </div>

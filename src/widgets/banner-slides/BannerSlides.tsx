@@ -36,7 +36,11 @@ const BannerSlides = () => {
               top: `${(slide.id - 1) * 50 - 50 * currentBannerIndex}px`,
             }}
           >
-            <OptimizedImage src={slide.imageUrl} alt={slide.alt} className="w-full h-full" skeletonClassName="rounded-sm" />
+            <OptimizedImage
+              src={slide.imageUrl}
+              alt={slide.alt}
+              className="w-[180px] h-[50px]"
+            />
           </Link>
         ),
       )}
