@@ -13,7 +13,12 @@ const TopHeader = () => {
         )}
       >
         <Link to="/">
-          <OptimizedImage src={'/logo.svg'} alt="logo" className="w-full h-full" />
+          <OptimizedImage
+            className="w-[89px] h-[25px]"
+            src="/logo.svg"
+            alt="logo"
+            lazy
+          />
         </Link>
         <SearchBar />
         <BannerSlides />
