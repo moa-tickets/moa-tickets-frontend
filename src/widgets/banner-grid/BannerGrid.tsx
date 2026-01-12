@@ -1,5 +1,5 @@
 import { cn } from '@/shared';
-import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import OptimizedImage from '@/shared/components/lazy-loading/LazyImage';
 
 const BannerGrid = () => {
   return (

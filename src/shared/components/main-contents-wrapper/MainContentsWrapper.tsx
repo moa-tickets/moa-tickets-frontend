@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { cn } from '@/shared';
 import CommonNavigationSlide from '../navigation-slide/CommonNavigationSlide';
 import { concertRankSlides } from '@/entities/constant/concertRankSlides';
@@ -7,6 +7,16 @@ import Icon from '@/shared/lib/Icon';
 import SelectTab from '../select-tab/SelectTab';
 import { PlayListMocks } from '@/entities/constant/PlayListMocks';
 import { recommendKeywords } from '@/entities/constant/recommendKeywords';
+
+const ContentHeader = React.memo(({ title }: { title: string }) => (
+  <h2
+    className={cn(
+      'flex items-center justify-center gap-2 text-center text-[22px] font-bold mb-[33px]',
+    )}
+  >
+    {title}
+  </h2>
+));
 
 const MainContentsWrapper = ({
   title,
@@ -31,13 +41,7 @@ const MainContentsWrapper = ({
   return (
     <div className={cn('main__contents__wrapper mt-[60px]')}>
       <div className={cn('main__contents max-w-[1080px] mx-auto')}>
-        <h2
-          className={cn(
-            'flex items-center justify-center gap-2 text-center text-[22px] font-bold mb-[33px]',
-          )}
-        >
-          {title}
-        </h2>
+        <ContentHeader title={title} />
         {isTab && title === '플레이' && (
           <SelectTab
             contentKey={playListKeys}

@@ -51,29 +51,26 @@ const MainBannerSlides = () => {
     startX.current = clientX;
   }, []);
 
-  const handleDragEnd = useCallback(
-    (clientX: number) => {
-      if (!isDragging.current) return;
-      isDragging.current = false;
+  const handleDragEnd = useCallback((clientX: number) => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
 
-      const diff = startX.current - clientX;
-      const threshold = 50;
+    const diff = startX.current - clientX;
+    const threshold = 50;
 
-      if (Math.abs(diff) > threshold) {
-        hasDragged.current = true;
-      }
+    if (Math.abs(diff) > threshold) {
+      hasDragged.current = true;
+    }
 
-      const length = mainBannerSlides.length;
-      if (diff > threshold) {
-        // 왼쪽으로 드래그 -> 다음 슬라이드
-        setCurrentIndex((prev) => (prev + 1) % length);
-      } else if (diff < -threshold) {
-        // 오른쪽으로 드래그 -> 이전 슬라이드
-        setCurrentIndex((prev) => (prev - 1 + length) % length);
-      }
-    },
-    [],
-  );
+    const length = mainBannerSlides.length;
+    if (diff > threshold) {
+      // 왼쪽으로 드래그 -> 다음 슬라이드
+      setCurrentIndex((prev) => (prev + 1) % length);
+    } else if (diff < -threshold) {
+      // 오른쪽으로 드래그 -> 이전 슬라이드
+      setCurrentIndex((prev) => (prev - 1 + length) % length);
+    }
+  }, []);
 
   const handleLinkClick = useCallback((e: React.MouseEvent) => {
     if (hasDragged.current) {
@@ -113,16 +110,17 @@ const MainBannerSlides = () => {
       >
         <div
           className={cn(
-            'slides__wrapper flex',
+            'slides__wrapper flex w-full h-full',
             isTransitioning && 'transition-transform duration-500 ease-in-out',
           )}
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
-          {mainBannerSlides.map((slide) => (
+          {mainBannerSlides.map((slide, index) => (
             <BannerSlideItem
               key={slide.id}
               slide={slide}
               onLinkClick={handleLinkClick}
+              priority={index === 0}
             />
           ))}
         </div>

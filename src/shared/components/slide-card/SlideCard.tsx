@@ -1,15 +1,15 @@
+import React from 'react';
 import type { ConcertRankSlide } from '@/entities/types/types';
 import { cn } from '@/shared/lib/utils';
 import { Link } from 'react-router-dom';
-import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import OptimizedImage from '@/shared/components/lazy-loading/LazyImage';
 
-const SlideCard = ({
-  item,
-  className,
-}: {
+interface SlideCardProps {
   item: ConcertRankSlide;
   className?: string;
-}) => {
+}
+
+const SlideCard = React.memo(({ item, className }: SlideCardProps) => {
   return (
     <Link to={`concert/${item.id}`} className={cn('slide__card', className)}>
       <div
@@ -62,6 +62,6 @@ const SlideCard = ({
       )}
     </Link>
   );
-};
+});
 
 export default SlideCard;

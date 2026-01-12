@@ -4,7 +4,7 @@ import DetailDescription from '@/widgets/detail-description/DetailDescription';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/shared/components/ui/button';
 import Icon from '@/shared/lib/Icon';
-import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import OptimizedImage from '@/shared/components/lazy-loading/LazyImage';
 import { useProductSearch } from '@/features/product-search/useProductSearch';
 import PriceModal from '@/shared/components/price-modal/PriceModal';
 import ConcertReviews from '@/widgets/concert-reviews/ConcertReviews';

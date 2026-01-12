@@ -1,11 +1,13 @@
 import { useParams, Link } from 'react-router-dom';
 import { cn } from '@/shared';
 import { useBookingDetail } from '@/features/booking/useBookings';
-import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import OptimizedImage from '@/shared/components/lazy-loading/LazyImage';
 
 const ReservationDetailPage = () => {
   const { reservationId } = useParams<{ reservationId: string }>();
-  const { data, isLoading, isError, error } = useBookingDetail(reservationId || '');
+  const { data, isLoading, isError, error } = useBookingDetail(
+    reservationId || '',
+  );
 
   // 디버깅
   console.log('=== ReservationDetailPage Debug ===');
@@ -83,8 +85,7 @@ const ReservationDetailPage = () => {
       >
         <h1 className={cn('text-[30px] font-bold mb-[10px]')}>예매 상세</h1>
         <div className={cn('text-[14px] text-[#888]')}>
-          예매번호:{' '}
-          <span className={cn('font-bold')}>{detail.orderId}</span>
+          예매번호: <span className={cn('font-bold')}>{detail.orderId}</span>
         </div>
       </div>
 
@@ -128,7 +129,8 @@ const ReservationDetailPage = () => {
                 공연기간
               </span>
               <span className={cn('flex-1 text-[#242428]')}>
-                {formatDate(detail.concertStart)} ~ {formatDate(detail.concertEnd)}
+                {formatDate(detail.concertStart)} ~{' '}
+                {formatDate(detail.concertEnd)}
               </span>
             </div>
             <div className={cn('flex items-start gap-[10px] text-[16px]')}>
@@ -174,16 +176,18 @@ const ReservationDetailPage = () => {
                 좌석 정보
               </h3>
               <div className={cn('flex flex-wrap gap-[8px]')}>
-                {detail.seats.map((seat: { ticketId: number; seatNum: number }) => (
-                  <span
-                    key={seat.ticketId}
-                    className={cn(
-                      'px-[12px] py-[6px] bg-[#F8F9FA] rounded-[4px] text-[14px] text-[#242428]',
-                    )}
-                  >
-                    {seat.seatNum}번
-                  </span>
-                ))}
+                {detail.seats.map(
+                  (seat: { ticketId: number; seatNum: number }) => (
+                    <span
+                      key={seat.ticketId}
+                      className={cn(
+                        'px-[12px] py-[6px] bg-[#F8F9FA] rounded-[4px] text-[14px] text-[#242428]',
+                      )}
+                    >
+                      {seat.seatNum}번
+                    </span>
+                  ),
+                )}
               </div>
             </div>
           )}
@@ -195,11 +199,7 @@ const ReservationDetailPage = () => {
         <h3 className={cn('text-[20px] font-bold mb-[20px]')}>결제 정보</h3>
         <div className={cn('bg-[#F8F9FA] p-[20px] rounded-[8px]')}>
           <div className={cn('space-y-[12px]')}>
-            <div
-              className={cn(
-                'flex justify-between text-[16px] font-bold',
-              )}
-            >
+            <div className={cn('flex justify-between text-[16px] font-bold')}>
               <span className={cn('text-[#242428]')}>총 결제금액</span>
               <span className={cn('text-[#242428]')}>
                 {formatPrice(detail.amount)}원

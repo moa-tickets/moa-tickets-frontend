@@ -1,66 +1,27 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { cn } from '@/shared';
 import SearchButton from '@/shared/components/search-button/SearchButton';
 
-const SearchRankingBar = ({ ref }: { ref: React.Ref<HTMLDivElement> }) => {
-  const initialPopularRanks = [
-    {
-      ranks: 1,
-      words: '싱어게인',
-      changedRanks: 0,
-    },
-    {
-      ranks: 2,
-      words: '성시경',
-      changedRanks: 0,
-    },
-    {
-      ranks: 3,
-      words: '임영웅',
-      changedRanks: 0,
-    },
-    {
-      ranks: 4,
-      words: '킥플립',
-      changedRanks: 1,
-    },
-    {
-      ranks: 5,
-      words: '어쩌면 해피엔딩',
-      changedRanks: -1,
-    },
-    {
-      ranks: 6,
-      words: '이창섭',
-      changedRanks: -2,
-    },
-    {
-      ranks: 7,
-      words: '부산',
-      changedRanks: 3,
-    },
-    {
-      ranks: 8,
-      words: '조용필',
-      changedRanks: 3,
-    },
-    {
-      ranks: 9,
-      words: '싱어게인4',
-      changedRanks: 0,
-    },
-    {
-      ranks: 10,
-      words: '대구',
-      changedRanks: -1,
-    },
-  ];
+const INITIAL_POPULAR_RANKS = [
+  { ranks: 1, words: '싱어게인', changedRanks: 0 },
+  { ranks: 2, words: '성시경', changedRanks: 0 },
+  { ranks: 3, words: '임영웅', changedRanks: 0 },
+  { ranks: 4, words: '킥플립', changedRanks: 1 },
+  { ranks: 5, words: '어쩌면 해피엔딩', changedRanks: -1 },
+  { ranks: 6, words: '이창섭', changedRanks: -2 },
+  { ranks: 7, words: '부산', changedRanks: 3 },
+  { ranks: 8, words: '조용필', changedRanks: 3 },
+  { ranks: 9, words: '싱어게인4', changedRanks: 0 },
+  { ranks: 10, words: '대구', changedRanks: -1 },
+];
 
-  const [recentWords, setRecentWords] = useState<string[]>([]);
-  const [popularRanks, setPopularRanks] = useState(initialPopularRanks);
+const SearchRankingBar = React.memo(
+  ({ ref }: { ref: React.Ref<HTMLDivElement> }) => {
+    const [recentWords, setRecentWords] = useState<string[]>([]);
+    const [popularRanks, setPopularRanks] = useState(INITIAL_POPULAR_RANKS);
 
-  // 예비
-  console.log(setPopularRanks, setRecentWords);
+    // 예비
+    console.log(setPopularRanks, setRecentWords);
 
   return (
     <div
@@ -113,6 +74,7 @@ const SearchRankingBar = ({ ref }: { ref: React.Ref<HTMLDivElement> }) => {
       </div>
     </div>
   );
-};
+  },
+);
 
 export default SearchRankingBar;
