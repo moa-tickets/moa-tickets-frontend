@@ -10,7 +10,8 @@ interface MessageResponseDto {
     message: string;
 }
 
-const SOCKET_URL = "http://localhost:8080/ws/connect";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const SOCKET_URL = API_BASE + "/ws/connect";
 
 export default function StreamPage() {
     const { playbackId } = useParams<{ playbackId: string }>();
