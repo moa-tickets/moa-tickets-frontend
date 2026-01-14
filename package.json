@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
+    "@stomp/stompjs": "^7.2.1",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-query": "^5.90.12",
     "@tanstack/react-query-devtools": "^5.91.1",
@@ -27,6 +28,8 @@
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.11.0",
     "react-youtube": "^10.1.0",
+    "sockjs-client": "^1.6.1",
+    "stompjs": "^2.3.3",
     "swiper": "^12.0.3",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
