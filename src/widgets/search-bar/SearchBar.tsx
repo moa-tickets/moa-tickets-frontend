@@ -14,7 +14,7 @@ const SearchBar = () => {
   useEffect(() => {
     const queryValue = searchParams.get('q') || '';
     // 값이 실제로 변경됐을 때만 업데이트
-    setSearchWords(prev => prev === queryValue ? prev : queryValue);
+    setSearchWords((prev) => (prev === queryValue ? prev : queryValue));
   }, [searchParams]);
 
   const handleSearchWordsChange = useCallback((value: string) => {

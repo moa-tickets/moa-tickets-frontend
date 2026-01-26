@@ -1,36 +1,33 @@
-import { useEffect, useState } from 'react';
-import useIntersect from '@/features/intersect/useIntersect';
 import { cn } from '@/shared';
-import { is } from 'date-fns/locale';
+import useIntersect from '@/features/intersect/useIntersect';
 
-interface OptimizedImageProps {
+export default function LazyImage({
+  src,
+  alt,
+  className,
+  skeletonComponent,
+}: Readonly<{
   src: string;
   alt: string;
-  className: string;
-  onLoad?: () => void;
-}
-
-export default function LazyImage(props: Readonly<OptimizedImageProps>) {
-  const { ref, isIntersecting } = useIntersect<HTMLImageElement>({
+  className?: string;
+  skeletonComponent: React.ReactNode;
+}>) {
+  const { ref, isIntersecting } = useIntersect({
+    threshold: 0.2,
     rootMargin: '100px',
-    threshold: 0.1,
   });
 
   return (
-    <div ref={ref} className={cn('overflow-hidden', props.className)}>
+    <div className={cn('observe__lazy__image', className)} ref={ref}>
       {isIntersecting ? (
         <img
-          src={props.src}
-          alt={props.alt}
+          src={src}
+          alt={alt}
+          loading={'lazy'}
           className={cn('w-full h-full object-cover')}
-          onLoad={props.onLoad}
         />
       ) : (
-        <div
-          className={cn(
-            'w-full h-full flex items-center justify-center bg-[#ccc]',
-          )}
-        ></div>
+        skeletonComponent
       )}
     </div>
   );

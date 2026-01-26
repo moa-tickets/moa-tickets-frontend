@@ -4,6 +4,7 @@ import MainLayout from '@/shared/components/layouts/MainLayout';
 import MyPageLayout from '@/shared/components/layouts/MyPageLayout';
 import MainPage from '@/pages/main/MainPage';
 import ProtectedRoute from '@/shared/components/ProtectedRoute';
+import BookingLayout from '@/shared/components/layouts/BookingLayout';
 
 // 레이지 로딩 페이지 컴포넌트
 const SearchResult = lazy(() => import('@/pages/search-result/SearchResult'));
@@ -25,10 +26,6 @@ const LoginPage = lazy(() => import('@/pages/login/LoginPage'));
 const LoginCallback = lazy(
   () => import('@/pages/login-callback/LoginCallback'),
 );
-const PaymentSuccessPage = lazy(
-  () => import('@/pages/payment/PaymentSuccessPage'),
-);
-const PaymentFailPage = lazy(() => import('@/pages/payment/PaymentFailPage'));
 const SelectInquiry = lazy(
   () => import('@/pages/select-inquiry/SelectInquiry'),
 );
@@ -60,7 +57,7 @@ const createdRouter = createBrowserRouter([
     children: [
       {
         index: true,
-        element: withSuspense(MainPage),
+        element: <MainPage />,
       },
       {
         path: 'login',
@@ -75,25 +72,10 @@ const createdRouter = createBrowserRouter([
         element: withSuspense(SearchResult),
       },
       {
-        path: 'landing/:id',
-        element: withSuspense(LandingPage),
-      },
-      {
-        path: 'detail/:id',
-        element: withSuspense(DetailPage),
-      },
-      {
-        path: 'detail/:id/booking',
-        element: withSuspense(BookingPage),
-      },
-      {
-        path: 'detail/:id/payment',
-        element: withSuspense(PaymentPage),
-      },
-      {
         path: 'inquiry-write',
         element: withSuspense(InquiryWrite),
       },
+
       {
         path: 'mypage',
         element: <ProtectedRoute />,
@@ -129,19 +111,45 @@ const createdRouter = createBrowserRouter([
           },
         ],
       },
-      {
-        path: 'payments/success',
-        element: withSuspense(PaymentSuccessPage),
-      },
-      {
-        path: 'payments/fail',
-        element: withSuspense(PaymentFailPage),
-      },
     ],
   },
   {
     path: 'live/:playbackId',
     element: withSuspense(StreamPage),
+  },
+  {
+    path: 'detail/:id',
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <MainLayout />,
+        children: [
+          {
+            index: true,
+            element: withSuspense(DetailPage),
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: 'detail/:id',
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <BookingLayout />,
+        children: [
+          {
+            path: 'booking',
+            element: withSuspense(BookingPage),
+          },
+          {
+            path: 'payment',
+            element: withSuspense(PaymentPage),
+          },
+        ],
+      },
+    ],
   },
 ]);
 

@@ -1,10 +1,7 @@
-import { useLoginData } from '@/entities/stores/useLoginData';
 import { Navigate, Outlet } from 'react-router-dom';
 
 const ProtectedRoute = () => {
-  const isLoggedIn = useLoginData((state) => state.isLoggedIn);
-
-  if (!isLoggedIn) {
+  if (false) {
     return <Navigate to="/login" replace />;
   }
 

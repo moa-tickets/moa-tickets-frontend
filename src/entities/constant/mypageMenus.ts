@@ -1,3 +1,14 @@
+export interface OneDepth {
+  id: number;
+  parentMenu: string;
+  child: TwoDepth[];
+}
+
+export interface TwoDepth {
+  childMenu: string;
+  childLink: string;
+}
+
 export const mypageMenus = [
   {
     id: 1,

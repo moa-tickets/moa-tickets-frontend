@@ -2,7 +2,8 @@ import React from 'react';
 import type { ConcertRankSlide } from '@/entities/types/types';
 import { cn } from '@/shared/lib/utils';
 import { Link } from 'react-router-dom';
-import OptimizedImage from '@/shared/components/lazy-loading/LazyImage';
+import LazyImage from '@/shared/components/lazy-loading/LazyImage';
+import Skeleton from '../skeleton/Skeleton';
 
 interface SlideCardProps {
   item: ConcertRankSlide;
@@ -17,11 +18,13 @@ const SlideCard = React.memo(({ item, className }: SlideCardProps) => {
           'slide__card__image w-full h-[288px] relative mb-[20px] mt-[30px] rounded-[16px] overflow-hidden',
         )}
       >
-        <OptimizedImage
+        <LazyImage
           src={item.imgUrl}
           alt={item.title}
           className={cn('w-full h-full pointer-events-none')}
-          skeletonClassName="rounded-[16px]"
+          skeletonComponent={
+            <Skeleton className={cn('w-full h-full bg-[#ccc]')} />
+          }
         />
         <span
           className={cn(

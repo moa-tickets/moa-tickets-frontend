@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-export default function useIntersect<T extends HTMLElement>(
+export default function useIntersect<T extends HTMLDivElement>(
   options?: IntersectionObserverInit,
 ) {
   const ref = useRef<T | null>(null);

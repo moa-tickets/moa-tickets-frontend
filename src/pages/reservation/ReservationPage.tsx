@@ -6,7 +6,7 @@ import Pagination from '@/shared/components/pagination/Pagination';
 import TicketCancelNotice from '@/widgets/ticket-cancel-notice/TicketCancelNotice';
 import { useState, useEffect } from 'react';
 import {
-  useBookings,
+  useBooking,
   type RangeType,
   type BasisType,
   type BookingFilterParams,
@@ -45,7 +45,7 @@ const ReservationPage = () => {
   };
 
   // API 호출
-  const { data, isLoading } = useBookings(buildFilterParams());
+  const { data, isLoading } = useBooking(buildFilterParams());
 
   // 필터 변경 시 페이지 초기화
   useEffect(() => {
