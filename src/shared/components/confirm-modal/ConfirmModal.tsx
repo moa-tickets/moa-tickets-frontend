@@ -1,68 +1,46 @@
 import { useEffect } from 'react';
 import { cn } from '@/shared';
+import ModalButton from './ModalButton';
 
-interface ConfirmModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  message: string;
-  confirmText?: string;
-}
-
-const ConfirmModal = ({
-  isOpen,
-  onClose,
+export default function ConfirmModal({
   title,
   message,
-  confirmText = '확인',
-}: ConfirmModalProps) => {
+  isOpen,
+  onClose,
+  isInfo,
+}: Readonly<{
+  title: string;
+  message: string | React.ReactNode;
+  isOpen: boolean;
+  onClose: () => void;
+  isInfo?: boolean;
+}>) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+      document.body.classList.add('modal-dimmed');
     }
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = 'auto';
+      document.body.classList.remove('modal-dimmed');
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center"
-      onClick={onClose}
+      className={cn(
+        'fixed inset-0 m-auto w-[600px] h-[260px] flex flex-col justify-center bg-white rounded-lg shadow-lg p-6 z-100',
+      )}
     >
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/50" />
-
-      {/* Modal */}
-      <div
-        className={cn(
-          'relative bg-white rounded-lg shadow-xl',
-          'w-[90%] max-w-[444px] py-[60px] px-[40px]',
-          'flex flex-col items-center text-center',
-        )}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <h2 className="text-[28px] font-bold text-black mb-[20px]">{title}</h2>
-        <p className="text-[16px] text-black whitespace-pre-line mb-[30px]">
-          {message}
-        </p>
-        <button
-          onClick={onClose}
-          className={cn(
-            'w-full max-w-[250px] py-[16px] px-[60px]',
-            'bg-[#5B4FCF] text-white text-[18px] font-medium',
-            'rounded-[12px] hover:bg-[#4A3FB8] transition-colors',
-          )}
-        >
-          {confirmText}
-        </button>
+      <h2 className={cn('text-center text-[22px] font-bold')}>{title}</h2>
+      {isInfo ? (
+        message
+      ) : (
+        <span className="block text-center mt-[20px]">{message}</span>
+      )}
+      <div className="modal__buttons mt-[30px] flex justify-center">
+        <ModalButton onClick={onClose} title={'닫기'} />
       </div>
     </div>
   );
-};
-
-export default ConfirmModal;
+}

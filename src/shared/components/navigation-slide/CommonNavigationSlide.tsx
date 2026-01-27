@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import type {
   ConcertRankSlide,
   PlayListItem,
@@ -10,6 +10,32 @@ import SlideCard from '../slide-card/SlideCard';
 import SlideGridCard from '../slide-card/SlideGridCard';
 import SlidePlayCard from '../slide-card/SlidePlayCard';
 import Icon from '@/shared/lib/Icon';
+
+interface SlideNavButtonProps {
+  direction: 'prev' | 'next';
+  onClick: () => void;
+  disabled: boolean;
+}
+
+// 아이콘을 컴포넌트 외부에 상수로 정의하여 리렌더링 방지
+const NavButtonIcon = <Icon ICON="RIGHT" className="w-[16px] h-[16px] fill-none" />;
+
+const SlideNavButton = React.memo(({ direction, onClick, disabled }: SlideNavButtonProps) => {
+  const isPrev = direction === 'prev';
+  return (
+    <button
+      className={cn(
+        isPrev
+          ? 'slide__nav__prev rotate-[180deg] w-[46px] h-[46px] bg-[rgba(255,255,255,.9)] rounded-full flex justify-center items-center absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-[20] cursor-pointer text-white shadow-[0_0_8px_0_rgba(0,0,0,.13)] border border-solid border-[rgba(0,0,0,.1)] disabled:opacity-40 disabled:cursor-not-allowed'
+          : 'slide__nav__next w-[46px] h-[46px] bg-[rgba(255,255,255,.9)] rounded-full flex justify-center items-center absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-[20] cursor-pointer text-white shadow-[0_0_8px_0_rgba(0,0,0,.13)] border border-solid border-[rgba(0,0,0,.1)] disabled:opacity-40 disabled:cursor-not-allowed',
+      )}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {NavButtonIcon}
+    </button>
+  );
+});
 
 const CommonNavigationSlide = ({
   type,
@@ -36,13 +62,13 @@ const CommonNavigationSlide = ({
   const maxIndex = Math.max(0, data.length - visibleCount);
   const isVertical = type.startsWith('VERTICAL');
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev));
-  };
+  }, []);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : prev));
-  };
+  }, [maxIndex]);
 
   // 카드 1개 너비 + gap 비율 (VERTICAL-3: 33.33%, VERTICAL-5: 20%)
   const slidePercentage = type === 'VERTICAL-3' ? 100 / 3 : 20;
@@ -91,24 +117,16 @@ const CommonNavigationSlide = ({
       {type === 'VERTICAL-5' && (
         <>
           {/* 버튼 - 슬라이드 영역 바깥에 위치 */}
-          <button
-            className={cn(
-              'slide__nav__prev rotate-[180deg] w-[46px] h-[46px] bg-[rgba(255,255,255,.9)] rounded-full flex justify-center items-center absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-[20] cursor-pointer text-white shadow-[0_0_8px_0_rgba(0,0,0,.13)] border border-solid border-[rgba(0,0,0,.1)] disabled:opacity-40 disabled:cursor-not-allowed',
-            )}
+          <SlideNavButton
+            direction="prev"
             onClick={handlePrev}
             disabled={currentIndex === 0}
-          >
-            <Icon ICON="RIGHT" className="w-[16px] h-[16px] fill-none" />
-          </button>
-          <button
-            className={cn(
-              'slide__nav__next w-[46px] h-[46px] bg-[rgba(255,255,255,.9)] rounded-full flex justify-center items-center absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-[20] cursor-pointer text-white shadow-[0_0_8px_0_rgba(0,0,0,.13)] border border-solid border-[rgba(0,0,0,.1)] disabled:opacity-40 disabled:cursor-not-allowed',
-            )}
+          />
+          <SlideNavButton
+            direction="next"
             onClick={handleNext}
             disabled={currentIndex === maxIndex}
-          >
-            <Icon ICON="RIGHT" className="w-[16px] h-[16px] fill-none" />
-          </button>
+          />
 
           {/* 슬라이드 영역 */}
           <div
@@ -156,24 +174,16 @@ const CommonNavigationSlide = ({
       {type === 'VERTICAL-3' && (
         <>
           {/* 버튼 - 슬라이드 영역 바깥에 위치 */}
-          <button
-            className={cn(
-              'slide__nav__prev rotate-[180deg] w-[46px] h-[46px] bg-[rgba(255,255,255,.9)] rounded-full flex justify-center items-center absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-[20] cursor-pointer text-white shadow-[0_0_8px_0_rgba(0,0,0,.13)] border border-solid border-[rgba(0,0,0,.1)] disabled:opacity-40 disabled:cursor-not-allowed',
-            )}
+          <SlideNavButton
+            direction="prev"
             onClick={handlePrev}
             disabled={currentIndex === 0}
-          >
-            <Icon ICON="RIGHT" className="w-[16px] h-[16px] fill-none" />
-          </button>
-          <button
-            className={cn(
-              'slide__nav__next w-[46px] h-[46px] bg-[rgba(255,255,255,.9)] rounded-full flex justify-center items-center absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-[20] cursor-pointer text-white shadow-[0_0_8px_0_rgba(0,0,0,.13)] border border-solid border-[rgba(0,0,0,.1)] disabled:opacity-40 disabled:cursor-not-allowed',
-            )}
+          />
+          <SlideNavButton
+            direction="next"
             onClick={handleNext}
             disabled={currentIndex === maxIndex}
-          >
-            <Icon ICON="RIGHT" className="w-[16px] h-[16px] fill-none" />
-          </button>
+          />
 
           {/* 슬라이드 영역 */}
           <div

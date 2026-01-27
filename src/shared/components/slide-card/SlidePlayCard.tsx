@@ -1,15 +1,15 @@
+import React from 'react';
 import type { PlayListItem } from '@/entities/types/types';
 import { cn } from '@/shared';
 import YoutubePlayers from '../youtube-custom/YoutubePlayers';
-import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import OptimizedImage from '@/shared/components/lazy-loading/LazyImage';
 
-const SlidePlayCard = ({
-  item,
-  className,
-}: {
+interface SlidePlayCardProps {
   item: PlayListItem;
   className: string;
-}) => {
+}
+
+const SlidePlayCard = React.memo(({ item, className }: SlidePlayCardProps) => {
   return (
     <div
       className={cn(
@@ -46,6 +46,6 @@ const SlidePlayCard = ({
       </div>
     </div>
   );
-};
+});
 
 export default SlidePlayCard;

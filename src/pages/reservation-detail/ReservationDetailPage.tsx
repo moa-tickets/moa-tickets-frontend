@@ -1,24 +1,28 @@
 import { useParams, Link } from 'react-router-dom';
 import { cn } from '@/shared';
-import { useBookingDetail } from '@/features/booking/useBookings';
-import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import { useReservation } from '@/features/reservation/useReservation';
+import OptimizedImage from '@/shared/components/lazy-loading/LazyImage';
+import { useSelector } from 'react-redux';
+import type {
+  MainReservationDetail,
+  ReservationDetailSeat,
+} from '@/entities/reducers/ReservationDetailReducer';
+import { useEffect } from 'react';
 
 const ReservationDetailPage = () => {
   const { reservationId } = useParams<{ reservationId: string }>();
-  const { data, isLoading, isError, error } = useBookingDetail(reservationId || '');
+  const { getReserDetail, getReserDetailPending } = useReservation();
 
-  // 디버깅
-  console.log('=== ReservationDetailPage Debug ===');
-  console.log('reservationId:', reservationId);
-  console.log('data (전체):', data);
-  console.log('data?.data:', data?.data);
-  console.log('isLoading:', isLoading);
-  console.log('isError:', isError);
-  console.log('error:', error);
+  const { data: detail } = useSelector(
+    (state: { reservationDetailReducer: MainReservationDetail }) =>
+      state.reservationDetailReducer,
+  );
 
-  // API 응답이 { data: {...} } 형태가 아닐 수 있음
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const detail = (data?.data ?? data) as any;
+  useEffect(() => {
+    if (reservationId) {
+      getReserDetail.mutate({ orderId: reservationId });
+    }
+  }, [reservationId]);
 
   const formatPrice = (price: number) => {
     return price.toLocaleString('ko-KR');
@@ -47,7 +51,7 @@ const ReservationDetailPage = () => {
     }
   };
 
-  if (isLoading) {
+  if (getReserDetailPending) {
     return (
       <div className={cn('max-w-[1080px] mx-auto py-[40px] text-center')}>
         <p className={cn('text-[16px] text-[#62676C]')}>로딩 중...</p>
@@ -55,7 +59,7 @@ const ReservationDetailPage = () => {
     );
   }
 
-  if (isError || !detail) {
+  if (!detail.orderId) {
     return (
       <div className={cn('max-w-[1080px] mx-auto py-[40px] text-center')}>
         <p className={cn('text-[16px] text-[#62676C]')}>
@@ -83,8 +87,7 @@ const ReservationDetailPage = () => {
       >
         <h1 className={cn('text-[30px] font-bold mb-[10px]')}>예매 상세</h1>
         <div className={cn('text-[14px] text-[#888]')}>
-          예매번호:{' '}
-          <span className={cn('font-bold')}>{detail.orderId}</span>
+          예매번호: <span className={cn('font-bold')}>{detail.orderId}</span>
         </div>
       </div>
 
@@ -102,6 +105,9 @@ const ReservationDetailPage = () => {
                 src={detail.concertThumbnail}
                 alt={detail.concertName}
                 className="w-full h-full object-cover"
+                skeletonComponent={
+                  <div className="w-full h-full bg-[#e0e0e0] animate-pulse" />
+                }
               />
             )}
           </div>
@@ -128,7 +134,8 @@ const ReservationDetailPage = () => {
                 공연기간
               </span>
               <span className={cn('flex-1 text-[#242428]')}>
-                {formatDate(detail.concertStart)} ~ {formatDate(detail.concertEnd)}
+                {formatDate(detail.concertStart)} ~{' '}
+                {formatDate(detail.concertEnd)}
               </span>
             </div>
             <div className={cn('flex items-start gap-[10px] text-[16px]')}>
@@ -174,7 +181,7 @@ const ReservationDetailPage = () => {
                 좌석 정보
               </h3>
               <div className={cn('flex flex-wrap gap-[8px]')}>
-                {detail.seats.map((seat: { ticketId: number; seatNum: number }) => (
+                {detail.seats.map((seat: ReservationDetailSeat) => (
                   <span
                     key={seat.ticketId}
                     className={cn(
@@ -195,11 +202,7 @@ const ReservationDetailPage = () => {
         <h3 className={cn('text-[20px] font-bold mb-[20px]')}>결제 정보</h3>
         <div className={cn('bg-[#F8F9FA] p-[20px] rounded-[8px]')}>
           <div className={cn('space-y-[12px]')}>
-            <div
-              className={cn(
-                'flex justify-between text-[16px] font-bold',
-              )}
-            >
+            <div className={cn('flex justify-between text-[16px] font-bold')}>
               <span className={cn('text-[#242428]')}>총 결제금액</span>
               <span className={cn('text-[#242428]')}>
                 {formatPrice(detail.amount)}원
