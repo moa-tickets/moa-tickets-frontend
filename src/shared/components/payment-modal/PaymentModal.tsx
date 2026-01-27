@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import {
   loadTossPayments,
@@ -10,6 +10,7 @@ import { CLOSE_MODAL } from '@/entities/reducers/ModalReducer';
 
 const PaymentModal = ({ isOpen }: { isOpen: boolean }) => {
   const dispatch = useDispatch();
+  const isTossOpenRef = useRef(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -20,6 +21,10 @@ const PaymentModal = ({ isOpen }: { isOpen: boolean }) => {
       window.history.pushState({ modal: true }, '', window.location.href);
 
       const handlePopState = () => {
+        // 토스 iframe이 열려있으면 히스토리 유지하면서 모달 닫기
+        if (isTossOpenRef.current) {
+          window.history.pushState({ modal: true }, '', window.location.href);
+        }
         // 뒤로가기 시 모달 닫기
         dispatch({ type: CLOSE_MODAL });
       };
@@ -93,6 +98,7 @@ const PaymentModal = ({ isOpen }: { isOpen: boolean }) => {
     if (!widgets || !isReady) return;
 
     setIsLoading(true);
+    isTossOpenRef.current = true;
 
     // 토스 위젯 열기 전 히스토리 추가 (뒤로가기 시 토스 위젯 닫힘)
     window.history.pushState({ tossPayment: true }, '', window.location.href);
@@ -108,6 +114,7 @@ const PaymentModal = ({ isOpen }: { isOpen: boolean }) => {
       console.error('결제 요청 실패:', error);
     } finally {
       setIsLoading(false);
+      isTossOpenRef.current = false;
     }
   };
 
