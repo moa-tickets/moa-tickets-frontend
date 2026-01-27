@@ -1,15 +1,16 @@
+import React from 'react';
 import type { ConcertRankSlide } from '@/entities/types/types';
 import { cn } from '@/shared/lib/utils';
 import { Link } from 'react-router-dom';
-import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import LazyImage from '@/shared/components/lazy-loading/LazyImage';
+import Skeleton from '../skeleton/Skeleton';
 
-const SlideCard = ({
-  item,
-  className,
-}: {
+interface SlideCardProps {
   item: ConcertRankSlide;
   className?: string;
-}) => {
+}
+
+const SlideCard = React.memo(({ item, className }: SlideCardProps) => {
   return (
     <Link to={`concert/${item.id}`} className={cn('slide__card', className)}>
       <div
@@ -17,11 +18,13 @@ const SlideCard = ({
           'slide__card__image w-full h-[288px] relative mb-[20px] mt-[30px] rounded-[16px] overflow-hidden',
         )}
       >
-        <OptimizedImage
+        <LazyImage
           src={item.imgUrl}
           alt={item.title}
           className={cn('w-full h-full pointer-events-none')}
-          skeletonClassName="rounded-[16px]"
+          skeletonComponent={
+            <Skeleton className={cn('w-full h-full bg-[#ccc]')} />
+          }
         />
         <span
           className={cn(
@@ -62,6 +65,6 @@ const SlideCard = ({
       )}
     </Link>
   );
-};
+});
 
 export default SlideCard;

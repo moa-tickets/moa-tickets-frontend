@@ -1,3 +1,14 @@
+export type Action = {
+  type: string;
+  payload?: any;
+};
+
+export type ModalState = {
+  isOpen: boolean;
+  title: string | null;
+  message: string | null;
+};
+
 export type ConcertRankSlide = {
   id: number;
   title: string;
@@ -6,17 +17,6 @@ export type ConcertRankSlide = {
   date: string[];
   seatOver?: boolean;
   privateSale?: boolean;
-};
-
-export type ConcertListType = {
-  concertId: number;
-  bookingOpen: string;
-  concertDuration: string;
-  concertEnd: string;
-  concertName: string;
-  concertStart: string;
-  concertThumbnail: string;
-  hallName?: string;
 };
 
 export type WillOpenGridItem = {

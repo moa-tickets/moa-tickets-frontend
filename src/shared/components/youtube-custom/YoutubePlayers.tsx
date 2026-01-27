@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import YouTube, { type YouTubeProps, type YouTubePlayer } from 'react-youtube';
 import Icon from '@/shared/lib/Icon';
-import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import OptimizedImage from '@/shared/components/lazy-loading/LazyImage';
 
 const formatTime = (seconds: number) => {
   const mins = Math.floor(seconds / 60);
