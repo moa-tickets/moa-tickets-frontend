@@ -1,83 +1,69 @@
-import { mypageMenus } from '@/entities/constant/mypageMenus';
-import { useLoginData } from '@/entities/stores/useLoginData';
-import { useLoginDataFunction } from '@/features/login/useLoginDataFunction';
 import { cn } from '@/shared';
-import Icon from '@/shared/lib/Icon';
-import { useEffect } from 'react';
+import {
+  mypageMenus,
+  type OneDepth,
+  type TwoDepth,
+} from '@/entities/constant/mypageMenus';
 import { Link, useLocation } from 'react-router-dom';
+import { BiCaretRight } from 'react-icons/bi';
+import { useSelector } from 'react-redux';
+import type { LoginState } from '@/entities/reducers/LoginReducer';
 
 const MyPageAside = () => {
   const location = useLocation();
 
-  const { getLoginData } = useLoginDataFunction();
-  const userData = useLoginData((state) => state.userData);
-
-  useEffect(() => {
-    getLoginData.mutate();
-  }, []);
-
-  console.log('userData:', userData);
+  const { isSeller } = useSelector(
+    (state: { loginReducer: LoginState }) => state.loginReducer,
+  );
 
   return (
-    <div className={cn('my__page__aside w-[250px] px-[30px] pb-[30px]')}>
-      <ul>
-        {mypageMenus.map((menu: any) => (
-          <li
-            key={menu.id}
-            className="pb-[20px] pt-[30px] border-b border-solid border-gray-300"
-          >
-            <dl>
-              <dd className="text-[18px] font-bold mb-[20px]">
-                {menu.parentMenu}
-              </dd>
-              {menu.child.map((child: any) => {
-                // childLink에 | 가 있으면 seller 여부에 따라 분기
-                const getChildLink = () => {
-                  if (!child.childLink.includes('|')) return child.childLink;
-                  const [buyerLink, sellerLink] = child.childLink.split('|');
-                  return userData.seller ? sellerLink : buyerLink;
-                };
-
-                const currentLink = getChildLink();
-
-                // 상세 페이지에서도 해당 메뉴가 active 상태가 되도록 처리
-                const isActive =
-                  location.pathname === currentLink ||
-                  (currentLink === '/mypage/reservation' &&
-                    location.pathname.startsWith('/mypage/reservation')) ||
-                  (currentLink === '/mypage/inquiry' &&
-                    location.pathname.startsWith('/mypage/inquiry'));
-
-                const getMenuLabel = () => {
-                  if (!child.childMenu.includes('|')) return child.childMenu;
-                  const [buyerLabel, sellerLabel] = child.childMenu.split('|');
-                  return userData.seller ? sellerLabel : buyerLabel;
-                };
-
-                return (
-                  <dt key={child.childMenu}>
-                    <Link
-                      to={currentLink}
-                      className={cn(
-                        'text-[14px] font-light hover:font-bold block',
-                        isActive ? 'text-[#fa2828] font-bold relative' : '',
-                      )}
-                    >
-                      <span>{getMenuLabel()}</span>
-                      {isActive && (
-                        <Icon
-                          ICON="ARROW_RIGHT"
-                          className="w-[10px] h-[10px] fill-none absolute top-0 bottom-0 my-auto right-0"
-                        />
-                      )}
-                    </Link>
-                  </dt>
-                );
-              })}
-            </dl>
-          </li>
-        ))}
-      </ul>
+    <div className={cn('w-[250px] h-[500px] bg-white px-[26px] py-[20px]')}>
+      {mypageMenus.map((one_depth: OneDepth) => (
+        <div
+          key={one_depth.id}
+          className={cn(
+            'aside__element pb-[14px] pt-[10px] px-[10px] border-b border-solid border-[rgb(237,237,237)]',
+          )}
+        >
+          <h2 className={cn('text-[16px] font-bold mb-[14px]')}>
+            {one_depth.parentMenu}
+          </h2>
+          <div className={cn('child__link flex flex-col gap-[8px]')}>
+            {one_depth.id === 3
+              ? one_depth.child.map((two_depth: TwoDepth) => (
+                  <Link
+                    className={cn('text-[14px] text-[rgb(135,141,149)]')}
+                    to={
+                      isSeller
+                        ? two_depth.childLink.split('|')[1]
+                        : two_depth.childLink.split('|')[0]
+                    }
+                    key={two_depth.childMenu}
+                  >
+                    {isSeller
+                      ? two_depth.childMenu.split('|')[1]
+                      : two_depth.childMenu.split('|')[0]}
+                  </Link>
+                ))
+              : one_depth.child.map((two_depth: TwoDepth) => (
+                  <Link
+                    to={two_depth.childLink}
+                    key={two_depth.childMenu}
+                    className={cn(
+                      'text-[14px] text-[rgb(135,141,149)]',
+                      location.pathname === two_depth.childLink &&
+                        'text-[rgb(250,40,40)] flex justify-between items-center',
+                    )}
+                  >
+                    <span>{two_depth.childMenu}</span>
+                    {location.pathname === two_depth.childLink && (
+                      <BiCaretRight />
+                    )}
+                  </Link>
+                ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

@@ -1,26 +1,53 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import MainLayout from '@/shared/components/layouts/MainLayout';
 import MyPageLayout from '@/shared/components/layouts/MyPageLayout';
 import MainPage from '@/pages/main/MainPage';
-import SearchResult from '@/pages/search-result/SearchResult';
-import LandingPage from '@/pages/landing/LandingPage';
-import DetailPage from '@/pages/detail/DetailPage';
-import ReservationPage from '@/pages/reservation/ReservationPage';
-import ReservationDetailPage from '@/pages/reservation-detail/ReservationDetailPage';
-import BookingPage from '@/pages/booking/BookingPage';
-import PaymentPage from '@/pages/payment/PaymentPage';
-import StreamPage from '@/pages/stream/StreamPage.tsx';
-import InquiryPage from '@/pages/inquiry/InquiryPage';
-import InquiryWrite from '@/pages/inquiry-write/InquiryWrite';
-import InquiryEdit from '@/pages/inquiry-edit/InquiryEdit';
-import LoginPage from '@/pages/login/LoginPage';
-import LoginCallback from '@/pages/login-callback/LoginCallback';
-import PaymentSuccessPage from '@/pages/payment/PaymentSuccessPage';
-import PaymentFailPage from '@/pages/payment/PaymentFailPage';
-import SelectInquiry from '@/pages/select-inquiry/SelectInquiry';
-import InquiryDetail from '@/pages/inquiry-detail/InquiryDetail';
 import ProtectedRoute from '@/shared/components/ProtectedRoute';
+import BookingLayout from '@/shared/components/layouts/BookingLayout';
 
+// 레이지 로딩 페이지 컴포넌트
+const SearchResult = lazy(() => import('@/pages/search-result/SearchResult'));
+const LandingPage = lazy(() => import('@/pages/landing/LandingPage'));
+const DetailPage = lazy(() => import('@/pages/detail/DetailPage'));
+const ReservationPage = lazy(
+  () => import('@/pages/reservation/ReservationPage'),
+);
+const ReservationDetailPage = lazy(
+  () => import('@/pages/reservation-detail/ReservationDetailPage'),
+);
+const BookingPage = lazy(() => import('@/pages/booking/BookingPage'));
+const PaymentPage = lazy(() => import('@/pages/payment/PaymentPage'));
+const StreamPage = lazy(() => import('@/pages/stream/StreamPage'));
+const LoginPage = lazy(() => import('@/pages/login/LoginPage'));
+const LoginCallback = lazy(
+  () => import('@/pages/login-callback/LoginCallback'),
+);
+const SelectInquiry = lazy(
+  () => import('@/pages/select-inquiry/SelectInquiry'),
+);
+const PaymentSuccessPage = lazy(
+  () => import('@/pages/payment-success/PaymentSuccessPage'),
+);
+const PaymentFailPage = lazy(
+  () => import('@/pages/payment-fail/PaymentFailPage'),
+);
+
+// 로딩 폴백 컴포넌트
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-[400px]">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
+  </div>
+);
+
+// Suspense 래퍼
+const withSuspense = (
+  Component: React.LazyExoticComponent<React.ComponentType>,
+) => (
+  <Suspense fallback={<PageLoader />}>
+    <Component />
+  </Suspense>
+);
 
 const createdRouter = createBrowserRouter([
   {
@@ -34,35 +61,23 @@ const createdRouter = createBrowserRouter([
       },
       {
         path: 'login',
-        element: <LoginPage />,
+        element: withSuspense(LoginPage),
       },
       {
         path: 'login-callback',
-        element: <LoginCallback />,
+        element: withSuspense(LoginCallback),
       },
       {
         path: 'search/result',
-        element: <SearchResult />,
+        element: withSuspense(SearchResult),
       },
       {
-        path: 'landing/:id',
-        element: <LandingPage />,
+        path: 'payment/success',
+        element: withSuspense(PaymentSuccessPage),
       },
       {
-        path: 'detail/:id',
-        element: <DetailPage />,
-      },
-      {
-        path: 'detail/:id/booking',
-        element: <BookingPage />,
-      },
-      {
-        path: 'detail/:id/payment',
-        element: <PaymentPage />,
-      },
-      {
-        path: 'inquiry-write',
-        element: <InquiryWrite />,
+        path: 'payment/fail',
+        element: withSuspense(PaymentFailPage),
       },
       {
         path: 'mypage',
@@ -73,45 +88,55 @@ const createdRouter = createBrowserRouter([
             children: [
               {
                 path: 'reservation',
-                element: <ReservationPage />,
+                element: withSuspense(ReservationPage),
               },
               {
                 path: 'reservation/:reservationId',
-                element: <ReservationDetailPage />,
-              },
-              {
-                path: 'inquiry',
-                element: <InquiryPage />,
-              },
-              {
-                path: 'selectInquiry',
-                element: <SelectInquiry />,
-              },
-              {
-                path: 'inquiry/:inquiryId',
-                element: <InquiryDetail />,
-              },
-              {
-                path: 'inquiry/:inquiryId/edit',
-                element: <InquiryEdit />,
+                element: withSuspense(ReservationDetailPage),
               },
             ],
           },
         ],
       },
-      {
-        path: 'payments/success',
-        element: <PaymentSuccessPage />,
-      },
-      {
-        path: 'payments/fail',
-        element: <PaymentFailPage />,
-      },
     ],
   },
   {
     path: 'live/:playbackId',
-    element: <StreamPage />,
+    element: withSuspense(StreamPage),
+  },
+  {
+    path: 'detail/:id',
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <MainLayout />,
+        children: [
+          {
+            index: true,
+            element: withSuspense(DetailPage),
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: 'detail/:id',
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <BookingLayout />,
+        children: [
+          {
+            path: 'booking',
+            element: withSuspense(BookingPage),
+          },
+          {
+            path: 'payment',
+            element: withSuspense(PaymentPage),
+          },
+        ],
+      },
+    ],
   },
 ]);
 

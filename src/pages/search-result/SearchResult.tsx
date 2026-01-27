@@ -1,24 +1,36 @@
+import { useCallback, useEffect, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+import type { RealConcertList } from '@/entities/reducers/ConcertListReducer';
 import { useProductSearch } from '@/features/product-search/useProductSearch';
 import { cn } from '@/shared';
 import SearchFilter from '@/widgets/search-filter/SearchFilter';
 import SearchResultList from '@/widgets/search-result-list/SearchResultList';
-import { useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import SearchResultListSkeleton from '@/widgets/search-result-list/SearchResultListSkeleton';
 
 const SearchResult = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q');
 
-  const { getSearchResults, concertList, isLoading } = useProductSearch();
+  const { getProductList, getProductListPending } = useProductSearch();
 
-  useEffect(() => {
-    if (query) {
-      getSearchResults.mutate({ query });
-    }
+  const { data: concertListData } = useSelector(
+    (state: { concertListReducer: RealConcertList }) =>
+      state.concertListReducer,
+  );
+
+  const getProductListMutation = useCallback(() => {
+    getProductList.mutate({
+      searchParam: query!,
+      sortBy: 'date',
+      sortOrder: 'asc',
+      page: 0,
+    });
   }, [query]);
 
-  console.log('concertList', concertList);
-  console.log('isLoading', isLoading);
+  useEffect(() => {
+    getProductListMutation();
+  }, []);
 
   return (
     <div className={cn('search__result__wrapper w-full mb-[50px]')}>
@@ -26,7 +38,8 @@ const SearchResult = () => {
         className={cn('search__result max-w-[1080px] mx-auto mt-[30px] flex')}
       >
         <SearchFilter />
-        <SearchResultList data={concertList} isLoading={isLoading} />
+        {!getProductListPending && <SearchResultList data={concertListData} />}
+        {getProductListPending && <SearchResultListSkeleton />}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import type { WillOpenGridItem } from '@/entities/types/types';
-import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import OptimizedImage from '@/shared/components/lazy-loading/LazyImage';
 
 const SlideGridCard = ({ item }: { item: WillOpenGridItem }) => {
   return (

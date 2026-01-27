@@ -1,8 +1,7 @@
 import { cn } from '@/shared';
 import BannerSlides from '@/widgets/banner-slides/BannerSlides';
 import SearchBar from '@/widgets/search-bar/SearchBar';
-import { Link } from 'react-router-dom';
-import OptimizedImage from '@/shared/components/optimized-image/OptimizedImage';
+import LogoLink from './LogoLink';
 
 const TopHeader = () => {
   return (
@@ -12,9 +11,7 @@ const TopHeader = () => {
           'top__header h-[90px] max-w-[1080px] mx-auto flex items-center',
         )}
       >
-        <Link to="/">
-          <OptimizedImage src={'/logo.svg'} alt="logo" className="w-full h-full" />
-        </Link>
+        <LogoLink />
         <SearchBar />
         <BannerSlides />
       </div>
