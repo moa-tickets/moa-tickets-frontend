@@ -3,6 +3,7 @@ import type { PlayListItem } from '@/entities/types/types';
 import { cn } from '@/shared';
 import YoutubePlayers from '../youtube-custom/YoutubePlayers';
 import OptimizedImage from '@/shared/components/lazy-loading/LazyImage';
+import Skeleton from '../skeleton/Skeleton';
 
 interface SlidePlayCardProps {
   item: PlayListItem;
@@ -37,7 +38,7 @@ const SlidePlayCard = React.memo(({ item, className }: SlidePlayCardProps) => {
             src={item.thumbnailUrl}
             alt={item.title}
             className="w-full h-full pointer-events-none"
-            skeletonClassName="rounded-[10px]"
+            skeletonComponent={<Skeleton className="w-full h-full bg-[#ccc]" />}
           />
         </div>
         <div className={cn('title text-[18px] font-bold flex-1')}>
