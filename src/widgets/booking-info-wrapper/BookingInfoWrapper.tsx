@@ -14,6 +14,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import type { ModalState } from '@/entities/types/types';
 import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
 import { useBooking } from '@/features/booking/useBooking';
+import { useReservation } from '@/features/reservation/useReservation';
 
 const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
   const { id } = useParams<{ id: string }>();
@@ -35,6 +36,7 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
   const navigate = useNavigate();
 
   const { seatHold, seatHoldPending } = useBooking();
+  const { getReser, getReserPending } = useReservation();
 
   const goSubmitButton = () => {
     if (selectedSession.date === '' || selectedTicketIds.length === 0) {
@@ -42,16 +44,51 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
         type: OPEN_MODAL,
         payload: { title: '경고', message: '세션 및 좌석을 먼저 선택하세요.' },
       });
-    } else {
-      seatHold.mutate(
-        { sessionId: selectedSession.sessionId, ticketIds: selectedTicketIds },
-        {
-          onSuccess: () => {
-            navigate(`/detail/${Number(id)}/payment`);
-          },
-        },
-      );
+      return;
     }
+
+    // 내 예매 내역 조회 후 4개 제한 확인
+    getReser.mutate(
+      { view: 'PERIOD', range: 'M3', page: 0 },
+      {
+        onSuccess: (reservationData) => {
+          // 같은 세션 날짜의 기존 구매 티켓 수 합산
+          const mySoldCount = reservationData.items
+            .filter((item) => {
+              const bookingDate = new Date(item.sessionDate)
+                .toISOString()
+                .split('T')[0];
+              const targetDate = new Date(selectedSession.date)
+                .toISOString()
+                .split('T')[0];
+              return bookingDate === targetDate;
+            })
+            .reduce((sum, item) => sum + item.ticketCount, 0);
+
+          // 기존 구매 + 새로 선택한 좌석이 4개 초과하면 경고
+          if (mySoldCount + selectedTicketIds.length > 4) {
+            dispatch({
+              type: OPEN_MODAL,
+              payload: {
+                title: '구매 제한',
+                message: `이미 ${mySoldCount}개의 티켓을 구매하셨습니다. 1인당 최대 4매까지 구매 가능합니다.`,
+              },
+            });
+            return;
+          }
+
+          // 제한 통과 시 홀드 진행
+          seatHold.mutate(
+            { sessionId: selectedSession.sessionId, ticketIds: selectedTicketIds },
+            {
+              onSuccess: () => {
+                navigate(`/detail/${Number(id)}/payment`);
+              },
+            },
+          );
+        },
+      },
+    );
   };
 
   return (
@@ -86,7 +123,7 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
         />
         <SessionSelector data={data} />
         <SubmitButton
-          title={seatHoldPending ? '처리 중...' : '결제하기'}
+          title={getReserPending || seatHoldPending ? '처리 중...' : '결제하기'}
           className="absolute left-0 top-[500px] w-[300px] cursor-pointer"
           onClick={goSubmitButton}
         />
