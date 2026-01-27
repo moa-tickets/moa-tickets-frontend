@@ -9,21 +9,37 @@ import type { Payment } from '@/entities/reducers/PaymentReducer';
 import { CLOSE_MODAL } from '@/entities/reducers/ModalReducer';
 
 const PaymentModal = ({ isOpen }: { isOpen: boolean }) => {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       document.body.classList.add('modal-dimmed');
+
+      // 모달 열릴 때 히스토리 추가
+      window.history.pushState({ modal: true }, '', window.location.href);
+
+      const handlePopState = () => {
+        // 뒤로가기 시 모달 닫기
+        dispatch({ type: CLOSE_MODAL });
+      };
+
+      window.addEventListener('popstate', handlePopState);
+
+      return () => {
+        document.body.style.overflow = 'auto';
+        document.body.classList.remove('modal-dimmed');
+        window.removeEventListener('popstate', handlePopState);
+      };
     }
     return () => {
       document.body.style.overflow = 'auto';
       document.body.classList.remove('modal-dimmed');
     };
-  }, [isOpen]);
+  }, [isOpen, dispatch]);
 
   const checkoutKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
   const customerKey = 'I3WzO5n80ykg2zY6fjSqQ';
-
-  const dispatch = useDispatch();
 
   const { ready } = useSelector(
     (state: { paymentReducer: Payment }) => state.paymentReducer,
@@ -77,6 +93,9 @@ const PaymentModal = ({ isOpen }: { isOpen: boolean }) => {
     if (!widgets || !isReady) return;
 
     setIsLoading(true);
+
+    // 토스 위젯 열기 전 히스토리 추가 (뒤로가기 시 토스 위젯 닫힘)
+    window.history.pushState({ tossPayment: true }, '', window.location.href);
 
     try {
       await widgets.requestPayment({
