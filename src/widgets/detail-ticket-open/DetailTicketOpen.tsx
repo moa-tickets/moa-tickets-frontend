@@ -9,6 +9,7 @@ const DetailTicketOpen = ({ data }: { data: ProductDetail }) => {
   const { id } = useParams<{ id: string }>();
   const currentDate = new Date();
   const reservationDate = new Date(data.bookingOpen);
+  const concertEndDate = new Date(data.concertEnd);
 
   const { isLoggedIn } = useSelector(
     (state: { loginReducer: LoginState }) => state.loginReducer,
@@ -39,7 +40,7 @@ const DetailTicketOpen = ({ data }: { data: ProductDetail }) => {
             'cursor-pointer disabled:opacity-45',
             'hover:bg-[rgb(141, 152, 244)]',
           )}
-          disabled={currentDate < reservationDate}
+          disabled={currentDate < reservationDate || currentDate > concertEndDate}
           onClick={reservationMove}
         >
           예매하기
