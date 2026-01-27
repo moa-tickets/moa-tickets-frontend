@@ -38,6 +38,18 @@ const DetailPageInfo = ({ data }: { data: ProductDetail }) => {
               data.bookingOpen.split('T')[0].split('-')[2]
             }
           />
+          {data.sessions.length > 0 && (
+            <DetailPageDescription
+              title={'공연기간'}
+              data={
+                data.sessions[0].date.split('T')[0].replaceAll('-', '.') +
+                ' ~ ' +
+                data.sessions.at(-1)!.date
+                  .split('T')[0]
+                  .replaceAll('-', '.')
+              }
+            />
+          )}
           <DetailPageDescription
             title={'관람연령'}
             data={data.age + '세 이상 관람 가능'}

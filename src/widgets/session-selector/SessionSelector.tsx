@@ -37,7 +37,7 @@ const SessionSelector = ({ data }: { data: ProductDetail }) => {
 
   useEffect(() => {
     dispatch({ type: SESSION_INIT });
-  }, [dispatch]);
+  }, [dispatch, data.concertId]);
 
   return (
     <div
