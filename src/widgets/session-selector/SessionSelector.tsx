@@ -41,6 +41,7 @@ const SessionSelector = ({ data }: { data: ProductDetail }) => {
 
   useEffect(() => {
     dispatch({ type: SESSION_INIT });
+    dispatch({ type: CLEAR_SELECTED_SEATS });
   }, [dispatch, data.concertId]);
 
   return (
@@ -57,6 +58,7 @@ const SessionSelector = ({ data }: { data: ProductDetail }) => {
             list={convertedSessionList}
             selectedState={selectedSession.date}
             onChanger={(element: string, sessionId: number) => {
+              dispatch({ type: CLEAR_SELECTED_SEATS });
               dispatch({
                 type: SESSION_CHANGE,
                 payload: { date: element, sessionId },
