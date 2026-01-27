@@ -4,6 +4,7 @@ import { cn } from '@/shared';
 import type { ProductDetail } from '@/entities/reducers/ConcertDetailReducer';
 import {
   SESSION_CHANGE,
+  SESSION_INIT,
   type LoginState,
 } from '@/entities/reducers/LoginReducer';
 import type { MainSeatInfo } from '@/entities/reducers/BookSeatReducer';
@@ -33,6 +34,10 @@ const SessionSelector = ({ data }: { data: ProductDetail }) => {
   useEffect(() => {
     getSeatInfo.mutate({ sessionId: selectedSession.sessionId });
   }, [selectedSession.sessionId]);
+
+  useEffect(() => {
+    dispatch({ type: SESSION_INIT });
+  }, [dispatch]);
 
   return (
     <div
