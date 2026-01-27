@@ -7,6 +7,7 @@ import bookSeatReducer from './BookSeatReducer';
 import paymentReducer from './PaymentReducer';
 import reservationReducer from './ReservationReducer';
 import reservationDetailReducer from './ReservationDetailReducer';
+import dateFilterReducer from './DateFilterReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   paymentReducer,
   reservationReducer,
   reservationDetailReducer,
+  dateFilterReducer,
 });
 
 export default rootReducer;

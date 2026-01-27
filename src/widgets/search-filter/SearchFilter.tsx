@@ -1,7 +1,15 @@
+import { useDispatch } from 'react-redux';
 import { cn } from '@/shared';
+import { DATE_FILTER_RESET } from '@/entities/reducers/DateFilterReducer';
 import FilterSelect from './FilterSelect';
 
 const SearchFilter = () => {
+  const dispatch = useDispatch();
+
+  const handleReset = () => {
+    dispatch({ type: DATE_FILTER_RESET });
+  };
+
   return (
     <div
       className={cn(
@@ -18,6 +26,7 @@ const SearchFilter = () => {
             'px-[18px] py-[8px] border border-solid border-[#ccc] rounded-[6px] text-[14px] cursor-pointer whitespace-nowrap',
             'hover:bg-black hover:text-white transition-all duration-600',
           )}
+          onClick={handleReset}
         >
           초기화
         </button>
