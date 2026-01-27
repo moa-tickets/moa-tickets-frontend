@@ -1,5 +1,6 @@
 import type { WillOpenGridItem } from '@/entities/types/types';
 import OptimizedImage from '@/shared/components/lazy-loading/LazyImage';
+import Skeleton from '../skeleton/Skeleton';
 
 const SlideGridCard = ({ item }: { item: WillOpenGridItem }) => {
   return (
@@ -10,7 +11,7 @@ const SlideGridCard = ({ item }: { item: WillOpenGridItem }) => {
           src={item.imageUrl}
           alt={item.title}
           className="w-full h-full"
-          skeletonClassName="rounded-l-lg"
+          skeletonComponent={<Skeleton className="w-full h-full bg-[#ccc]" />}
         />
       </div>
 

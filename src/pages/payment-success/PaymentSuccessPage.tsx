@@ -14,9 +14,7 @@ const PaymentSuccessPage = () => {
   const navigate = useNavigate();
 
   const [isConfirming, setIsConfirming] = useState(true);
-  const [paymentInfo, setPaymentInfo] = useState<PaymentConfirmResponse | null>(
-    null,
-  );
+  const [paymentInfo] = useState<PaymentConfirmResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const paymentKey = searchParams.get('paymentKey');
@@ -32,7 +30,7 @@ const PaymentSuccessPage = () => {
       }
 
       try {
-        const response = await axios.post(`/api/payments/confirm`, {
+        await axios.post(`/api/payments/confirm`, {
           orderId,
           paymentKey,
           amount,

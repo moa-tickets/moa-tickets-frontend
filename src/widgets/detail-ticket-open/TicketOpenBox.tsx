@@ -1,12 +1,9 @@
-import type { ProductDetail } from '@/entities/reducers/ConcertDetailReducer';
 import { cn } from '@/shared';
 
 const TicketOpenBox = ({
-  data,
   currentDate,
   reserDate,
 }: {
-  data: ProductDetail;
   currentDate: Date;
   reserDate: Date;
 }) => {

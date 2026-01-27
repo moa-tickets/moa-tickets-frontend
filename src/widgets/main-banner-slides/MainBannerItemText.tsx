@@ -1,7 +1,6 @@
 import useIntersect from '@/features/intersect/useIntersect';
 import { cn } from '@/shared';
 import Skeleton from '@/shared/components/skeleton/Skeleton';
-import { Link } from 'react-router-dom';
 
 const MainBannerItemText = ({
   bigText,

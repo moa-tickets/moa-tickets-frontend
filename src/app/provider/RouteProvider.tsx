@@ -8,7 +8,6 @@ import BookingLayout from '@/shared/components/layouts/BookingLayout';
 
 // 레이지 로딩 페이지 컴포넌트
 const SearchResult = lazy(() => import('@/pages/search-result/SearchResult'));
-const LandingPage = lazy(() => import('@/pages/landing/LandingPage'));
 const DetailPage = lazy(() => import('@/pages/detail/DetailPage'));
 const ReservationPage = lazy(
   () => import('@/pages/reservation/ReservationPage'),
@@ -22,9 +21,6 @@ const StreamPage = lazy(() => import('@/pages/stream/StreamPage'));
 const LoginPage = lazy(() => import('@/pages/login/LoginPage'));
 const LoginCallback = lazy(
   () => import('@/pages/login-callback/LoginCallback'),
-);
-const SelectInquiry = lazy(
-  () => import('@/pages/select-inquiry/SelectInquiry'),
 );
 const PaymentSuccessPage = lazy(
   () => import('@/pages/payment-success/PaymentSuccessPage'),
