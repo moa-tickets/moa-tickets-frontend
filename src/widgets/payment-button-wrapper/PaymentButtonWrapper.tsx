@@ -1,4 +1,7 @@
-import type { MainSeatInfo } from '@/entities/reducers/BookSeatReducer';
+import {
+  CLEAR_SELECTED_SEATS,
+  type MainSeatInfo,
+} from '@/entities/reducers/BookSeatReducer';
 import type { LoginState } from '@/entities/reducers/LoginReducer';
 import { PAYMENT_OPEN } from '@/entities/reducers/ModalReducer';
 import { useBooking } from '@/features/booking/useBooking';
@@ -44,6 +47,7 @@ const PaymentButtonWrapper = () => {
           'text-black bg-white border border-solid border-[rgb(237,237,237)] w-[340px] cursor-pointer'
         }
         onClick={() => {
+          dispatch({ type: CLEAR_SELECTED_SEATS });
           navigate(-1);
         }}
       />
