@@ -1,10 +1,10 @@
 import { cn } from '@/shared';
 
 const SeatItem = ({
-  hi,
+  seatNum,
   foundSession,
 }: {
-  hi: number;
+  seatNum: number;
   foundSession: {
     sessionId: number;
     price: number;
@@ -19,9 +19,7 @@ const SeatItem = ({
         'flex justify-between items-center',
       )}
     >
-      <span>
-        {Math.floor(hi / 14)}열 {hi % 14}번
-      </span>
+      <span>{seatNum}번</span>
       <span>{foundSession.price.toLocaleString()}원</span>
     </div>
   );

@@ -19,9 +19,6 @@ const ReservationDetailPage = lazy(
 const BookingPage = lazy(() => import('@/pages/booking/BookingPage'));
 const PaymentPage = lazy(() => import('@/pages/payment/PaymentPage'));
 const StreamPage = lazy(() => import('@/pages/stream/StreamPage'));
-const InquiryPage = lazy(() => import('@/pages/inquiry/InquiryPage'));
-const InquiryWrite = lazy(() => import('@/pages/inquiry-write/InquiryWrite'));
-const InquiryEdit = lazy(() => import('@/pages/inquiry-edit/InquiryEdit'));
 const LoginPage = lazy(() => import('@/pages/login/LoginPage'));
 const LoginCallback = lazy(
   () => import('@/pages/login-callback/LoginCallback'),
@@ -29,8 +26,11 @@ const LoginCallback = lazy(
 const SelectInquiry = lazy(
   () => import('@/pages/select-inquiry/SelectInquiry'),
 );
-const InquiryDetail = lazy(
-  () => import('@/pages/inquiry-detail/InquiryDetail'),
+const PaymentSuccessPage = lazy(
+  () => import('@/pages/payment-success/PaymentSuccessPage'),
+);
+const PaymentFailPage = lazy(
+  () => import('@/pages/payment-fail/PaymentFailPage'),
 );
 
 // 로딩 폴백 컴포넌트
@@ -72,10 +72,13 @@ const createdRouter = createBrowserRouter([
         element: withSuspense(SearchResult),
       },
       {
-        path: 'inquiry-write',
-        element: withSuspense(InquiryWrite),
+        path: 'payment/success',
+        element: withSuspense(PaymentSuccessPage),
       },
-
+      {
+        path: 'payment/fail',
+        element: withSuspense(PaymentFailPage),
+      },
       {
         path: 'mypage',
         element: <ProtectedRoute />,
@@ -90,22 +93,6 @@ const createdRouter = createBrowserRouter([
               {
                 path: 'reservation/:reservationId',
                 element: withSuspense(ReservationDetailPage),
-              },
-              {
-                path: 'inquiry',
-                element: withSuspense(InquiryPage),
-              },
-              {
-                path: 'selectInquiry',
-                element: withSuspense(SelectInquiry),
-              },
-              {
-                path: 'inquiry/:inquiryId',
-                element: withSuspense(InquiryDetail),
-              },
-              {
-                path: 'inquiry/:inquiryId/edit',
-                element: withSuspense(InquiryEdit),
               },
             ],
           },

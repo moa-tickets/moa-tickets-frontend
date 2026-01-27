@@ -1,11 +1,13 @@
 import { cn } from '@/shared';
 import SeatItem from './SeatItem';
 import type { ProductDetail } from '@/entities/reducers/ConcertDetailReducer';
+import type { SeatInfo } from '@/entities/reducers/BookSeatReducer';
 
 const SeatList = ({
   holdedIndex,
   data,
   selectedSession,
+  seatData,
 }: {
   holdedIndex: number[];
   data: ProductDetail;
@@ -13,6 +15,7 @@ const SeatList = ({
     date: string;
     sessionId: number;
   };
+  seatData: SeatInfo[];
 }) => {
   const foundSession = data.sessions.find(
     (f) => f.sessionId === selectedSession.sessionId,
@@ -20,9 +23,12 @@ const SeatList = ({
 
   return (
     <div className={cn('seat__list', 'flex flex-col w-full')}>
-      {holdedIndex.map((hi: number) => (
-        <SeatItem hi={hi} key={hi} foundSession={foundSession} />
-      ))}
+      {holdedIndex.map((ticketId: number) => {
+        const seatNum = seatData.find((s) => s.ticketId === ticketId)?.seatNum ?? ticketId;
+        return (
+          <SeatItem seatNum={seatNum} key={ticketId} foundSession={foundSession!} />
+        );
+      })}
     </div>
   );
 };

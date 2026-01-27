@@ -4,7 +4,6 @@ import { cn } from '@/shared';
 import type { ProductDetail } from '@/entities/reducers/ConcertDetailReducer';
 import {
   SESSION_CHANGE,
-  SESSION_INIT,
   type LoginState,
 } from '@/entities/reducers/LoginReducer';
 import type { MainSeatInfo } from '@/entities/reducers/BookSeatReducer';
@@ -30,10 +29,6 @@ const SessionSelector = ({ data }: { data: ProductDetail }) => {
   const { getSeatInfo } = useBooking();
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch({ type: SESSION_INIT });
-  }, []);
 
   useEffect(() => {
     getSeatInfo.mutate({ sessionId: selectedSession.sessionId });
@@ -88,6 +83,7 @@ const SessionSelector = ({ data }: { data: ProductDetail }) => {
               holdedIndex={holdedInfo.holdedIndex}
               data={data}
               selectedSession={selectedSession}
+              seatData={seatData}
             />
           )
         }

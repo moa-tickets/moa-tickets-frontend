@@ -1,26 +1,28 @@
 import { useParams, Link } from 'react-router-dom';
 import { cn } from '@/shared';
-import { useBookingDetail } from '@/features/booking/useBookings';
+import { useReservation } from '@/features/reservation/useReservation';
 import OptimizedImage from '@/shared/components/lazy-loading/LazyImage';
+import { useSelector } from 'react-redux';
+import type {
+  MainReservationDetail,
+  ReservationDetailSeat,
+} from '@/entities/reducers/ReservationDetailReducer';
+import { useEffect } from 'react';
 
 const ReservationDetailPage = () => {
   const { reservationId } = useParams<{ reservationId: string }>();
-  const { data, isLoading, isError, error } = useBookingDetail(
-    reservationId || '',
+  const { getReserDetail, getReserDetailPending } = useReservation();
+
+  const { data: detail } = useSelector(
+    (state: { reservationDetailReducer: MainReservationDetail }) =>
+      state.reservationDetailReducer,
   );
 
-  // 디버깅
-  console.log('=== ReservationDetailPage Debug ===');
-  console.log('reservationId:', reservationId);
-  console.log('data (전체):', data);
-  console.log('data?.data:', data?.data);
-  console.log('isLoading:', isLoading);
-  console.log('isError:', isError);
-  console.log('error:', error);
-
-  // API 응답이 { data: {...} } 형태가 아닐 수 있음
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const detail = (data?.data ?? data) as any;
+  useEffect(() => {
+    if (reservationId) {
+      getReserDetail.mutate({ orderId: reservationId });
+    }
+  }, [reservationId]);
 
   const formatPrice = (price: number) => {
     return price.toLocaleString('ko-KR');
@@ -49,7 +51,7 @@ const ReservationDetailPage = () => {
     }
   };
 
-  if (isLoading) {
+  if (getReserDetailPending) {
     return (
       <div className={cn('max-w-[1080px] mx-auto py-[40px] text-center')}>
         <p className={cn('text-[16px] text-[#62676C]')}>로딩 중...</p>
@@ -57,7 +59,7 @@ const ReservationDetailPage = () => {
     );
   }
 
-  if (isError || !detail) {
+  if (!detail.orderId) {
     return (
       <div className={cn('max-w-[1080px] mx-auto py-[40px] text-center')}>
         <p className={cn('text-[16px] text-[#62676C]')}>
@@ -103,6 +105,9 @@ const ReservationDetailPage = () => {
                 src={detail.concertThumbnail}
                 alt={detail.concertName}
                 className="w-full h-full object-cover"
+                skeletonComponent={
+                  <div className="w-full h-full bg-[#e0e0e0] animate-pulse" />
+                }
               />
             )}
           </div>
@@ -176,18 +181,16 @@ const ReservationDetailPage = () => {
                 좌석 정보
               </h3>
               <div className={cn('flex flex-wrap gap-[8px]')}>
-                {detail.seats.map(
-                  (seat: { ticketId: number; seatNum: number }) => (
-                    <span
-                      key={seat.ticketId}
-                      className={cn(
-                        'px-[12px] py-[6px] bg-[#F8F9FA] rounded-[4px] text-[14px] text-[#242428]',
-                      )}
-                    >
-                      {seat.seatNum}번
-                    </span>
-                  ),
-                )}
+                {detail.seats.map((seat: ReservationDetailSeat) => (
+                  <span
+                    key={seat.ticketId}
+                    className={cn(
+                      'px-[12px] py-[6px] bg-[#F8F9FA] rounded-[4px] text-[14px] text-[#242428]',
+                    )}
+                  >
+                    {seat.seatNum}번
+                  </span>
+                ))}
               </div>
             </div>
           )}

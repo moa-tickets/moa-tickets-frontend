@@ -21,7 +21,7 @@ export interface MainSeatInfo {
 
 export interface SeatInfo {
   seatNum: number;
-  state: 'AVAILABLE' | 'HOLD';
+  state: 'AVAILABLE' | 'HOLD' | 'SOLD';
   ticketId: number;
 }
 

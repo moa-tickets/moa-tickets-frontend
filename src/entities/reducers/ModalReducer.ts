@@ -1,9 +1,11 @@
 import type { Action, ModalState } from '../types/types';
 
 export const OPEN_MODAL = 'modal/OPEN_MODAL';
+export const PAYMENT_OPEN = 'modal/PAYMENT_OPEN';
 export const CLOSE_MODAL = 'modal/CLOSE_MODAL';
 
 export const openModal = () => ({ type: OPEN_MODAL });
+export const paymentOpen = () => ({ type: PAYMENT_OPEN });
 export const closeModal = () => ({ type: CLOSE_MODAL });
 
 const modalInitialState: ModalState = {
@@ -30,6 +32,11 @@ export default function modalReducer(
         isOpen: false,
         title: null,
         message: null,
+      };
+    case PAYMENT_OPEN:
+      return {
+        ...state,
+        isOpen: true,
       };
     default:
       return state;
