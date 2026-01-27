@@ -1,8 +1,19 @@
+import { useSelector } from 'react-redux';
 import { cn } from '@/shared';
+import type { MainReservation } from '@/entities/reducers/ReservationReducer';
 import ProductInfo from '../product-info/ProductInfo';
 import Icon from '@/shared/lib/Icon';
 
 const MyPageHeader = () => {
+  const { data: reservationData } = useSelector(
+    (state: { reservationReducer: MainReservation }) => state.reservationReducer,
+  );
+
+  const totalTicketCount = reservationData.items.reduce(
+    (acc, item) => acc + item.ticketCount,
+    0,
+  );
+
   return (
     <header id="myPageHeader" className={cn('w-full h-[120px] flex')}>
       <div
@@ -28,7 +39,7 @@ const MyPageHeader = () => {
             <Icon ICON="TICKET" className="w-[40px] h-[40px] fill-none" />
           }
           title="나의 예매쿠폰"
-          value={10}
+          value={totalTicketCount}
         />
       </div>
     </header>
