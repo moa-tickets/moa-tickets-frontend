@@ -7,7 +7,10 @@ import {
   SESSION_INIT,
   type LoginState,
 } from '@/entities/reducers/LoginReducer';
-import type { MainSeatInfo } from '@/entities/reducers/BookSeatReducer';
+import {
+  CLEAR_SELECTED_SEATS,
+  type MainSeatInfo,
+} from '@/entities/reducers/BookSeatReducer';
 import { useBooking } from '@/features/booking/useBooking';
 import SelectorArea from '@/shared/components/selectors/SelectorArea';
 import SelectorWrapper from '@/shared/components/selectors/SelectorWrapper';
@@ -32,6 +35,7 @@ const SessionSelector = ({ data }: { data: ProductDetail }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch({ type: CLEAR_SELECTED_SEATS });
     getSeatInfo.mutate({ sessionId: selectedSession.sessionId });
   }, [selectedSession.sessionId]);
 
