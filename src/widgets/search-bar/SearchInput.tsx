@@ -20,8 +20,19 @@ const SearchInputInner = forwardRef<HTMLInputElement, SearchInputProps>(
     );
 
     const handleSearch = useCallback(() => {
-      navigate(`/search/result?q=${searchWords}`);
+      if (searchWords.trim()) {
+        navigate(`/search/result?q=${searchWords}`);
+      }
     }, [navigate, searchWords]);
+
+    const handleKeyDown = useCallback(
+      (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+          handleSearch();
+        }
+      },
+      [handleSearch],
+    );
 
     return (
       <div
@@ -36,6 +47,7 @@ const SearchInputInner = forwardRef<HTMLInputElement, SearchInputProps>(
           ref={ref}
           value={searchWords}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
         />
         <button
           onClick={handleSearch}

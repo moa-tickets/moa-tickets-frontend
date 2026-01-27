@@ -6,7 +6,7 @@ const SearchResultItem = React.memo(
   ({ concertItem }: { concertItem: ConcertList }) => {
     return (
       <Link to={`/detail/${concertItem.concertId}`}>
-        <div className="search__result__item__thumbnail w-full h-[250px] mb-[20px]">
+        <div className="search__result__item__thumbnail w-full h-[250px] mb-[20px] mr-[30px]">
           <img
             src={concertItem.concertThumbnail}
             alt={concertItem.concertName}

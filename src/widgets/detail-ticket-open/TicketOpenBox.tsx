@@ -46,9 +46,12 @@ const TicketOpenBox = ({
           </span>
         </>
       ) : (
-        <div className="no__reservation flex justify-center items-center">
-          <span className="text-[rgb(239,62,67)] opacity-45">
-            예약 기간이 지났습니다
+        <div className="no__reservation flex flex-col justify-center items-center">
+          <span className="text-[rgb(239,62,67)] text-[20px] font-semibold mb-[10px]">
+            예매가 가능합니다
+          </span>
+          <span className="text-[14px] text-[rgb(102,102,102)]">
+            예매 시작일: {reserDate.toISOString().split('T')[0]}
           </span>
         </div>
       )}

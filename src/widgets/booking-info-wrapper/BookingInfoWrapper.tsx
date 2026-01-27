@@ -13,6 +13,7 @@ import type { MainSeatInfo } from '@/entities/reducers/BookSeatReducer';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { ModalState } from '@/entities/types/types';
 import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
+import { useBooking } from '@/features/booking/useBooking';
 
 const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
   const { id } = useParams<{ id: string }>();
@@ -25,7 +26,7 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
     (state: { loginReducer: LoginState }) => state.loginReducer,
   );
 
-  const { holdedInfo } = useSelector(
+  const { selectedTicketIds } = useSelector(
     (state: { bookSeatReducer: MainSeatInfo }) => state.bookSeatReducer,
   );
 
@@ -33,14 +34,23 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
 
   const navigate = useNavigate();
 
+  const { seatHold, seatHoldPending } = useBooking();
+
   const goSubmitButton = () => {
-    if (selectedSession.date === '' || holdedInfo.holdedIndex.length === 0) {
+    if (selectedSession.date === '' || selectedTicketIds.length === 0) {
       dispatch({
         type: OPEN_MODAL,
         payload: { title: '경고', message: '세션 및 좌석을 먼저 선택하세요.' },
       });
     } else {
-      navigate(`/detail/${Number(id)}/payment`);
+      seatHold.mutate(
+        { sessionId: selectedSession.sessionId, ticketIds: selectedTicketIds },
+        {
+          onSuccess: () => {
+            navigate(`/detail/${Number(id)}/payment`);
+          },
+        },
+      );
     }
   };
 
@@ -76,7 +86,7 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
         />
         <SessionSelector data={data} />
         <SubmitButton
-          title={'결제하기'}
+          title={seatHoldPending ? '처리 중...' : '결제하기'}
           className="absolute left-0 top-[500px] w-[300px] cursor-pointer"
           onClick={goSubmitButton}
         />

@@ -39,7 +39,7 @@ const DetailTicketOpen = ({ data }: { data: ProductDetail }) => {
             'cursor-pointer disabled:opacity-45',
             'hover:bg-[rgb(141, 152, 244)]',
           )}
-          disabled={reservationDate <= currentDate}
+          disabled={currentDate < reservationDate}
           onClick={reservationMove}
         >
           예매하기

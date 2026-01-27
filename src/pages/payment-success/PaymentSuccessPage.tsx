@@ -21,6 +21,21 @@ const PaymentSuccessPage = () => {
   const orderId = searchParams.get('orderId');
   const amount = searchParams.get('amount');
 
+  // 뒤로가기 시 홈으로 이동
+  useEffect(() => {
+    window.history.pushState(null, '', window.location.href);
+
+    const handlePopState = () => {
+      navigate('/', { replace: true });
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [navigate]);
+
   useEffect(() => {
     const confirmPayment = async () => {
       if (!paymentKey || !orderId || !amount) {

@@ -19,7 +19,6 @@ export const useMember = () => {
       return response.data;
     },
     onSuccess: (data: MemberResponse) => {
-      console.log(data);
       dispatch({
         type: GET_MEMBER,
         payload: {

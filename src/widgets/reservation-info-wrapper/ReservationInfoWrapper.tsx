@@ -23,7 +23,7 @@ const ReservationInfoWrapper = ({ data }: { data: ProductDetail }) => {
     (state: { loginReducer: LoginState }) => state.loginReducer,
   );
 
-  const { holdedInfo } = useSelector(
+  const { holdedInfo, data: seatData } = useSelector(
     (state: { bookSeatReducer: MainSeatInfo }) => state.bookSeatReducer,
   );
 
@@ -37,6 +37,15 @@ const ReservationInfoWrapper = ({ data }: { data: ProductDetail }) => {
     if (!selectedSessionData) return 0;
     return selectedSessionData.price * holdedInfo.holdedIndex.length;
   }, [selectedSessionData, holdedInfo.holdedIndex.length]);
+
+  const seatNumbers = useMemo(() => {
+    return holdedInfo.holdedIndex
+      .map((ticketId) => {
+        const seat = seatData.find((s) => s.ticketId === ticketId);
+        return seat ? seat.seatNum : ticketId;
+      })
+      .sort((a, b) => a - b);
+  }, [holdedInfo.holdedIndex, seatData]);
 
   return (
     <>
@@ -70,8 +79,8 @@ const ReservationInfoWrapper = ({ data }: { data: ProductDetail }) => {
             <InfoItem
               label="선택좌석"
               value={
-                holdedInfo.holdedIndex.length > 0
-                  ? holdedInfo.holdedIndex.map((seat) => `${seat}번`).join(', ')
+                seatNumbers.length > 0
+                  ? seatNumbers.map((seat) => `${seat}번`).join(', ')
                   : '선택된 좌석이 없습니다'
               }
             />

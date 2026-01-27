@@ -1,78 +1,86 @@
-import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import type {
-  MainSeatInfo,
-  SeatInfo,
+import {
+  DESELECT_SEAT,
+  SELECT_SEAT,
+  type MainSeatInfo,
+  type SeatInfo,
 } from '@/entities/reducers/BookSeatReducer';
+import type { LoginState } from '@/entities/reducers/LoginReducer';
 import { CLOSE_MODAL, OPEN_MODAL } from '@/entities/reducers/ModalReducer';
 import type { ModalState } from '@/entities/types/types';
 import { useBooking } from '@/features/booking/useBooking';
 import { cn } from '@/shared';
 import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
-import { HashLoader } from 'react-spinners';
 
-const SeatSelectEditor = ({
-  data,
-  sessionId,
-}: {
-  data: SeatInfo[];
-  sessionId: number;
-}) => {
-  const { seatHold, seatHoldPending, seatRelease, seatReleasePending } =
-    useBooking();
-
+const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
   const { isOpen, title, message } = useSelector(
     (state: { modalReducer: ModalState }) => state.modalReducer,
   );
 
-  const { holdedInfo } = useSelector(
+  const { selectedSession } = useSelector(
+    (state: { loginReducer: LoginState }) => state.loginReducer,
+  );
+
+  const { selectedTicketIds, holdedInfo } = useSelector(
     (state: { bookSeatReducer: MainSeatInfo }) => state.bookSeatReducer,
   );
 
-  const [ticketIds, setTicketIds] = useState<number[]>([]);
+  const { getSeatInfo, getSeatInfoPending, seatRelease, seatReleasePending } =
+    useBooking();
 
   const dispatch = useDispatch();
 
-  const selectHoldOrRelease = (seatInfo: SeatInfo) => {
-    // 내가 누르려는 seatInfo의 인덱스가 ticketIds가 포함되어 있는가
-    const exists = holdedInfo.holdedIndex.find((f) => f === seatInfo.ticketId);
+  const isMyHoldedSeat = (ticketId: number) => {
+    return holdedInfo.holdedIndex.includes(ticketId);
+  };
 
-    if (exists) {
-      setTicketIds((prev) => prev.filter((p) => p !== seatInfo.ticketId));
+  const handleSeatClick = (seatInfo: SeatInfo) => {
+    // 내가 홀드한 좌석이면 release
+    if (isMyHoldedSeat(seatInfo.ticketId)) {
       seatRelease.mutate({
         holdToken: holdedInfo.holdToken,
         ticketId: seatInfo.ticketId,
-        sessionId,
+        sessionId: selectedSession.sessionId,
         remainingTicketIds: holdedInfo.holdedIndex.filter(
-          (item) => item !== seatInfo.ticketId,
+          (id) => id !== seatInfo.ticketId,
         ),
       });
+      dispatch({ type: DESELECT_SEAT, payload: { ticketId: seatInfo.ticketId } });
+      return;
+    }
+
+    // 일반 좌석 선택/해제
+    const isSelected = selectedTicketIds.includes(seatInfo.ticketId);
+
+    if (isSelected) {
+      dispatch({ type: DESELECT_SEAT, payload: { ticketId: seatInfo.ticketId } });
     } else {
-      if (ticketIds.length >= 4) {
+      if (selectedTicketIds.length >= 4) {
         dispatch({
           type: OPEN_MODAL,
           payload: {
             title: '경고',
-            message: '4개 이상 티켓 점유할 수 없습니다.',
+            message: '4개 이상 티켓 선택할 수 없습니다.',
           },
         });
         return;
       }
-      const newTicketIds = [...ticketIds, seatInfo.ticketId];
-      setTicketIds(newTicketIds);
-      seatHold.mutate({ sessionId, ticketIds: newTicketIds });
+      dispatch({ type: SELECT_SEAT, payload: { ticketId: seatInfo.ticketId } });
     }
   };
 
-  useEffect(() => {
-    const expiresAt = new Date(holdedInfo.expiresAt).getTime();
-    const now = Date.now();
-    const timeUntilExpiry = expiresAt - now;
+  const refreshSeats = () => {
+    getSeatInfo.mutate({ sessionId: selectedSession.sessionId });
+  };
 
-    if (timeUntilExpiry <= 0) {
-      setTicketIds([]);
+  const isDisabled = (seatInfo: SeatInfo) => {
+    // 내가 홀드한 좌석은 클릭 가능 (release 위해)
+    if (isMyHoldedSeat(seatInfo.ticketId)) {
+      return false;
     }
-  }, [holdedInfo.expiresAt]);
+    // 다른 사람이 홀드했거나 sold된 좌석은 disabled
+    return seatInfo.state === 'HOLD' || seatInfo.state === 'SOLD';
+  };
 
   return (
     <>
@@ -88,28 +96,30 @@ const SeatSelectEditor = ({
         className={cn(
           'w-full h-[400px] border border-solid border-black mt-[20px] p-[10px] flex flex-col items-center',
           'relative',
-          (seatHoldPending || seatReleasePending) &&
-            'after:content-[""] after:absolute after:inset-0 after:bg-[rgba(0,0,0,.85)] m-auto',
+          seatReleasePending &&
+            'after:content-[""] after:absolute after:inset-0 after:bg-[rgba(0,0,0,.5)]',
         )}
       >
-        {(seatHoldPending || seatReleasePending) && (
-          <HashLoader
-            color={'#fff'}
-            cssOverride={{
-              zIndex: '300',
-              position: 'absolute',
-              inset: '0',
-              margin: 'auto',
-            }}
-          />
-        )}
-        <div
-          className={cn(
-            'stage__front',
-            'w-[240px] py-[10px] bg-black text-white text-center mb-[30px]',
-          )}
-        >
-          무대 앞
+        <div className={cn('flex items-center gap-[10px] mb-[20px]')}>
+          <div
+            className={cn(
+              'stage__front',
+              'w-[240px] py-[10px] bg-black text-white text-center',
+            )}
+          >
+            무대 앞
+          </div>
+          <button
+            className={cn(
+              'px-[12px] py-[8px] bg-[rgb(87,100,255)] text-white text-[12px] rounded-[6px]',
+              'cursor-pointer hover:bg-[rgb(65,84,255)]',
+              getSeatInfoPending && 'opacity-50',
+            )}
+            onClick={refreshSeats}
+            disabled={getSeatInfoPending}
+          >
+            {getSeatInfoPending ? '로딩...' : '새로고침'}
+          </button>
         </div>
         <div className={cn('flex flex-wrap gap-[20px]')}>
           {data.map((seatInfo: SeatInfo) => (
@@ -120,10 +130,16 @@ const SeatSelectEditor = ({
                 'text-[12px]',
                 'cursor-pointer',
                 'bg-black text-white rounded-full',
-                seatInfo.state === 'HOLD' && 'opacity-45',
+                seatInfo.state === 'HOLD' &&
+                  !isMyHoldedSeat(seatInfo.ticketId) &&
+                  'opacity-45',
+                (selectedTicketIds.includes(seatInfo.ticketId) ||
+                  isMyHoldedSeat(seatInfo.ticketId)) &&
+                  'bg-[rgb(239,62,67)]',
               )}
+              disabled={isDisabled(seatInfo)}
               onClick={() => {
-                selectHoldOrRelease(seatInfo);
+                handleSeatClick(seatInfo);
               }}
             >
               {seatInfo.seatNum}

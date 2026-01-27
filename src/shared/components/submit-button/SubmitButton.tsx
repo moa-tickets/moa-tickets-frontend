@@ -11,6 +11,7 @@ const SubmitButton = ({
 }) => {
   return (
     <button
+      type="button"
       className={cn(
         'submit__button py-[10px] bg-black text-white rounded-[10px]',
         className,

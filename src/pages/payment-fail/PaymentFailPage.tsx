@@ -1,9 +1,25 @@
 import { cn } from '@/shared/lib/utils';
+import { useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 const PaymentFailPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  // 뒤로가기 시 홈으로 이동
+  useEffect(() => {
+    window.history.pushState(null, '', window.location.href);
+
+    const handlePopState = () => {
+      navigate('/', { replace: true });
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [navigate]);
 
   const code = searchParams.get('code');
   const message = searchParams.get('message');
