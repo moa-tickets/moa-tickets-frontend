@@ -17,8 +17,8 @@ const INITIAL_POPULAR_RANKS = [
 
 const SearchRankingBar = React.memo(
   ({ ref }: { ref: React.Ref<HTMLDivElement> }) => {
-    const [recentWords, setRecentWords] = useState<string[]>([]);
-    const [popularRanks, setPopularRanks] = useState(INITIAL_POPULAR_RANKS);
+    const [recentWords] = useState<string[]>([]);
+    const [popularRanks] = useState(INITIAL_POPULAR_RANKS);
 
     return (
       <div

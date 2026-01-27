@@ -196,14 +196,6 @@ const MainBannerSlides = () => {
     dragOffsetRef.current = 0;
   }, [isDrag, dispatch, slideCount]);
 
-  // 실제 슬라이드 인덱스 계산 (클론 제외)
-  const getRealIndex = () => {
-    if (currentIndex === 0) return slideCount;
-    if (currentIndex === slideCount + 1) return 1;
-    return currentIndex;
-  };
-  const realIndex = getRealIndex();
-
   // 트랙 전체 이동 계산
   const trackTranslate = -(currentIndex * 100);
 
@@ -213,7 +205,7 @@ const MainBannerSlides = () => {
         ReactDOM.createPortal(
           <ConfirmModal
             title={title!}
-            message={message!}
+            message={message}
             isOpen={isOpen}
             onClose={closeModal}
           />,

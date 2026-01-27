@@ -1,6 +1,5 @@
 import type { MainSeatInfo } from '@/entities/reducers/BookSeatReducer';
-import { OPEN_MODAL, PAYMENT_OPEN } from '@/entities/reducers/ModalReducer';
-import type { ModalState } from '@/entities/types/types';
+import { PAYMENT_OPEN } from '@/entities/reducers/ModalReducer';
 import { usePayment } from '@/features/payment/usePayment';
 import { cn } from '@/shared';
 import SubmitButton from '@/shared/components/submit-button/SubmitButton';

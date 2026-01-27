@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 
 const ReservationPage = () => {
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const [page, setPage] = useState<number>(0);
+  const [page] = useState<number>(0);
   const { getReser, getReserPending } = useReservation();
   const { data: reservationData } = useSelector(
     (state: { reservationReducer: MainReservation }) =>
