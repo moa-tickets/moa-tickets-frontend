@@ -13,7 +13,7 @@ const SearchResultItem = React.memo(
             className="w-full h-full object-cover rounded-[8px]"
           />
         </div>
-        <div className="search__result__item__name font-bold mb-[10px]">
+        <div className="search__result__item__name font-bold mb-[10px] max-w-[180px]">
           {concertItem.concertName}
         </div>
         <div className="search__result__item__place text-[14px] font-medium mb-[10px]">
