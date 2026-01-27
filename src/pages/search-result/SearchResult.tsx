@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import type { RealConcertList } from '@/entities/reducers/ConcertListReducer';
@@ -19,18 +19,16 @@ const SearchResult = () => {
       state.concertListReducer,
   );
 
-  const getProductListMutation = useCallback(() => {
-    getProductList.mutate({
-      searchParam: query!,
-      sortBy: 'date',
-      sortOrder: 'asc',
-      page: 0,
-    });
-  }, [query]);
-
   useEffect(() => {
-    getProductListMutation();
-  }, []);
+    if (query) {
+      getProductList.mutate({
+        searchParam: query,
+        sortBy: 'date',
+        sortOrder: 'asc',
+        page: 0,
+      });
+    }
+  }, [query]);
 
   return (
     <div className={cn('search__result__wrapper w-full mb-[50px]')}>
