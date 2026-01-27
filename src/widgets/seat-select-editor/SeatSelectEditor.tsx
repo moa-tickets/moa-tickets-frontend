@@ -130,6 +130,7 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
                 'text-[12px]',
                 'cursor-pointer',
                 'bg-black text-white rounded-full',
+                seatInfo.state === 'SOLD' && 'bg-gray-400 cursor-not-allowed',
                 seatInfo.state === 'HOLD' &&
                   !isMyHoldedSeat(seatInfo.ticketId) &&
                   'opacity-45',
