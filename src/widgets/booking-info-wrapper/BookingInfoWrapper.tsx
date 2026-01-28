@@ -13,7 +13,7 @@ import type { MainSeatInfo } from '@/entities/reducers/BookSeatReducer';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { ModalState } from '@/entities/types/types';
 import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
-import { useBooking } from '@/features/booking/useBooking';
+import { usePayment } from '@/features/payment/usePayment';
 import { useReservation } from '@/features/reservation/useReservation';
 
 const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
@@ -27,7 +27,7 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
     (state: { loginReducer: LoginState }) => state.loginReducer,
   );
 
-  const { selectedTicketIds } = useSelector(
+  const { holdedInfo } = useSelector(
     (state: { bookSeatReducer: MainSeatInfo }) => state.bookSeatReducer,
   );
 
@@ -35,11 +35,11 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
 
   const navigate = useNavigate();
 
-  const { seatHold, seatHoldPending } = useBooking();
+  const { paymentReady, paymentReadyPending } = usePayment();
   const { getReser, getReserPending } = useReservation();
 
   const goSubmitButton = () => {
-    if (selectedSession.date === '' || selectedTicketIds.length === 0) {
+    if (selectedSession.date === '' || holdedInfo.holdedIndex.length === 0) {
       dispatch({
         type: OPEN_MODAL,
         payload: { title: '경고', message: '세션 및 좌석을 먼저 선택하세요.' },
@@ -66,7 +66,7 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
             .reduce((sum, item) => sum + item.ticketCount, 0);
 
           // 기존 구매 + 새로 선택한 좌석이 4개 초과하면 경고
-          if (mySoldCount + selectedTicketIds.length > 4) {
+          if (mySoldCount + holdedInfo.holdedIndex.length > 4) {
             dispatch({
               type: OPEN_MODAL,
               payload: {
@@ -77,9 +77,17 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
             return;
           }
 
-          // 제한 통과 시 홀드 진행
-          seatHold.mutate(
-            { sessionId: selectedSession.sessionId, ticketIds: selectedTicketIds },
+          // 제한 통과 시 결제 준비 진행
+          if (!holdedInfo.holdToken) {
+            dispatch({
+              type: OPEN_MODAL,
+              payload: { title: '경고', message: '좌석을 먼저 선점해주세요.' },
+            });
+            return;
+          }
+
+          paymentReady.mutate(
+            { holdToken: holdedInfo.holdToken },
             {
               onSuccess: () => {
                 navigate(`/detail/${Number(id)}/payment`);
@@ -123,7 +131,7 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
         />
         <SessionSelector data={data} />
         <SubmitButton
-          title={getReserPending || seatHoldPending ? '처리 중...' : '결제하기'}
+          title={getReserPending || paymentReadyPending ? '처리 중...' : '결제하기'}
           className="absolute left-0 top-[500px] w-[300px] cursor-pointer"
           onClick={goSubmitButton}
         />

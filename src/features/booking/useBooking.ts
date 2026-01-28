@@ -1,7 +1,6 @@
 import {
   GET__SEAT__INFO,
   HOLD,
-  RELEASE,
   type SeatInfo,
 } from '@/entities/reducers/BookSeatReducer';
 import { useMutation } from '@tanstack/react-query';
@@ -57,45 +56,10 @@ export const useBooking = () => {
     },
   });
 
-  // 좌석 홀드 해제하기 : Release
-  const seatRelease = useMutation<
-    void,
-    Error,
-    {
-      holdToken: string;
-      ticketId: number;
-      sessionId: number;
-      remainingTicketIds: number[];
-    }
-  >({
-    mutationFn: async ({
-      holdToken,
-      sessionId,
-      remainingTicketIds,
-    }: {
-      holdToken: string;
-      sessionId: number;
-      remainingTicketIds: number[];
-    }) => {
-      // 전체 해제
-      await axios.post(`/api/holds/${holdToken}/release`);
-      // 나머지 좌석 다시 홀드
-      if (remainingTicketIds.length > 0) {
-        seatHold.mutate({ sessionId, ticketIds: remainingTicketIds });
-      }
-    },
-    onSuccess: (_, variables) => {
-      dispatch({ type: RELEASE, payload: { target: variables.ticketId } });
-      getSeatInfo.mutate({ sessionId: variables.sessionId });
-    },
-  });
-
   return {
     getSeatInfo,
     seatHold,
-    seatRelease,
     getSeatInfoPending: getSeatInfo.isPending,
     seatHoldPending: seatHold.isPending,
-    seatReleasePending: seatRelease.isPending,
   };
 };

@@ -41,7 +41,12 @@ const DetailPageInfo = ({ data }: { data: ProductDetail }) => {
           <DetailPageDescription
             title={'공연기간'}
             data={
-              data.bookingOpen.split('T')[0].replaceAll('-', '.') +
+              (data.sessions.length > 0
+                ? new Date(Math.min(...data.sessions.map((s) => new Date(s.date).getTime())))
+                    .toISOString()
+                    .split('T')[0]
+                    .replaceAll('-', '.')
+                : data.concertEnd.split('T')[0].replaceAll('-', '.')) +
               ' ~ ' +
               data.concertEnd.split('T')[0].replaceAll('-', '.')
             }

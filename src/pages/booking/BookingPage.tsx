@@ -1,13 +1,16 @@
 import type { RealProductDetail } from '@/entities/reducers/ConcertDetailReducer';
+import { RESET_SEAT_STATE } from '@/entities/reducers/BookSeatReducer';
+import { SESSION_INIT } from '@/entities/reducers/LoginReducer';
 import { useProduct } from '@/features/product/useProduct';
 import { cn } from '@/shared';
 import BookingInfoWrapper from '@/widgets/booking-info-wrapper/BookingInfoWrapper';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 const BookingPage = () => {
   const { id } = useParams<{ id: string }>();
+  const dispatch = useDispatch();
 
   const { getDetailProduct, getDetailProductPending } = useProduct();
 
@@ -17,6 +20,9 @@ const BookingPage = () => {
   );
 
   useEffect(() => {
+    // 페이지 진입 시 세션 및 좌석 상태 초기화
+    dispatch({ type: SESSION_INIT });
+    dispatch({ type: RESET_SEAT_STATE });
     getDetailProduct.mutate({ id: Number(id) });
   }, [id]);
 

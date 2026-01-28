@@ -1,7 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  DESELECT_SEAT,
-  SELECT_SEAT,
   type MainSeatInfo,
   type SeatInfo,
 } from '@/entities/reducers/BookSeatReducer';
@@ -21,11 +19,11 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
     (state: { loginReducer: LoginState }) => state.loginReducer,
   );
 
-  const { selectedTicketIds, holdedInfo } = useSelector(
+  const { holdedInfo } = useSelector(
     (state: { bookSeatReducer: MainSeatInfo }) => state.bookSeatReducer,
   );
 
-  const { getSeatInfo, getSeatInfoPending, seatRelease, seatReleasePending } =
+  const { getSeatInfo, getSeatInfoPending, seatHold, seatHoldPending } =
     useBooking();
 
   const dispatch = useDispatch();
@@ -35,38 +33,43 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
   };
 
   const handleSeatClick = (seatInfo: SeatInfo) => {
-    // 내가 홀드한 좌석이면 release
+    // 이미 내가 홀드한 좌석이면 무시 (release API 없음)
     if (isMyHoldedSeat(seatInfo.ticketId)) {
-      seatRelease.mutate({
-        holdToken: holdedInfo.holdToken,
-        ticketId: seatInfo.ticketId,
-        sessionId: selectedSession.sessionId,
-        remainingTicketIds: holdedInfo.holdedIndex.filter(
-          (id) => id !== seatInfo.ticketId,
-        ),
-      });
-      dispatch({ type: DESELECT_SEAT, payload: { ticketId: seatInfo.ticketId } });
       return;
     }
 
-    // 일반 좌석 선택/해제
-    const isSelected = selectedTicketIds.includes(seatInfo.ticketId);
-
-    if (isSelected) {
-      dispatch({ type: DESELECT_SEAT, payload: { ticketId: seatInfo.ticketId } });
-    } else {
-      if (selectedTicketIds.length >= 4) {
-        dispatch({
-          type: OPEN_MODAL,
-          payload: {
-            title: '경고',
-            message: '4개 이상 티켓 선택할 수 없습니다.',
-          },
-        });
-        return;
-      }
-      dispatch({ type: SELECT_SEAT, payload: { ticketId: seatInfo.ticketId } });
+    // 새 좌석 선택
+    if (holdedInfo.holdedIndex.length >= 4) {
+      dispatch({
+        type: OPEN_MODAL,
+        payload: {
+          title: '경고',
+          message: '4개 이상 티켓 선택할 수 없습니다.',
+        },
+      });
+      return;
     }
+
+    // 새 좌석만 hold API 호출
+    seatHold.mutate(
+      {
+        sessionId: selectedSession.sessionId,
+        ticketIds: [seatInfo.ticketId],
+      },
+      {
+        onError: () => {
+          dispatch({
+            type: OPEN_MODAL,
+            payload: {
+              title: '선점 실패',
+              message: '이미 다른 사용자가 임시 점유한 좌석입니다.',
+            },
+          });
+          // 좌석 정보 새로고침
+          getSeatInfo.mutate({ sessionId: selectedSession.sessionId });
+        },
+      },
+    );
   };
 
   const refreshSeats = () => {
@@ -96,7 +99,7 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
         className={cn(
           'w-full h-[400px] border border-solid border-black mt-[20px] p-[10px] flex flex-col items-center',
           'relative',
-          seatReleasePending &&
+          seatHoldPending &&
             'after:content-[""] after:absolute after:inset-0 after:bg-[rgba(0,0,0,.5)]',
         )}
       >
@@ -121,7 +124,7 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
             {getSeatInfoPending ? '로딩...' : '새로고침'}
           </button>
         </div>
-        <div className={cn('flex flex-wrap gap-[20px]')}>
+        <div className={cn('flex flex-wrap gap-[20px] overflow-y-auto max-h-[280px]')}>
           {data.map((seatInfo: SeatInfo) => (
             <button
               key={seatInfo.ticketId}
@@ -134,9 +137,7 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
                 seatInfo.state === 'HOLD' &&
                   !isMyHoldedSeat(seatInfo.ticketId) &&
                   'opacity-45',
-                (selectedTicketIds.includes(seatInfo.ticketId) ||
-                  isMyHoldedSeat(seatInfo.ticketId)) &&
-                  'bg-[rgb(239,62,67)]',
+                isMyHoldedSeat(seatInfo.ticketId) && 'bg-[rgb(239,62,67)]',
               )}
               disabled={isDisabled(seatInfo)}
               onClick={() => {

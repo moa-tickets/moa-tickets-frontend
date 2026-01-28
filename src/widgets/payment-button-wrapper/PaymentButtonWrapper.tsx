@@ -2,9 +2,7 @@ import {
   CLEAR_SELECTED_SEATS,
   type MainSeatInfo,
 } from '@/entities/reducers/BookSeatReducer';
-import type { LoginState } from '@/entities/reducers/LoginReducer';
 import { PAYMENT_OPEN } from '@/entities/reducers/ModalReducer';
-import { useBooking } from '@/features/booking/useBooking';
 import { usePayment } from '@/features/payment/usePayment';
 import { cn } from '@/shared';
 import SubmitButton from '@/shared/components/submit-button/SubmitButton';
@@ -16,23 +14,20 @@ const PaymentButtonWrapper = () => {
 
   const dispatch = useDispatch();
 
-  const { selectedSession } = useSelector(
-    (state: { loginReducer: LoginState }) => state.loginReducer,
-  );
-
-  const { selectedTicketIds } = useSelector(
+  const { holdedInfo } = useSelector(
     (state: { bookSeatReducer: MainSeatInfo }) => state.bookSeatReducer,
   );
 
-  const { seatHold, seatHoldPending } = useBooking();
-  const { paymentReady } = usePayment();
+  const { paymentReady, paymentReadyPending } = usePayment();
 
   const payReady = async () => {
-    seatHold.mutate(
-      { sessionId: selectedSession.sessionId, ticketIds: selectedTicketIds },
+    if (!holdedInfo.holdToken) {
+      return;
+    }
+    paymentReady.mutate(
+      { holdToken: holdedInfo.holdToken },
       {
-        onSuccess: (data) => {
-          paymentReady.mutate({ holdToken: data.holdToken });
+        onSuccess: () => {
           dispatch({ type: PAYMENT_OPEN });
         },
       },
@@ -52,7 +47,7 @@ const PaymentButtonWrapper = () => {
         }}
       />
       <SubmitButton
-        title={seatHoldPending ? '처리 중...' : '결제하기'}
+        title={paymentReadyPending ? '처리 중...' : '결제하기'}
         className={'text-white bg-[rgb(87,100,255)] w-[340px] cursor-pointer'}
         onClick={payReady}
       />

@@ -6,6 +6,7 @@ export const RELEASE = 'post/release';
 export const SELECT_SEAT = 'seat/select';
 export const DESELECT_SEAT = 'seat/deselect';
 export const CLEAR_SELECTED_SEATS = 'seat/clear';
+export const RESET_SEAT_STATE = 'seat/reset';
 
 export const getSeatInfo = () => ({ type: GET__SEAT__INFO });
 export const hold = () => ({ type: HOLD });
@@ -62,7 +63,7 @@ export default function bookSeatReducer(
       return {
         ...state,
         holdedInfo: {
-          holdedIndex: action.payload.holdIndex,
+          holdedIndex: [...state.holdedInfo.holdedIndex, ...action.payload.holdIndex],
           holdToken: action.payload.holdToken,
           expiresAt: action.payload.expires,
         },
@@ -94,6 +95,8 @@ export default function bookSeatReducer(
         ...state,
         selectedTicketIds: [],
       };
+    case RESET_SEAT_STATE:
+      return seatInfoInitial;
     default:
       return state;
   }
