@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  DESELECT_SEAT,
   type MainSeatInfo,
   type SeatInfo,
 } from '@/entities/reducers/BookSeatReducer';
@@ -24,7 +23,7 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
     (state: { bookSeatReducer: MainSeatInfo }) => state.bookSeatReducer,
   );
 
-  const { getSeatInfo, getSeatInfoPending, seatHold, seatHoldPending, seatRelease, seatReleasePending } =
+  const { getSeatInfo, getSeatInfoPending, seatHold, seatHoldPending } =
     useBooking();
 
   const dispatch = useDispatch();
@@ -34,54 +33,43 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
   };
 
   const handleSeatClick = (seatInfo: SeatInfo) => {
-    // 내가 홀드한 좌석이면 release
+    // 이미 내가 홀드한 좌석이면 무시 (release API 없음)
     if (isMyHoldedSeat(seatInfo.ticketId)) {
-      seatRelease.mutate({
-        holdToken: holdedInfo.holdToken,
-        ticketId: seatInfo.ticketId,
-        sessionId: selectedSession.sessionId,
-        remainingTicketIds: holdedInfo.holdedIndex.filter(
-          (id) => id !== seatInfo.ticketId,
-        ),
-      });
-      dispatch({ type: DESELECT_SEAT, payload: { ticketId: seatInfo.ticketId } });
       return;
     }
 
     // 새 좌석 선택
     if (holdedInfo.holdedIndex.length >= 4) {
-        dispatch({
-          type: OPEN_MODAL,
-          payload: {
-            title: '경고',
-            message: '4개 이상 티켓 선택할 수 없습니다.',
-          },
-        });
-        return;
-      }
+      dispatch({
+        type: OPEN_MODAL,
+        payload: {
+          title: '경고',
+          message: '4개 이상 티켓 선택할 수 없습니다.',
+        },
+      });
+      return;
+    }
 
-      // 좌석 선택 시 바로 hold API 호출
-      const newTicketIds = [...holdedInfo.holdedIndex, seatInfo.ticketId];
-      seatHold.mutate(
-        {
-          sessionId: selectedSession.sessionId,
-          ticketIds: newTicketIds,
-          existingHoldToken: holdedInfo.holdToken || undefined,
+    // 새 좌석만 hold API 호출
+    seatHold.mutate(
+      {
+        sessionId: selectedSession.sessionId,
+        ticketIds: [seatInfo.ticketId],
+      },
+      {
+        onError: () => {
+          dispatch({
+            type: OPEN_MODAL,
+            payload: {
+              title: '선점 실패',
+              message: '이미 다른 사용자가 임시 점유한 좌석입니다.',
+            },
+          });
+          // 좌석 정보 새로고침
+          getSeatInfo.mutate({ sessionId: selectedSession.sessionId });
         },
-        {
-          onError: () => {
-            dispatch({
-              type: OPEN_MODAL,
-              payload: {
-                title: '선점 실패',
-                message: '이미 다른 사용자가 임시 점유한 좌석입니다.',
-              },
-            });
-            // 좌석 정보 새로고침
-            getSeatInfo.mutate({ sessionId: selectedSession.sessionId });
-          },
-        },
-      );
+      },
+    );
   };
 
   const refreshSeats = () => {
@@ -111,7 +99,7 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
         className={cn(
           'w-full h-[400px] border border-solid border-black mt-[20px] p-[10px] flex flex-col items-center',
           'relative',
-          (seatReleasePending || seatHoldPending) &&
+          seatHoldPending &&
             'after:content-[""] after:absolute after:inset-0 after:bg-[rgba(0,0,0,.5)]',
         )}
       >

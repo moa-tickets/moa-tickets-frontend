@@ -63,7 +63,7 @@ export default function bookSeatReducer(
       return {
         ...state,
         holdedInfo: {
-          holdedIndex: action.payload.holdIndex,
+          holdedIndex: [...state.holdedInfo.holdedIndex, ...action.payload.holdIndex],
           holdToken: action.payload.holdToken,
           expiresAt: action.payload.expires,
         },
