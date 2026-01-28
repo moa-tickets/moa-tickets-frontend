@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
   DESELECT_SEAT,
-  SELECT_SEAT,
   type MainSeatInfo,
   type SeatInfo,
 } from '@/entities/reducers/BookSeatReducer';
@@ -25,7 +24,7 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
     (state: { bookSeatReducer: MainSeatInfo }) => state.bookSeatReducer,
   );
 
-  const { getSeatInfo, getSeatInfoPending, seatRelease, seatReleasePending } =
+  const { getSeatInfo, getSeatInfoPending, seatHold, seatHoldPending, seatRelease, seatReleasePending } =
     useBooking();
 
   const dispatch = useDispatch();
@@ -55,7 +54,7 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
     if (isSelected) {
       dispatch({ type: DESELECT_SEAT, payload: { ticketId: seatInfo.ticketId } });
     } else {
-      if (selectedTicketIds.length >= 4) {
+      if (holdedInfo.holdedIndex.length >= 4) {
         dispatch({
           type: OPEN_MODAL,
           payload: {
@@ -65,7 +64,28 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
         });
         return;
       }
-      dispatch({ type: SELECT_SEAT, payload: { ticketId: seatInfo.ticketId } });
+
+      // 좌석 선택 시 바로 hold API 호출
+      const newTicketIds = [...holdedInfo.holdedIndex, seatInfo.ticketId];
+      seatHold.mutate(
+        {
+          sessionId: selectedSession.sessionId,
+          ticketIds: newTicketIds,
+        },
+        {
+          onError: () => {
+            dispatch({
+              type: OPEN_MODAL,
+              payload: {
+                title: '선점 실패',
+                message: '이미 다른 사용자가 임시 점유한 좌석입니다.',
+              },
+            });
+            // 좌석 정보 새로고침
+            getSeatInfo.mutate({ sessionId: selectedSession.sessionId });
+          },
+        },
+      );
     }
   };
 
@@ -96,7 +116,7 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
         className={cn(
           'w-full h-[400px] border border-solid border-black mt-[20px] p-[10px] flex flex-col items-center',
           'relative',
-          seatReleasePending &&
+          (seatReleasePending || seatHoldPending) &&
             'after:content-[""] after:absolute after:inset-0 after:bg-[rgba(0,0,0,.5)]',
         )}
       >
