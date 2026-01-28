@@ -38,14 +38,16 @@ const PaymentPage = () => {
     navigate(`/detail/${id}`, { replace: true });
   }, [dispatch, navigate, id]);
 
-  // 타이머 설정
+  // 타이머 설정 (최대 10분)
   useEffect(() => {
     if (!holdedInfo.expiresAt) return;
+
+    const MAX_TIME = 600; // 10분
 
     const updateTimer = () => {
       const now = Date.now();
       const expiresAt = new Date(holdedInfo.expiresAt).getTime();
-      const diff = Math.max(0, Math.floor((expiresAt - now) / 1000));
+      const diff = Math.min(MAX_TIME, Math.max(0, Math.floor((expiresAt - now) / 1000)));
       setRemainingTime(diff);
 
       if (diff <= 0) {
