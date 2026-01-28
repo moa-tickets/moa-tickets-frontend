@@ -47,6 +47,17 @@ const ReservationInfoWrapper = ({ data }: { data: ProductDetail }) => {
       .sort((a, b) => a - b);
   }, [holdedInfo.holdedIndex, seatData]);
 
+  const formattedDate = useMemo(() => {
+    if (!selectedSession.date) return '';
+    const date = new Date(selectedSession.date);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}.${month}.${day} ${hours}:${minutes}`;
+  }, [selectedSession.date]);
+
   return (
     <>
       {isOpen && <PaymentModal isOpen={isOpen} />}
@@ -74,7 +85,7 @@ const ReservationInfoWrapper = ({ data }: { data: ProductDetail }) => {
         <ReservationInfo title={data.concertName}>
           <InfoList>
             <InfoItem label="장소" value={data.hallName} />
-            <InfoItem label="관람일시" value={selectedSession.date} />
+            <InfoItem label="관람일시" value={formattedDate} />
             <InfoItem label="관람시간" value={data.concertDuration} />
             <InfoItem
               label="선택좌석"
