@@ -40,9 +40,13 @@ export const useBooking = () => {
       ticketIds: number[];
       existingHoldToken?: string;
     }) => {
-      // 기존 hold가 있으면 먼저 release
+      // 기존 hold가 있으면 먼저 release (실패해도 무시)
       if (existingHoldToken) {
-        await axios.post(`/api/holds/${existingHoldToken}/release`);
+        try {
+          await axios.post(`/api/holds/${existingHoldToken}/release`);
+        } catch {
+          // release 실패 시 무시 (이미 만료되었거나 존재하지 않는 경우)
+        }
       }
       const response = await axios.post(`/api/tickets/hold`, {
         sessionId,
