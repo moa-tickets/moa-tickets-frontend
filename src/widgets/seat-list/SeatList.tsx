@@ -21,12 +21,16 @@ const SeatList = ({
     (f) => f.sessionId === selectedSession.sessionId,
   );
 
+  if (!foundSession) {
+    return null;
+  }
+
   return (
     <div className={cn('seat__list', 'flex flex-col w-full')}>
       {holdedIndex.map((ticketId: number) => {
         const seatNum = seatData.find((s) => s.ticketId === ticketId)?.seatNum ?? ticketId;
         return (
-          <SeatItem seatNum={seatNum} key={ticketId} foundSession={foundSession!} />
+          <SeatItem seatNum={seatNum} key={ticketId} foundSession={foundSession} />
         );
       })}
     </div>
