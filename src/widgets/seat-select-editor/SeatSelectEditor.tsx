@@ -121,7 +121,7 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
             {getSeatInfoPending ? '로딩...' : '새로고침'}
           </button>
         </div>
-        <div className={cn('flex flex-wrap gap-[20px]')}>
+        <div className={cn('flex flex-wrap gap-[20px] overflow-y-auto max-h-[280px]')}>
           {data.map((seatInfo: SeatInfo) => (
             <button
               key={seatInfo.ticketId}
