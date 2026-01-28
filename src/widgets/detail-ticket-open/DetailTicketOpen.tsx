@@ -11,6 +11,11 @@ const DetailTicketOpen = ({ data }: { data: ProductDetail }) => {
   const reservationDate = new Date(data.bookingOpen);
   const concertEndDate = new Date(data.concertEnd);
 
+  // sessions에서 가장 이른 날짜를 concertStart로 사용
+  const concertStartDate = data.sessions.length > 0
+    ? new Date(Math.min(...data.sessions.map(s => new Date(s.date).getTime())))
+    : concertEndDate;
+
   const { isLoggedIn } = useSelector(
     (state: { loginReducer: LoginState }) => state.loginReducer,
   );
@@ -33,7 +38,7 @@ const DetailTicketOpen = ({ data }: { data: ProductDetail }) => {
           'max-w-[1080px] mx-auto flex flex-col items-end',
         )}
       >
-        <TicketOpenBox currentDate={currentDate} reserDate={reservationDate} endDate={concertEndDate} />
+        <TicketOpenBox currentDate={currentDate} reserDate={reservationDate} startDate={concertStartDate} endDate={concertEndDate} />
         <button
           className={cn(
             'w-[300px] py-[16px] bg-[rgb(65,84,255)] text-white rounded-[10px]',

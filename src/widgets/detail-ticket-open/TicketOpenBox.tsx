@@ -3,10 +3,12 @@ import { cn } from '@/shared';
 const TicketOpenBox = ({
   currentDate,
   reserDate,
+  startDate,
   endDate,
 }: {
   currentDate: Date;
   reserDate: Date;
+  startDate: Date;
   endDate: Date;
 }) => {
   // 날짜만 비교 (시간 제외)
@@ -28,7 +30,7 @@ const TicketOpenBox = ({
             공연이 종료되었습니다
           </span>
           <span className="text-[14px] text-[rgb(102,102,102)]">
-            공연 기간: {reserDate.toISOString().split('T')[0]} ~{' '}
+            공연 기간: {startDate.toISOString().split('T')[0]} ~{' '}
             {endDate.toISOString().split('T')[0]}
           </span>
         </div>
