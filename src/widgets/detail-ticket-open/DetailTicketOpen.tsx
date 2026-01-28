@@ -33,7 +33,7 @@ const DetailTicketOpen = ({ data }: { data: ProductDetail }) => {
           'max-w-[1080px] mx-auto flex flex-col items-end',
         )}
       >
-        <TicketOpenBox currentDate={currentDate} reserDate={reservationDate} />
+        <TicketOpenBox currentDate={currentDate} reserDate={reservationDate} endDate={concertEndDate} />
         <button
           className={cn(
             'w-[300px] py-[16px] bg-[rgb(65,84,255)] text-white rounded-[10px]',
