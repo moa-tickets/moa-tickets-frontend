@@ -20,7 +20,7 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
     (state: { loginReducer: LoginState }) => state.loginReducer,
   );
 
-  const { selectedTicketIds, holdedInfo } = useSelector(
+  const { holdedInfo } = useSelector(
     (state: { bookSeatReducer: MainSeatInfo }) => state.bookSeatReducer,
   );
 
@@ -48,13 +48,8 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
       return;
     }
 
-    // 일반 좌석 선택/해제
-    const isSelected = selectedTicketIds.includes(seatInfo.ticketId);
-
-    if (isSelected) {
-      dispatch({ type: DESELECT_SEAT, payload: { ticketId: seatInfo.ticketId } });
-    } else {
-      if (holdedInfo.holdedIndex.length >= 4) {
+    // 새 좌석 선택
+    if (holdedInfo.holdedIndex.length >= 4) {
         dispatch({
           type: OPEN_MODAL,
           payload: {
@@ -71,6 +66,7 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
         {
           sessionId: selectedSession.sessionId,
           ticketIds: newTicketIds,
+          existingHoldToken: holdedInfo.holdToken || undefined,
         },
         {
           onError: () => {
@@ -86,7 +82,6 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
           },
         },
       );
-    }
   };
 
   const refreshSeats = () => {
@@ -154,9 +149,7 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
                 seatInfo.state === 'HOLD' &&
                   !isMyHoldedSeat(seatInfo.ticketId) &&
                   'opacity-45',
-                (selectedTicketIds.includes(seatInfo.ticketId) ||
-                  isMyHoldedSeat(seatInfo.ticketId)) &&
-                  'bg-[rgb(239,62,67)]',
+                isMyHoldedSeat(seatInfo.ticketId) && 'bg-[rgb(239,62,67)]',
               )}
               disabled={isDisabled(seatInfo)}
               onClick={() => {

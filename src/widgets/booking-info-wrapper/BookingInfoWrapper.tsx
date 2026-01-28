@@ -27,7 +27,7 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
     (state: { loginReducer: LoginState }) => state.loginReducer,
   );
 
-  const { selectedTicketIds, holdedInfo } = useSelector(
+  const { holdedInfo } = useSelector(
     (state: { bookSeatReducer: MainSeatInfo }) => state.bookSeatReducer,
   );
 
@@ -39,7 +39,7 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
   const { getReser, getReserPending } = useReservation();
 
   const goSubmitButton = () => {
-    if (selectedSession.date === '' || selectedTicketIds.length === 0) {
+    if (selectedSession.date === '' || holdedInfo.holdedIndex.length === 0) {
       dispatch({
         type: OPEN_MODAL,
         payload: { title: '경고', message: '세션 및 좌석을 먼저 선택하세요.' },
@@ -66,7 +66,7 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
             .reduce((sum, item) => sum + item.ticketCount, 0);
 
           // 기존 구매 + 새로 선택한 좌석이 4개 초과하면 경고
-          if (mySoldCount + selectedTicketIds.length > 4) {
+          if (mySoldCount + holdedInfo.holdedIndex.length > 4) {
             dispatch({
               type: OPEN_MODAL,
               payload: {

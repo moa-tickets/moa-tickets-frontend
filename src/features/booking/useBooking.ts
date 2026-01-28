@@ -29,15 +29,21 @@ export const useBooking = () => {
       expiresAt: string;
     },
     Error,
-    { sessionId: number; ticketIds: number[] }
+    { sessionId: number; ticketIds: number[]; existingHoldToken?: string }
   >({
     mutationFn: async ({
       sessionId,
       ticketIds,
+      existingHoldToken,
     }: {
       sessionId: number;
       ticketIds: number[];
+      existingHoldToken?: string;
     }) => {
+      // 기존 hold가 있으면 먼저 release
+      if (existingHoldToken) {
+        await axios.post(`/api/holds/${existingHoldToken}/release`);
+      }
       const response = await axios.post(`/api/tickets/hold`, {
         sessionId,
         ticketIds,
