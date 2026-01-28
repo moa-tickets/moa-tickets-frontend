@@ -27,7 +27,7 @@ const SessionSelector = ({ data }: { data: ProductDetail }) => {
     (state: { loginReducer: LoginState }) => state.loginReducer,
   );
 
-  const { data: seatData, holdedInfo } = useSelector(
+  const { data: seatData, selectedTicketIds } = useSelector(
     (state: { bookSeatReducer: MainSeatInfo }) => state.bookSeatReducer,
   );
   const { getSeatInfo } = useBooking();
@@ -82,13 +82,13 @@ const SessionSelector = ({ data }: { data: ProductDetail }) => {
       <SelectorArea
         title={'선택한 좌석'}
         area={
-          holdedInfo.holdedIndex.length === 0 ? (
+          selectedTicketIds.length === 0 ? (
             <p className={cn('mt-[20px] opacity-45')}>
               좌석을 선택해야 합니다.
             </p>
           ) : (
             <SeatList
-              holdedIndex={holdedInfo.holdedIndex}
+              holdedIndex={selectedTicketIds}
               data={data}
               selectedSession={selectedSession}
               seatData={seatData}
