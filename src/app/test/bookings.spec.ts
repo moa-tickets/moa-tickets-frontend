@@ -8,8 +8,9 @@ import { Provider } from 'react-redux';
 import concertDetailReducer, {
   GET_DETAIL_PRODUCT,
   type ProductDetail,
-} from '../../../entities/reducers/ConcertDetailReducer';
-import { useProduct } from '../../../features/product/useProduct';
+  type RealProductDetail,
+} from '../../entities/reducers/ConcertDetailReducer';
+import { useProduct } from '../../features/product/useProduct';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -55,7 +56,7 @@ describe('ProductDetail Mutation Test - Sessions Length Validation', () => {
     });
 
     // 3. Verify Redux State
-    const state = store.getState();
+    const state = store.getState() as { concertDetailReducer: RealProductDetail };
     const sessions = state.concertDetailReducer.data.sessions;
 
     expect(sessions.length).toBeGreaterThanOrEqual(1);
@@ -95,7 +96,7 @@ describe('ProductDetail Mutation Test - Sessions Length Validation', () => {
       expect(result.current.getDetailProduct.isSuccess).toBe(true);
     });
 
-    const state = store.getState();
+    const state = store.getState() as { concertDetailReducer: RealProductDetail };
     const sessions = state.concertDetailReducer.data.sessions;
 
     expect(sessions.length).toBeGreaterThanOrEqual(1);
@@ -218,7 +219,7 @@ describe('If Session Selected and Seats Selected, holdedInfo States are in', () 
     mockedAxios.get.mockResolvedValueOnce({ data: [] }); // getSeatInfo 호출용
 
     // 3. Render Hook
-    const { useBooking } = await import('../../../features/booking/useBooking');
+    const { useBooking } = await import('../../features/booking/useBooking');
 
     function wrapper({ children }: { children: ReactNode }) {
       return React.createElement(Provider, {

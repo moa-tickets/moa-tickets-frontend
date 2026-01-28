@@ -55,9 +55,6 @@ export const useBooking = () => {
       });
       getSeatInfo.mutate({ sessionId: variables.sessionId });
     },
-    onError: (e) => {
-      console.error(e);
-    },
   });
 
   // 좌석 홀드 해제하기 : Release
