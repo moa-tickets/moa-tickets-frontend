@@ -16,7 +16,7 @@ const PaymentPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [remainingTime, setRemainingTime] = useState<number>(0);
+  const [remainingTime, setRemainingTime] = useState<number>(600); // 10분
 
   const { getDetailProduct, getDetailProductPending } = useProduct();
 
@@ -38,28 +38,21 @@ const PaymentPage = () => {
     navigate(`/detail/${id}`, { replace: true });
   }, [dispatch, navigate, id]);
 
-  // 타이머 설정 (최대 10분)
+  // 타이머 설정 (10분부터 시작)
   useEffect(() => {
-    if (!holdedInfo.expiresAt) return;
-
-    const MAX_TIME = 600; // 10분
-
-    const updateTimer = () => {
-      const now = Date.now();
-      const expiresAt = new Date(holdedInfo.expiresAt).getTime();
-      const diff = Math.min(MAX_TIME, Math.max(0, Math.floor((expiresAt - now) / 1000)));
-      setRemainingTime(diff);
-
-      if (diff <= 0) {
-        handleExpire();
-      }
-    };
-
-    updateTimer();
-    const interval = setInterval(updateTimer, 1000);
+    const interval = setInterval(() => {
+      setRemainingTime((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          handleExpire();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
 
     return () => clearInterval(interval);
-  }, [holdedInfo.expiresAt, handleExpire]);
+  }, [handleExpire]);
 
   useEffect(() => {
     if (selectedSession.sessionId === 0 || holdedInfo.holdedIndex.length === 0) {
