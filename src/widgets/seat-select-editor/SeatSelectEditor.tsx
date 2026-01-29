@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  DESELECT_SEAT,
   type MainSeatInfo,
+  SELECT_SEAT,
   type SeatInfo,
 } from '@/entities/reducers/BookSeatReducer';
 import type { LoginState } from '@/entities/reducers/LoginReducer';
@@ -19,27 +21,27 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
     (state: { loginReducer: LoginState }) => state.loginReducer,
   );
 
-  const { holdedInfo } = useSelector(
+  const { selectedTicketIds } = useSelector(
     (state: { bookSeatReducer: MainSeatInfo }) => state.bookSeatReducer,
   );
 
-  const { getSeatInfo, getSeatInfoPending, seatHold, seatHoldPending } =
-    useBooking();
+  const { getSeatInfo, getSeatInfoPending } = useBooking();
 
   const dispatch = useDispatch();
 
-  const isMyHoldedSeat = (ticketId: number) => {
-    return holdedInfo.holdedIndex.includes(ticketId);
+  const isSelectedSeat = (ticketId: number) => {
+    return selectedTicketIds.includes(ticketId);
   };
 
   const handleSeatClick = (seatInfo: SeatInfo) => {
-    // 이미 내가 홀드한 좌석이면 무시 (release API 없음)
-    if (isMyHoldedSeat(seatInfo.ticketId)) {
+    // 이미 선택한 좌석이면 선택 해제
+    if (isSelectedSeat(seatInfo.ticketId)) {
+      dispatch({ type: DESELECT_SEAT, payload: { ticketId: seatInfo.ticketId } });
       return;
     }
 
-    // 새 좌석 선택
-    if (holdedInfo.holdedIndex.length >= 4) {
+    // 4개 이상 선택 불가
+    if (selectedTicketIds.length >= 4) {
       dispatch({
         type: OPEN_MODAL,
         payload: {
@@ -50,26 +52,8 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
       return;
     }
 
-    // 새 좌석만 hold API 호출
-    seatHold.mutate(
-      {
-        sessionId: selectedSession.sessionId,
-        ticketIds: [seatInfo.ticketId],
-      },
-      {
-        onError: () => {
-          dispatch({
-            type: OPEN_MODAL,
-            payload: {
-              title: '선점 실패',
-              message: '이미 다른 사용자가 임시 점유한 좌석입니다.',
-            },
-          });
-          // 좌석 정보 새로고침
-          getSeatInfo.mutate({ sessionId: selectedSession.sessionId });
-        },
-      },
-    );
+    // 좌석 선택
+    dispatch({ type: SELECT_SEAT, payload: { ticketId: seatInfo.ticketId } });
   };
 
   const refreshSeats = () => {
@@ -77,8 +61,8 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
   };
 
   const isDisabled = (seatInfo: SeatInfo) => {
-    // 내가 홀드한 좌석은 클릭 가능 (release 위해)
-    if (isMyHoldedSeat(seatInfo.ticketId)) {
+    // 내가 선택한 좌석은 클릭 가능 (해제 위해)
+    if (isSelectedSeat(seatInfo.ticketId)) {
       return false;
     }
     // 다른 사람이 홀드했거나 sold된 좌석은 disabled
@@ -98,9 +82,6 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
       <div
         className={cn(
           'w-full h-[400px] border border-solid border-black mt-[20px] p-[10px] flex flex-col items-center',
-          'relative',
-          seatHoldPending &&
-            'after:content-[""] after:absolute after:inset-0 after:bg-[rgba(0,0,0,.5)]',
         )}
       >
         <div className={cn('flex items-center gap-[10px] mb-[20px]')}>
@@ -134,10 +115,8 @@ const SeatSelectEditor = ({ data }: { data: SeatInfo[] }) => {
                 'cursor-pointer',
                 'bg-black text-white rounded-full',
                 seatInfo.state === 'SOLD' && 'bg-gray-400 cursor-not-allowed',
-                seatInfo.state === 'HOLD' &&
-                  !isMyHoldedSeat(seatInfo.ticketId) &&
-                  'opacity-45',
-                isMyHoldedSeat(seatInfo.ticketId) && 'bg-[rgb(239,62,67)]',
+                seatInfo.state === 'HOLD' && 'opacity-45',
+                isSelectedSeat(seatInfo.ticketId) && 'bg-[rgb(239,62,67)]',
               )}
               disabled={isDisabled(seatInfo)}
               onClick={() => {
