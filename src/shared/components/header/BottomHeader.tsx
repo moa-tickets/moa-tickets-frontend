@@ -54,7 +54,7 @@ const BottomHeader = React.memo(() => {
               <Icon ICON="PROFILE" className={'w-5 h-5 fill-none'} />
             }
             text={'로그아웃'}
-            onNavigate={logoutMember}
+            onNavigate={() => logoutMember.mutate()}
           />
         ) : (
           <IconButton

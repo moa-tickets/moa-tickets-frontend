@@ -30,10 +30,14 @@ export const useMember = () => {
     },
   });
 
-  const logoutMember = () => {
-    Cookies.remove('Authorization');
-    dispatch({ type: LOGOUT });
-  };
+  const logoutMember = useMutation<void>({
+    mutationFn: async () => {
+      await axios.post('/api/logout');
+    },
+    onSuccess: () => {
+      dispatch({ type: LOGOUT });
+    },
+  });
 
   return { getMember, getMemberPending: getMember.isPending, logoutMember };
 };
