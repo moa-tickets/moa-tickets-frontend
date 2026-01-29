@@ -1,7 +1,10 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const ProtectedRoute = () => {
-  if (false) {
+  const cookie = Cookies.get('Authorization');
+
+  if (!cookie) {
     return <Navigate to="/login" replace />;
   }
 
