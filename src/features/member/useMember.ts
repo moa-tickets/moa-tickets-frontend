@@ -1,7 +1,6 @@
 import { GET_MEMBER, LOGOUT } from '@/entities/reducers/LoginReducer';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
 
 interface MemberResponse {
