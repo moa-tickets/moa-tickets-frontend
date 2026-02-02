@@ -8,6 +8,7 @@ import paymentReducer from './PaymentReducer';
 import reservationReducer from './ReservationReducer';
 import reservationDetailReducer from './ReservationDetailReducer';
 import dateFilterReducer from './DateFilterReducer';
+import audienceReviewReducer from './AudienceReviewReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   reservationReducer,
   reservationDetailReducer,
   dateFilterReducer,
+  audienceReviewReducer,
 });
 
 export default rootReducer;
