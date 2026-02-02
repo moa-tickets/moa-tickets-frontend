@@ -8,7 +8,12 @@ import DetailTicketOpen from '../detail-ticket-open/DetailTicketOpen';
 
 const DetailPageFunctions = ({ data }: { data: ProductDetail }) => {
   return (
-    <div className={cn('detail__page__functions', 'flex justify-between')}>
+    <div
+      className={cn(
+        'detail__page__functions',
+        'flex justify-between mb-[50px]',
+      )}
+    >
       <ImageFrame
         w={300}
         h={400}
