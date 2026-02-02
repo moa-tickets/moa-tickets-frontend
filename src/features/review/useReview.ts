@@ -40,7 +40,7 @@ export const useReview = () => {
       });
       return response.data;
     },
-    onSuccess: (data: ReviewData, variable) => {
+    onSuccess: (_, variable) => {
       reviewGetter.mutate({ concertId: variable.concertId });
     },
   });

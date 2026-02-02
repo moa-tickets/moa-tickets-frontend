@@ -7,7 +7,6 @@ import type { ModalState } from '@/entities/types/types';
 import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
 import { useReview } from '@/features/review/useReview';
 import { useParams } from 'react-router-dom';
-import type { MainReviewData } from '@/entities/reducers/AudienceReviewReducer';
 
 interface Score {
   bool: boolean;
