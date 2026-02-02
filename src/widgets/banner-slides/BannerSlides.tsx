@@ -16,7 +16,7 @@ const BannerSlides = () => {
   return (
     <div
       className={cn(
-        'banner__slide w-[180px] h-[50px] ml-[30px] overflow-hidden relative',
+        'banner__slide sm:block hidden w-[180px] h-[50px] ml-[30px] overflow-hidden relative',
       )}
     >
       <div

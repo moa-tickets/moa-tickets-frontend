@@ -15,7 +15,7 @@ const IconButton = ({
   return (
     <button
       className={cn(
-        'flex items-center gap-2 cursor-pointer group',
+        'sm:flex hidden items-center gap-2 cursor-pointer group',
         disabled && 'opacity-50 cursor-not-allowed',
       )}
       onClick={onNavigate}

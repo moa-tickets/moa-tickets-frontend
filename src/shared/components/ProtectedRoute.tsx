@@ -1,10 +1,20 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import { useEffect } from 'react';
+import { useMember } from '@/features/member/useMember';
+import { useSelector } from 'react-redux';
+import type { LoginState } from '@/entities/reducers/LoginReducer';
 
 const ProtectedRoute = () => {
-  const cookie = Cookies.get('Authorization');
+  const { getMember } = useMember();
+  const { isLoggedIn } = useSelector(
+    (state: { loginReducer: LoginState }) => state.loginReducer,
+  );
 
-  if (!cookie) {
+  useEffect(() => {
+    getMember.mutate();
+  }, []);
+
+  if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
 

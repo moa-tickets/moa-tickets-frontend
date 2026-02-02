@@ -7,7 +7,7 @@ const LogoLink = React.memo(() => {
   return (
     <Link to="/">
       <LazyImage
-        className="w-[89px] h-[25px]"
+        className="sm:w-[89px] w-[71px]"
         src="/logo.svg"
         alt="logo"
         skeletonComponent={<Skeleton className="w-full h-full bg-[#ccc]" />}
