@@ -1,12 +1,14 @@
 import { type Action } from '../types/types';
 
 export const LOGIN = 'login/login';
+export const LOGGED_INIT = 'login/logged_init';
 export const GET_MEMBER = 'login/get_member';
 export const LOGOUT = 'login/logout';
 export const SESSION_CHANGE = 'login/session_change';
 export const SESSION_INIT = 'login/session_init';
 
 export const getLoginData = () => ({ type: LOGIN });
+export const loggedInit = () => ({ type: LOGGED_INIT });
 export const getMember = () => ({ type: GET_MEMBER });
 export const getLogout = () => ({ type: LOGOUT });
 export const sessionChange = () => ({ type: SESSION_CHANGE });
@@ -40,6 +42,11 @@ export default function loginReducer(
 ) {
   switch (action.type) {
     case LOGIN:
+      return {
+        ...state,
+        isLoggedIn: true,
+      };
+    case LOGGED_INIT:
       return {
         ...state,
         isLoggedIn: action.payload.isLoggedIn,

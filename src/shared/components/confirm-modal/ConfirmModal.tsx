@@ -17,11 +17,9 @@ export default function ConfirmModal({
 }>) {
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
       document.body.classList.add('modal-dimmed');
     }
     return () => {
-      document.body.style.overflow = 'auto';
       document.body.classList.remove('modal-dimmed');
     };
   }, [isOpen]);

@@ -1,24 +1,29 @@
-import { type LoginState } from '@/entities/reducers/LoginReducer';
+import { LOGIN, LOGOUT } from '@/entities/reducers/LoginReducer';
+import axios from 'axios';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import Cookies from 'js-cookie';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 const LoginCallback = () => {
   const navigate = useNavigate();
-  const isLoggedIn = useSelector(
-    (state: { loginReducer: LoginState }) => state.loginReducer.isLoggedIn,
-  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const cookie = Cookies.get('Authorization');
+    const checkLogin = async () => {
+      try {
+        await axios.get(`/api/members/me`, {
+          withCredentials: true,
+        });
+        dispatch({ type: LOGIN });
+        navigate('/', { replace: true });
+      } catch {
+        dispatch({ type: LOGOUT });
+        navigate('/login', { replace: true });
+      }
+    };
 
-    if (cookie) {
-      navigate('/');
-    } else {
-      navigate('/login');
-    }
-  }, [isLoggedIn]);
+    checkLogin();
+  }, []);
 
   return <div>진행중입니다...</div>;
 };

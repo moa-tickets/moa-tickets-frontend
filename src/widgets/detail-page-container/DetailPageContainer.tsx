@@ -3,7 +3,8 @@ import type { ProductDetail } from '@/entities/reducers/ConcertDetailReducer';
 import { cn } from '@/shared';
 import StateButton from '@/shared/components/state-button/StateButton';
 import DetailPageFunctions from '../detail-page-functions/DetailPageFunctions';
-import DetailSelectTab from '@/shared/components/detail-select-tab/DetailSelectTab';
+import DetailSelectTab from '../detail-select-tab/DetailSelectTab';
+import AudienceReview from '../audience-review/AudienceReview';
 
 const topState = [
   {
@@ -20,6 +21,25 @@ const topState = [
     id: 3,
     title: '예매대기',
     isActive: false,
+  },
+];
+
+const tabs = [
+  {
+    label: 'detail__info',
+    value: '상세정보',
+  },
+  {
+    label: 'review',
+    value: '관람후기',
+  },
+  {
+    label: 'place__info',
+    value: '장소정보',
+  },
+  {
+    label: 'community',
+    value: '커뮤니티',
   },
 ];
 
@@ -46,10 +66,11 @@ const DetailPageContainer = React.memo(({ data }: { data: ProductDetail }) => {
         <span className={cn('font-light inline-block mb-[30px]')}>콘서트</span>
         <DetailPageFunctions data={data} />
         <DetailSelectTab
-          lists={['상세정보', '관람후기']}
-          selectedState={selectedTab}
+          lists={tabs}
+          selectedTab={selectedTab}
           onChange={(element: string) => setSelectedTab(element)}
         />
+        {selectedTab === '관람후기' && <AudienceReview />}
       </div>
     </div>
   );

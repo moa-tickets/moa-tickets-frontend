@@ -213,7 +213,8 @@ const MainBannerSlides = () => {
         )}
       <div
         className={cn(
-          'main__banner__slides w-full h-[500px] overflow-hidden select-none relative cursor-grab',
+          'main__banner__slides w-full lg:h-[500px] h-[800px] overflow-hidden select-none relative cursor-grab',
+          'lg:mt-0 mt-[20px] lg:max-w-full max-w-[65%] mx-auto lg:rounded-none rounded-[30px]',
           isDrag && 'cursor-grabbing',
         )}
         onClickCapture={(e) => {

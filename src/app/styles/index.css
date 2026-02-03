@@ -1,7 +1,27 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+@font-face {
+  font-family: 'ONE_MOBILE_LIGHT';
+  src: url('/fonts/ONE_MOBILE_LIGHT.otf') format('opentype');
+  font-style: lighterss;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ONE_MOBILE_BOLD';
+  src: url('/fonts/ONE_MOBILE_BOLD.otf') format('opentype');
+  font-style: bold;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
+
+@theme {
+  --breakpoint-sm: 768px;
+  --breakpoint-md: 880px;
+  --breakpoint-lg: 1080px;
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -124,7 +144,6 @@
 
 body {
   overflow-x: hidden;
-  min-width: 1080px;
 }
 
 body.modal-dimmed::after {

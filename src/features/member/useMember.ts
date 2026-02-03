@@ -1,7 +1,6 @@
 import { GET_MEMBER, LOGOUT } from '@/entities/reducers/LoginReducer';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
 
 interface MemberResponse {
@@ -30,10 +29,14 @@ export const useMember = () => {
     },
   });
 
-  const logoutMember = () => {
-    Cookies.remove('Authorization');
-    dispatch({ type: LOGOUT });
-  };
+  const logoutMember = useMutation<void>({
+    mutationFn: async () => {
+      await axios.post('/api/logout');
+    },
+    onSuccess: () => {
+      dispatch({ type: LOGOUT });
+    },
+  });
 
   return { getMember, getMemberPending: getMember.isPending, logoutMember };
 };
