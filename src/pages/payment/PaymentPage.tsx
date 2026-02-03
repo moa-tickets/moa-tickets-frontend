@@ -55,8 +55,11 @@ const PaymentPage = () => {
   }, [handleExpire]);
 
   useEffect(() => {
-    if (selectedSession.sessionId === 0 || holdedInfo.holdedIndex.length === 0) {
-      navigate(`/detail/${id}/booking`, { replace: true });
+    if (
+      selectedSession.sessionId === 0 ||
+      holdedInfo.holdedIndex.length === 0
+    ) {
+      navigate(`/detail/${id}`, { replace: true });
     }
   }, [selectedSession.sessionId, holdedInfo.holdedIndex.length, id, navigate]);
 
@@ -78,7 +81,9 @@ const PaymentPage = () => {
           <div
             className={cn(
               'text-[18px] font-bold px-[16px] py-[8px] rounded-[8px]',
-              remainingTime <= 60 ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600',
+              remainingTime <= 60
+                ? 'bg-red-100 text-red-600'
+                : 'bg-blue-100 text-blue-600',
             )}
           >
             남은 시간: {formatTime(remainingTime)}
