@@ -10,7 +10,7 @@ import { useMember } from '@/features/member/useMember';
 import MobileLoginStatus from '../mobile-login-status/MobileLoginStatus';
 
 const BottomHeader = React.memo(() => {
-  const { isLoggedIn } = useSelector(
+  const { isLoggedIn, nickname } = useSelector(
     (state: { loginReducer: LoginState }) => state.loginReducer,
   );
   const { getMember, logoutMember } = useMember();
@@ -74,7 +74,7 @@ const BottomHeader = React.memo(() => {
           iconComponent={<Icon ICON="QUESTION" className={'w-6 h-6'} />}
           text={'1:1 문의'}
         />
-        <MobileLoginStatus isLoggedIn={isLoggedIn} />
+        <MobileLoginStatus isLoggedIn={isLoggedIn} nickname={nickname} />
       </div>
     </div>
   );

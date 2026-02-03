@@ -11,7 +11,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 
 interface ReservationParam {
-  page: number;
+  page?: number;
   view?: 'PERIOD' | 'MONTH';
   range?: 'D15' | 'M1' | 'M2' | 'M3';
   basis?: 'BOOKED_AT' | 'VIEWED_AT';
@@ -48,7 +48,11 @@ export const useReservation = () => {
     },
   });
 
-  const getReserDetail = useMutation<ReservationDetail, Error, { orderId: string }>({
+  const getReserDetail = useMutation<
+    ReservationDetail,
+    Error,
+    { orderId: string }
+  >({
     mutationFn: async ({ orderId }: { orderId: string }) => {
       const response = await axios.get(`/api/bookings/me/${orderId}`);
       return response.data;
