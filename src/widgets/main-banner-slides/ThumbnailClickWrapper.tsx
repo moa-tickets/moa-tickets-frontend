@@ -14,7 +14,9 @@ export default function ThumbnailClickWrapper({
 }) {
   return (
     <div
-      className={cn('thumbnail__wrapper absolute bottom-[20px] left-0 w-full')}
+      className={cn(
+        'thumbnail__wrapper absolute lg:block hidden bottom-[20px] left-0 w-full',
+      )}
     >
       <div
         className={cn(

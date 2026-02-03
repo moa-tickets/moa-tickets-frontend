@@ -1,24 +1,17 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useMember } from '@/features/member/useMember';
-import { useSelector } from 'react-redux';
-import type { LoginState } from '@/entities/reducers/LoginReducer';
 
 const ProtectedRoute = () => {
-  const { getMember } = useMember();
-  const { isLoggedIn } = useSelector(
-    (state: { loginReducer: LoginState }) => state.loginReducer,
-  );
+  const ls = localStorage.getItem('isLoggedIn');
 
-  useEffect(() => {
-    getMember.mutate();
-  }, []);
+  if (ls) {
+    const parsed = JSON.parse(ls);
 
-  if (!isLoggedIn) {
-    return <Navigate to="/login" replace />;
+    if (!parsed) {
+      return <Navigate to="/login" replace />;
+    }
+
+    return <Outlet />;
   }
-
-  return <Outlet />;
 };
 
 export default ProtectedRoute;

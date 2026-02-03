@@ -14,7 +14,7 @@ const LoginCallback = () => {
         await axios.get(`/api/members/me`, {
           withCredentials: true,
         });
-        dispatch({ type: LOGIN, payload: { isLoggedIn: true } });
+        dispatch({ type: LOGIN });
         navigate('/', { replace: true });
       } catch {
         dispatch({ type: LOGOUT });

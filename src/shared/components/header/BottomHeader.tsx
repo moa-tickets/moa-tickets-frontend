@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { cn } from '@/shared';
-import Cookies from 'js-cookie';
 import IconButton from '../icon-button/IconButton';
 import Icon from '@/shared/lib/Icon';
 import { useNavigate } from 'react-router-dom';
 
-import { LOGIN, type LoginState } from '@/entities/reducers/LoginReducer';
+import { LOGGED_INIT, type LoginState } from '@/entities/reducers/LoginReducer';
 import { useMember } from '@/features/member/useMember';
 import MobileLoginStatus from '../mobile-login-status/MobileLoginStatus';
 
@@ -16,11 +15,22 @@ const BottomHeader = React.memo(() => {
   );
   const { getMember, logoutMember } = useMember();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const ls = localStorage.getItem('isLoggedIn');
+    if (ls) {
+      const parsed = JSON.parse(ls);
+      console.log(parsed);
+      dispatch({ type: LOGGED_INIT, payload: { isLoggedIn: parsed } });
+    }
+  }, []);
 
   useEffect(() => {
     if (isLoggedIn) {
       getMember.mutate();
     }
+    localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
   }, [isLoggedIn]);
 
   const goLogin = () => {
