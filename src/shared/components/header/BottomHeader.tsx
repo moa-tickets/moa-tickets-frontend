@@ -45,7 +45,7 @@ const BottomHeader = React.memo(() => {
     <div className={cn('bottom__header__wrapper w-full h-[60px] bg-[#fbfbfb]')}>
       <div
         className={cn(
-          'bottom__header max-w-[90%] md:max-w-[880px] lg:max-w-[1080px] h-full mx-auto flex gap-3 items-center',
+          'bottom__header max-w-[90%] md:max-w-[880px] lg:max-w-[1080px] h-full mx-auto flex gap-3 items-center relative',
         )}
       >
         {isLoggedIn ? (
