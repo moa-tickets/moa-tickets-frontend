@@ -1,4 +1,5 @@
 import { cn } from '@/shared';
+import AudienceReviewKeywordTop7 from './AudienceReviewKeywordTop7';
 import AudienceReviewInput from './AudienceReviewInput';
 import AudienceReviewList from './AudienceReviewList';
 import { useSelector } from 'react-redux';
@@ -13,6 +14,15 @@ export default function AudienceReview() {
   return (
     <div className={cn('audience__review')}>
       <div className={cn('audience__review__inner', 'max-w-[1080px] mx-auto')}>
+        <div
+          className={cn(
+            'audience__review__title',
+            'flex items-center pb-[18px] border-b border-solid border-black mb-[20px]',
+          )}
+        >
+          <h2 className={cn('text-[22px] font-bold')}>AI 키워드 분석</h2>
+        </div>
+        <AudienceReviewKeywordTop7 />
         <div
           className={cn(
             'audience__review__title',
