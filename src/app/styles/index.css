@@ -18,6 +18,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  --breakpoint-xxs: 460px;
+  --breakpoint-xs: 600px;
   --breakpoint-sm: 768px;
   --breakpoint-md: 880px;
   --breakpoint-lg: 1080px;

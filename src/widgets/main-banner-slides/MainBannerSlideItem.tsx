@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/shared';
 import type { MainBannerSlide } from '@/entities/constant/mainBannerSlides';
 
@@ -23,14 +23,38 @@ const MainBannerSlideItem = React.memo(
       });
     };
 
+    // 반응형 이미지 바꾸기
+    const [screenSize, setScreenSize] = useState<number>(0);
+
+    useEffect(() => {
+      const resizeScreenSize = () => {
+        setScreenSize(window.innerWidth);
+      };
+
+      resizeScreenSize();
+
+      window.addEventListener('resize', resizeScreenSize);
+
+      return () => {
+        window.removeEventListener('resize', resizeScreenSize);
+      };
+    }, []);
+
     return (
       <Link
         to={`/detail/${slideItem.id}`}
-        className={cn('slide__item flex-shrink-0 w-full h-full relative')}
+        className={cn(
+          'slide__item flex-shrink-0 w-full h-full relative',
+          screenSize < 1080
+            ? 'after:content-[""] after:absolute after:inset-0 after:bg-[rgba(0,0,0,.25)] z-[100]'
+            : '',
+        )}
         onClick={waitOpenModal}
       >
         <LazyImage
-          src={slideItem.imageUrl}
+          src={
+            screenSize >= 1080 ? slideItem.imageUrl : slideItem.mobileImageUrl
+          }
           alt={slideItem.bigText}
           className="w-full h-full object-fit"
           skeletonComponent={
@@ -42,7 +66,9 @@ const MainBannerSlideItem = React.memo(
           smallText={slideItem.smallText}
           mediumText={slideItem.middleText}
           dateText={slideItem.dateText}
-          color={slideItem.textColor}
+          color={
+            screenSize >= 1080 ? slideItem.textColor : slideItem.mobileTextColor
+          }
         />
       </Link>
     );

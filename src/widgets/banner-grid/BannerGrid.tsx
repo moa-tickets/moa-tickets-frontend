@@ -4,7 +4,11 @@ import Skeleton from '@/shared/components/skeleton/Skeleton';
 
 const BannerGrid = () => {
   return (
-    <div className={cn('banner__grid__wrapper w-full mt-[20px] mb-[160px]')}>
+    <div
+      className={cn(
+        'banner__grid__wrapper lg:block hidden w-full mt-[20px] mb-[160px]',
+      )}
+    >
       <div
         className={cn(
           'banner__grid max-w-[1080px] mx-auto grid grid-cols-3 gap-4',
