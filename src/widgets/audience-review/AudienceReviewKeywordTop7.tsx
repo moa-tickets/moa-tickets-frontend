@@ -1,16 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { cn } from '@/shared';
-import { FaStar } from 'react-icons/fa6';
-import { useDispatch, useSelector } from 'react-redux';
-import { CLOSE_MODAL, OPEN_MODAL } from '@/entities/reducers/ModalReducer';
-import type { ModalState } from '@/entities/types/types';
-import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
-import { useReview } from '@/features/review/useReview';
+import { useSelector } from 'react-redux';
+import { useKeyword } from '@/features/keyword/useKeyword';
 import { useParams } from 'react-router-dom';
-
+import type {
+  MainKeywordData,
+  KeywordData,
+} from '@/entities/reducers/KeywordReducer'
+import AudienceReviewKeywordItem from './AudienceReviewKeywordItem';
 
 export default function AudienceReviewKeywordsTop7() {
-  
+  const { id } = useParams<{ id: string }>();
+
+  const { data: keywordData } = useSelector(
+      (state: { keywordReducer: MainKeywordData }) =>
+        state.keywordReducer,
+    );
+
+  const { keywordGetter, keywordGetterPending } = useKeyword();
+
+  useEffect(() => {
+    keywordGetter.mutate({ concertId: Number(id) });
+  }, []);
+
   return (
     <>
       <div className={cn('audience__review__positive')}>
@@ -21,18 +33,16 @@ export default function AudienceReviewKeywordsTop7() {
         >
           긍정 
         </span>
-        <ul className={cn('flex gap-4')}>
-          <li>
-            <span
-              className={cn(
-                'text-[12px] text-[rgb(137,137,137)] inline-block mb-[20px]',
-              )}
-            >
-              긍정 키워드 7개
-            </span>
-          </li>
-        </ul>
-        
+        <div>
+          <ul className={cn('flex gap-4')}>
+            {keywordGetterPending && 'loading...'}
+            {!keywordGetterPending &&
+            keywordData.length > 0 &&
+            keywordData.map((rdata: KeywordData) => (
+              <AudienceReviewKeywordItem data={rdata} />
+            ))}
+          </ul>
+        </div>
       </div>
       <div className={cn('audience__review__negative')}>
         <span
@@ -42,17 +52,20 @@ export default function AudienceReviewKeywordsTop7() {
         >
           부정
         </span>
-        <ul className={cn('flex gap-4')}>
-          <li>
-            <span
-              className={cn(
-                'text-[12px] text-[rgb(137,137,137)] inline-block mb-[20px]',
-              )}
-            >
-              부정 키워드 7개
-            </span>
-          </li>
+        <div>
+          <ul className={cn('flex gap-4')}>
+            {keywordGetterPending && 'loading...'}
+            <li>
+              <span
+                className={cn(
+                  'text-[12px] text-[rgb(137,137,137)] inline-block mb-[20px]',
+                )}
+              >
+                부정 키워드 7개
+              </span>
+            </li>
         </ul>
+        </div>
       </div>
     </>
   );
