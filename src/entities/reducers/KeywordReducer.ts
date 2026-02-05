@@ -1,24 +1,27 @@
 import type { Action } from '../types/types';
 
 export const GET_KEYWORD = 'get/keyword';
-
 export const get_keyword = () => ({ type: GET_KEYWORD });
 
-export interface MainKeywordData {
-  data: KeywordData[];
-}
-
-export interface KeywordData {
-  concertId: number;
-  score: number;
+export interface KeywordItem {
   keyword: string;
+  count: number;
 }
 
-const initialKeywordData = {
-  data: [],
+export interface KeywordResponse {
+  positive: KeywordItem[];
+  negative: KeywordItem[];
+}
+
+export interface MainKeywordData {
+  data: KeywordResponse;
+}
+
+const initialKeywordData: MainKeywordData = {
+  data: { positive: [], negative: [] },
 };
 
-export default function audienceReviewReducer(
+export default function keywordReducer(
   state: MainKeywordData = initialKeywordData,
   action: Action,
 ) {
@@ -26,7 +29,7 @@ export default function audienceReviewReducer(
     case GET_KEYWORD:
       return {
         ...state,
-        data: action.payload.data,
+        data: action.payload.data as KeywordResponse,
       };
     default:
       return state;
