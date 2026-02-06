@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { LOGGED_INIT, type LoginState } from '@/entities/reducers/LoginReducer';
 import { useMember } from '@/features/member/useMember';
 import MobileLoginStatus from '../mobile-login-status/MobileLoginStatus';
+import { useRealtimeAlarm } from '@/features/sse/useRealtimeAlarm';
 
 const BottomHeader = React.memo(() => {
   const { isLoggedIn, nickname } = useSelector(
