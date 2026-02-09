@@ -21,7 +21,6 @@ const BottomHeader = React.memo(() => {
     const ls = localStorage.getItem('isLoggedIn');
     if (ls) {
       const parsed = JSON.parse(ls);
-      console.log(parsed);
       dispatch({ type: LOGGED_INIT, payload: { isLoggedIn: parsed } });
     }
   }, []);
