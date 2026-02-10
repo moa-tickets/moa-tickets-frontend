@@ -17,8 +17,8 @@ export default defineConfig(({ mode }) => {
       }),
       tailwindcss(),
     ],
-    define:{
-      global: "window",
+    define: {
+      global: 'window',
     },
     resolve: {
       alias: {
@@ -31,6 +31,9 @@ export default defineConfig(({ mode }) => {
           target: apiBaseUrl,
           changeOrigin: true,
         },
+      },
+      headers: {
+        'Cache-Control': 'public, max-age=3600',
       },
     },
   };
