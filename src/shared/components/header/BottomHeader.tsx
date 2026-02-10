@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { LOGGED_INIT, type LoginState } from '@/entities/reducers/LoginReducer';
 import { useMember } from '@/features/member/useMember';
-import MobileLoginStatus from '../mobile-login-status/MobileLoginStatus';
 
 const BottomHeader = React.memo(() => {
   const { isLoggedIn, nickname } = useSelector(
@@ -45,7 +44,7 @@ const BottomHeader = React.memo(() => {
     <div className={cn('bottom__header__wrapper w-full h-[60px] bg-[#fbfbfb]')}>
       <div
         className={cn(
-          'bottom__header max-w-[90%] md:max-w-[880px] lg:max-w-[1080px] h-full mx-auto flex gap-3 items-center',
+          'bottom__header max-w-[1080px] h-full mx-auto flex gap-3 items-center',
         )}
       >
         {isLoggedIn ? (
@@ -74,7 +73,6 @@ const BottomHeader = React.memo(() => {
           iconComponent={<Icon ICON="QUESTION" className={'w-6 h-6'} />}
           text={'1:1 문의'}
         />
-        <MobileLoginStatus isLoggedIn={isLoggedIn} nickname={nickname} />
       </div>
     </div>
   );

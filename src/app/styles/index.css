@@ -146,6 +146,7 @@
 
 body {
   overflow-x: hidden;
+  min-width: 1300px;
 }
 
 body.modal-dimmed::after {
