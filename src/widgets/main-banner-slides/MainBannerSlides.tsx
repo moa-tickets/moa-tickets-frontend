@@ -27,7 +27,6 @@ const MainBannerSlides = () => {
 
   const closeModal = () => {
     dispatch({ type: CLOSE_MODAL });
-    console.log('console');
   };
 
   // 슬라이드 개수
