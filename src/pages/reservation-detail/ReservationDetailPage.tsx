@@ -1,7 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { cn } from '@/shared';
 import { useReservation } from '@/features/reservation/useReservation';
-import OptimizedImage from '@/shared/components/lazy-loading/LazyImage';
 import { useSelector } from 'react-redux';
 import type {
   MainReservationDetail,
@@ -101,13 +100,10 @@ const ReservationDetailPage = () => {
             )}
           >
             {detail.concertThumbnail && (
-              <OptimizedImage
+              <img
                 src={detail.concertThumbnail}
                 alt={detail.concertName}
                 className="w-full h-full object-cover"
-                skeletonComponent={
-                  <div className="w-full h-full bg-[#e0e0e0] animate-pulse" />
-                }
               />
             )}
           </div>

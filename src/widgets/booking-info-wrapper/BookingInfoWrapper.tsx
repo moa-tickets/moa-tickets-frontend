@@ -2,8 +2,6 @@ import type { ProductDetail } from '@/entities/reducers/ConcertDetailReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { cn } from '@/shared';
 import ImageFrame from '@/shared/components/image-frame/ImageFrame';
-import LazyImage from '@/shared/components/lazy-loading/LazyImage';
-import Skeleton from '@/shared/components/skeleton/Skeleton';
 import SessionSelector from '../session-selector/SessionSelector';
 import SubmitButton from '@/shared/components/submit-button/SubmitButton';
 
@@ -79,7 +77,10 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
 
           // 제한 통과 시 좌석 hold 후 결제 페이지로 이동
           seatHold.mutate(
-            { sessionId: selectedSession.sessionId, ticketIds: selectedTicketIds },
+            {
+              sessionId: selectedSession.sessionId,
+              ticketIds: selectedTicketIds,
+            },
             {
               onSuccess: () => {
                 navigate(`/detail/${Number(id)}/payment`);
@@ -89,7 +90,8 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
                   type: OPEN_MODAL,
                   payload: {
                     title: '선점 실패',
-                    message: '이미 다른 사용자가 선택한 좌석입니다. 다른 좌석을 선택해주세요.',
+                    message:
+                      '이미 다른 사용자가 선택한 좌석입니다. 다른 좌석을 선택해주세요.',
                   },
                 });
               },
@@ -118,13 +120,10 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
       >
         <ImageFrame
           imgComponent={
-            <LazyImage
+            <img
               src={data.thumbnail ?? '/placeholder.png'}
               alt={'detail-thumbnail'}
               className={'rounded-[10px] overflow-hidden'}
-              skeletonComponent={
-                <Skeleton className={'w-full h-full bg-[#ccc]'} />
-              }
             />
           }
           w={300}

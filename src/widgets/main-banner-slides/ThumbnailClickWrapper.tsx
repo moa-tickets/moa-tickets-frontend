@@ -1,7 +1,8 @@
+import { useEffect, type Dispatch, type SetStateAction } from 'react';
 import type { MainBannerSlide } from '@/entities/constant/mainBannerSlides';
 import { cn } from '@/shared';
 import ThumbnailItem from './ThumbnailItem';
-import type { Dispatch, SetStateAction } from 'react';
+import useIntersect from '@/features/intersect/useIntersect';
 
 export default function ThumbnailClickWrapper({
   mainBannerSlides,

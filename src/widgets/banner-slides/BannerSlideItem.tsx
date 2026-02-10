@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import OptimizedImage from '@/shared/components/lazy-loading/LazyImage';
 import Skeleton from '@/shared/components/skeleton/Skeleton';
 
 interface BannerSlideItemProps {
@@ -14,12 +13,7 @@ interface BannerSlideItemProps {
 
 const BannerSlideItem = React.memo(({ slide }: BannerSlideItemProps) => (
   <Link to={slide.linkUrl} className="block w-[180px] h-[50px]">
-    <OptimizedImage
-      src={slide.imageUrl}
-      alt={slide.alt}
-      className="w-[180px] h-[50px]"
-      skeletonComponent={<Skeleton className="w-full h-full bg-[#ccc]" />}
-    />
+    <img src={slide.imageUrl} alt={slide.alt} className="w-[180px] h-[50px]" />
   </Link>
 ));
 
