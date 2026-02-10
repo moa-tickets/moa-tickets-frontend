@@ -21,7 +21,6 @@ const ReservationDetailPage = lazy(
 );
 const BookingPage = lazy(() => import('@/pages/booking/BookingPage'));
 const PaymentPage = lazy(() => import('@/pages/payment/PaymentPage'));
-const StreamPage = lazy(() => import('@/pages/stream/StreamPage'));
 const LoginPage = lazy(() => import('@/pages/login/LoginPage'));
 const LoginCallback = lazy(
   () => import('@/pages/login-callback/LoginCallback'),
@@ -99,10 +98,6 @@ const createdRouter = createBrowserRouter([
         ],
       },
     ],
-  },
-  {
-    path: 'live/:playbackId',
-    element: withSuspense(StreamPage),
   },
   {
     path: 'detail/:id',
