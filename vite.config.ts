@@ -71,12 +71,22 @@ export default defineConfig(({ mode }) => {
       chunkSizeWarningLimit: 300,
     },
     server: {
+      hmr: {
+        host: 'localhost',
+        port: 5173,
+        protocol: 'ws',
+      },
       fs: {
         cachedChecks: true,
         deny: ['.env', '.env.local', '.git', 'node_modules/.vite'],
       },
       middlewares: [
         (req: any, res: any, next: any) => {
+          // WebSocket 업그레이드 요청은 스킵
+          if (req.headers.upgrade === 'websocket') {
+            return next();
+          }
+
           // HMR 웹소켓 요청은 스킵
           if (
             req.url.includes('?token=') ||
@@ -110,6 +120,7 @@ export default defineConfig(({ mode }) => {
         '/api': {
           target: apiBaseUrl,
           changeOrigin: true,
+          ws: false,
         },
       },
       headers: {
