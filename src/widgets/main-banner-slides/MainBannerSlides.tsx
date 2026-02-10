@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
 import { CLOSE_MODAL, OPEN_MODAL } from '@/entities/reducers/ModalReducer';
 import useIntersect from '@/features/intersect/useIntersect';
-import { is } from 'date-fns/locale';
 
 const SWIPE_LIMIT = 5; // 연속 스와이프 제한 횟수
 const SWIPE_RESET_TIME = 1500; // 스와이프 카운트 리셋 시간 (ms)
