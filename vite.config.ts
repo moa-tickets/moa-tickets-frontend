@@ -41,6 +41,9 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, './src'),
       },
     },
+    optimizeDeps: {
+      include: ['react', 'react-dom'],
+    },
     build: {
       target: 'ES2022',
       sourcemap: false,
