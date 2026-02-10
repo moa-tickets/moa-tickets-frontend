@@ -1,11 +1,10 @@
 import React from 'react';
 import { cn } from '@/shared';
 import type { MainBannerSlide } from '@/entities/constant/mainBannerSlides';
-
-import MainBannerItemText from './MainBannerItemText';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { OPEN_MODAL } from '@/entities/reducers/ModalReducer';
+import MainBannerItemText from './MainBannerItemText';
 
 const MainBannerSlideItem = React.memo(
   ({ slideItem }: { slideItem: MainBannerSlide }) => {
@@ -33,7 +32,7 @@ const MainBannerSlideItem = React.memo(
         <img
           src={slideItem.imageUrl}
           alt={slideItem.bigText}
-          className={cn('w-full h-full', 'object-cover')}
+          className="w-full h-full object-cover"
         />
         <MainBannerItemText
           bigText={slideItem.bigText}
