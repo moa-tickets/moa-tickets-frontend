@@ -9,7 +9,7 @@ import { LOGGED_INIT, type LoginState } from '@/entities/reducers/LoginReducer';
 import { useMember } from '@/features/member/useMember';
 
 const BottomHeader = React.memo(() => {
-  const { isLoggedIn, nickname } = useSelector(
+  const { isLoggedIn } = useSelector(
     (state: { loginReducer: LoginState }) => state.loginReducer,
   );
   const { getMember, logoutMember } = useMember();
