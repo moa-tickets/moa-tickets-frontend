@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import MainLayout from '@/shared/components/layouts/MainLayout';
 import MainPage from '@/pages/main/MainPage';
+import AppLoading from '@/widgets/app-loading/AppLoading';
 
 // 레이지 로딩 페이지 컴포넌트
 const MyPageLayout = lazy(
@@ -32,18 +33,11 @@ const PaymentFailPage = lazy(
   () => import('@/pages/payment-fail/PaymentFailPage'),
 );
 
-// 로딩 폴백 컴포넌트
-const PageLoader = () => (
-  <div className="flex items-center justify-center min-h-[400px]">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
-  </div>
-);
-
 // Suspense 래퍼
 const withSuspense = (
   Component: React.LazyExoticComponent<React.ComponentType>,
 ) => (
-  <Suspense fallback={<PageLoader />}>
+  <Suspense fallback={<AppLoading />}>
     <Component />
   </Suspense>
 );
