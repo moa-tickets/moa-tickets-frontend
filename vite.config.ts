@@ -42,7 +42,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {
-      target: 'ES2022',
+      target: 'es2020',
       sourcemap: false,
       cssCodeSplit: true,
       minify: 'esbuild',
