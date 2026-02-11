@@ -122,6 +122,12 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           ws: false,
         },
+        '/newApi': {
+          target: 'http://172.16.24.179:8080',
+          changeOrigin: true,
+          ws: false,
+          rewrite: (path: string) => path.replace(/^\/newApi/, '/api'),
+        },
       },
       headers: {
         'Cache-Control': 'public, max-age=3600',
