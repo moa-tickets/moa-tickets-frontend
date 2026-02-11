@@ -8,7 +8,7 @@ import { cn } from '@/shared';
 import MainBannerSlideItem from './MainBannerSlideItem';
 import ThumbnailClickWrapper from './ThumbnailClickWrapper';
 import type { ModalState } from '@/entities/types/types';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
 import { CLOSE_MODAL, OPEN_MODAL } from '@/entities/reducers/ModalReducer';
 import useIntersect from '@/features/intersect/useIntersect';
@@ -20,6 +20,7 @@ const MainBannerSlides = () => {
   // 모달 변수값 가져오기
   const { isOpen, title, message } = useSelector(
     (state: { modalReducer: ModalState }) => state.modalReducer,
+    shallowEqual,
   );
 
   // close 함수
