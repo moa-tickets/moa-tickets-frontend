@@ -25,13 +25,10 @@ export default defineConfig(({ mode }) => {
       include: [
         'react',
         'react-dom',
-        'react-router-dom',
-        '@reduxjs/toolkit',
-        'react-redux',
-        'zustand',
-        '@tanstack/react-query',
-        'axios',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
       ],
+      entries: ['src/**/*.tsx', 'src/**/*.ts'],
     },
     define: {
       global: 'window',
@@ -40,6 +37,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': path.resolve(__dirname, './src'),
       },
+      dedupe: ['react', 'react-dom'],
     },
     build: {
       target: 'es2020',
@@ -72,9 +70,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       hmr: {
-        host: 'localhost',
-        port: 5173,
-        protocol: 'ws',
+        overlay: true,
       },
       fs: {
         cachedChecks: true,
