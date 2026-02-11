@@ -5,8 +5,6 @@ import { cn } from '@/shared';
 import ImageFrame from '@/shared/components/image-frame/ImageFrame';
 import InfoItem from '@/shared/components/info-list/InfoItem';
 import InfoList from '@/shared/components/info-list/InfoList';
-import LazyImage from '@/shared/components/lazy-loading/LazyImage';
-import Skeleton from '@/shared/components/skeleton/Skeleton';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import ReservationInfo from './ReservationInfo';
@@ -69,13 +67,10 @@ const ReservationInfoWrapper = ({ data }: { data: ProductDetail }) => {
       >
         <ImageFrame
           imgComponent={
-            <LazyImage
+            <img
               src={data.thumbnail ?? '/placeholder.png'}
               alt={'concert-thumbnail'}
               className={'rounded-[10px] overflow-hidden'}
-              skeletonComponent={
-                <Skeleton className={'w-full h-full bg-[#ccc]'} />
-              }
             />
           }
           w={240}

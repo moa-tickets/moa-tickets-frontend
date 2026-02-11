@@ -1,7 +1,7 @@
+import { type Dispatch, type SetStateAction } from 'react';
 import type { MainBannerSlide } from '@/entities/constant/mainBannerSlides';
 import { cn } from '@/shared';
 import ThumbnailItem from './ThumbnailItem';
-import type { Dispatch, SetStateAction } from 'react';
 
 export default function ThumbnailClickWrapper({
   mainBannerSlides,
