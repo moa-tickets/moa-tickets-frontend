@@ -5,7 +5,6 @@ import { cn } from '@/shared';
 import ImageFrame from '@/shared/components/image-frame/ImageFrame';
 import InfoItem from '@/shared/components/info-list/InfoItem';
 import InfoList from '@/shared/components/info-list/InfoList';
-import Skeleton from '@/shared/components/skeleton/Skeleton';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import ReservationInfo from './ReservationInfo';

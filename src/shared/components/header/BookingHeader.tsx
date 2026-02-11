@@ -1,6 +1,5 @@
 import { cn } from '@/shared';
 import { Link, useLocation } from 'react-router-dom';
-import Skeleton from '../skeleton/Skeleton';
 import Icon from '@/shared/lib/Icon';
 
 const BookingHeader = () => {
