@@ -8,7 +8,7 @@ import { cn } from '@/shared';
 import MainBannerSlideItem from './MainBannerSlideItem';
 import ThumbnailClickWrapper from './ThumbnailClickWrapper';
 import type { ModalState } from '@/entities/types/types';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import ConfirmModal from '@/shared/components/confirm-modal/ConfirmModal';
 import { CLOSE_MODAL, OPEN_MODAL } from '@/entities/reducers/ModalReducer';
 import useIntersect from '@/features/intersect/useIntersect';
@@ -20,6 +20,7 @@ const MainBannerSlides = () => {
   // 모달 변수값 가져오기
   const { isOpen, title, message } = useSelector(
     (state: { modalReducer: ModalState }) => state.modalReducer,
+    shallowEqual,
   );
 
   // close 함수
@@ -27,7 +28,6 @@ const MainBannerSlides = () => {
 
   const closeModal = () => {
     dispatch({ type: CLOSE_MODAL });
-    console.log('console');
   };
 
   // 슬라이드 개수
@@ -213,8 +213,8 @@ const MainBannerSlides = () => {
         )}
       <div
         className={cn(
-          'main__banner__slides w-full lg:h-[500px] h-auto overflow-hidden select-none relative cursor-grab',
-          'lg:mt-0 mt-[20px] lg:max-w-full max-w-[85%] mx-auto lg:rounded-none rounded-[10px]',
+          'main__banner__slides w-full h-[500px] overflow-hidden select-none relative cursor-grab',
+          'max-w-full mx-auto',
           isDrag && 'cursor-grabbing',
         )}
         onClickCapture={(e) => {

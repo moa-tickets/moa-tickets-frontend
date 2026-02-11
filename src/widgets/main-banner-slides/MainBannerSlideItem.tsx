@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { cn } from '@/shared';
 import type { MainBannerSlide } from '@/entities/constant/mainBannerSlides';
-
-import MainBannerItemText from './MainBannerItemText';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { OPEN_MODAL } from '@/entities/reducers/ModalReducer';
-import LazyImage from '@/shared/components/lazy-loading/LazyImage';
-import Skeleton from '@/shared/components/skeleton/Skeleton';
+import MainBannerItemText from './MainBannerItemText';
 
 const MainBannerSlideItem = React.memo(
   ({ slideItem }: { slideItem: MainBannerSlide }) => {
@@ -23,52 +20,26 @@ const MainBannerSlideItem = React.memo(
       });
     };
 
-    // 반응형 이미지 바꾸기
-    const [screenSize, setScreenSize] = useState<number>(0);
-
-    useEffect(() => {
-      const resizeScreenSize = () => {
-        setScreenSize(window.innerWidth);
-      };
-
-      resizeScreenSize();
-
-      window.addEventListener('resize', resizeScreenSize);
-
-      return () => {
-        window.removeEventListener('resize', resizeScreenSize);
-      };
-    }, []);
-
     return (
       <Link
         to={`/detail/${slideItem.id}`}
         className={cn(
           'slide__item flex-shrink-0 w-full h-full relative',
-          screenSize < 1080
-            ? 'after:content-[""] after:absolute after:inset-0 after:bg-[rgba(0,0,0,.25)] z-[100]'
-            : '',
+          'after:content-[""] after:absolute after:inset-0 after:bg-[rgba(0,0,0,.25)] z-[100]',
         )}
         onClick={waitOpenModal}
       >
-        <LazyImage
-          src={
-            screenSize >= 1080 ? slideItem.imageUrl : slideItem.mobileImageUrl
-          }
+        <img
+          src={slideItem.imageUrl}
           alt={slideItem.bigText}
-          className="w-full h-full object-fit"
-          skeletonComponent={
-            <Skeleton className="w-full h-[500px] bg-[#ccc]" />
-          }
+          className="w-full h-full object-cover"
         />
         <MainBannerItemText
           bigText={slideItem.bigText}
           smallText={slideItem.smallText}
           mediumText={slideItem.middleText}
           dateText={slideItem.dateText}
-          color={
-            screenSize >= 1080 ? slideItem.textColor : slideItem.mobileTextColor
-          }
+          color={slideItem.textColor}
         />
       </Link>
     );

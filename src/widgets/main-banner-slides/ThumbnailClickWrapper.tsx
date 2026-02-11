@@ -1,7 +1,7 @@
+import { type Dispatch, type SetStateAction } from 'react';
 import type { MainBannerSlide } from '@/entities/constant/mainBannerSlides';
 import { cn } from '@/shared';
 import ThumbnailItem from './ThumbnailItem';
-import type { Dispatch, SetStateAction } from 'react';
 
 export default function ThumbnailClickWrapper({
   mainBannerSlides,
@@ -14,9 +14,7 @@ export default function ThumbnailClickWrapper({
 }) {
   return (
     <div
-      className={cn(
-        'thumbnail__wrapper absolute lg:block hidden bottom-[20px] left-0 w-full',
-      )}
+      className={cn('thumbnail__wrapper absolute bottom-[20px] left-0 w-full')}
     >
       <div
         className={cn(

@@ -42,13 +42,17 @@ const DetailPageInfo = ({ data }: { data: ProductDetail }) => {
             title={'공연기간'}
             data={
               (data.sessions.length > 0
-                ? new Date(Math.min(...data.sessions.map((s) => new Date(s.date).getTime())))
+                ? new Date(
+                    Math.min(
+                      ...data.sessions.map((s) => new Date(s.date).getTime()),
+                    ),
+                  )
                     .toISOString()
                     .split('T')[0]
-                    .replaceAll('-', '.')
-                : data.concertEnd.split('T')[0].replaceAll('-', '.')) +
+                    .replace(/-/g, '.')
+                : data.concertEnd.split('T')[0].replace(/-/g, '.')) +
               ' ~ ' +
-              data.concertEnd.split('T')[0].replaceAll('-', '.')
+              data.concertEnd.split('T')[0].replace(/-/g, '.')
             }
           />
           <DetailPageDescription

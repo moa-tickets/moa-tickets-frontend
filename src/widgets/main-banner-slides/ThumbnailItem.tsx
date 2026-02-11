@@ -1,7 +1,5 @@
 import React, { type Dispatch, type SetStateAction } from 'react';
 import { cn } from '@/shared';
-import LazyImage from '@/shared/components/lazy-loading/LazyImage';
-import Skeleton from '@/shared/components/skeleton/Skeleton';
 
 const ThumbnailItem = React.memo(
   ({
@@ -23,11 +21,10 @@ const ThumbnailItem = React.memo(
         )}
         onClick={() => setCurrentIndex(index + 1)}
       >
-        <LazyImage
+        <img
           src={thumbnail}
           alt="thumbnail"
           className={cn('w-full h-full object-cover')}
-          skeletonComponent={<Skeleton className={'w-full h-full bg-black'} />}
         />
       </button>
     );

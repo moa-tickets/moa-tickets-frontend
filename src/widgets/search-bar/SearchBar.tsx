@@ -22,9 +22,7 @@ const SearchBar = () => {
   }, []);
 
   return (
-    <div
-      className={cn('search__bar-wrapper relative sm:block hidden ml-[30px]')}
-    >
+    <div className={cn('search__bar-wrapper relative ml-[30px]')}>
       <SearchInput
         ref={inputRef}
         searchWords={searchWords}
