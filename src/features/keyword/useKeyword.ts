@@ -3,13 +3,15 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 
+type KeywordGetterVars = { concertId: number };
+
 export const useKeyword = () => {
   const dispatch = useDispatch();
 
-  // ✅ 이제 concertId를 안 받는 전역 API라면 concertId 제거
-  const keywordGetter = useMutation<KeywordResponse, Error, void>({
-    mutationFn: async () => {
-      const response = await axios.get('/api/sentiments/keywords');
+  // ✅ concertId를 받아서 콘서트별 키워드 API 호출
+  const keywordGetter = useMutation<KeywordResponse, Error, KeywordGetterVars>({
+    mutationFn: async ({ concertId }) => {
+      const response = await axios.get(`/api/concerts/${concertId}/sentiments/keywords`);
       return response.data as KeywordResponse;
     },
     onSuccess: (data) => {

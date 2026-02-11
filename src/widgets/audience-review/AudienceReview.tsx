@@ -4,8 +4,12 @@ import AudienceReviewInput from './AudienceReviewInput';
 import AudienceReviewList from './AudienceReviewList';
 import { useSelector } from 'react-redux';
 import type { MainReviewData } from '@/entities/reducers/AudienceReviewReducer';
+import { useParams } from 'react-router-dom';
 
 export default function AudienceReview() {
+  const { concertId } = useParams<{ concertId: string }>();
+  const parsedConcertId = Number(concertId ?? 1);
+
   const { data: reviewData } = useSelector(
     (state: { audienceReviewReducer: MainReviewData }) =>
       state.audienceReviewReducer,
@@ -22,7 +26,7 @@ export default function AudienceReview() {
         >
           <h2 className={cn('text-[22px] font-bold')}>AI 키워드 분석</h2>
         </div>
-        <AudienceReviewKeywordTop7 />
+        <AudienceReviewKeywordTop7 concertId={parsedConcertId}/>
         <div
           className={cn(
             'audience__review__title',

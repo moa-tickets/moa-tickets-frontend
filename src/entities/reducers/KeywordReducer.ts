@@ -8,10 +8,15 @@ export interface KeywordItem {
   count: number;
 }
 
-export interface KeywordResponse {
-  positive: KeywordItem[];
-  negative: KeywordItem[];
-}
+export type AspectKeywordGroup = {
+  aspect: string;              // "연출" | "음향" | "시야" | ...
+  keywords: KeywordItem[];
+};
+
+export type KeywordResponse = {
+  positive: AspectKeywordGroup[];
+  negative: AspectKeywordGroup[];
+};
 
 export interface MainKeywordData {
   data: KeywordResponse;

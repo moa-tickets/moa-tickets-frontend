@@ -1,11 +1,15 @@
-import type { KeywordItem } from '@/entities/reducers/KeywordReducer';
 import { cn } from '@/shared';
+
+type AspectSummaryItem = {
+  aspect: string;
+  totalCount: number;
+};
 
 const AudienceReviewKeywordItem = ({
   data,
   tone,
 }: {
-  data: KeywordItem;
+  data: AspectSummaryItem;
   tone: 'positive' | 'negative';
 }) => {
   return (
@@ -16,19 +20,17 @@ const AudienceReviewKeywordItem = ({
         'border border-solid border-[rgba(0,0,0,0.15)] rounded-md',
       )}
     >
-      {/* 키워드 */}
-      <span className={cn('text-[16px] font-semibold')}>
-        {data.keyword}
-      </span>
+      {/* aspect 이름 */}
+      <span className={cn('text-[16px] font-semibold')}>{data.aspect}</span>
 
-      {/* 카운트 */}
+      {/* totalCount */}
       <span
         className={cn(
           'text-[16px] font-bold',
           tone === 'positive' ? 'text-[rgb(54,61,255)]' : 'text-[rgb(240, 77, 77)]',
         )}
       >
-        {data.count}
+        {data.totalCount}
       </span>
     </li>
   );
