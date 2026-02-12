@@ -10,6 +10,7 @@ import reservationDetailReducer from './ReservationDetailReducer';
 import dateFilterReducer from './DateFilterReducer';
 import audienceReviewReducer from './AudienceReviewReducer';
 import keywordReducer from './KeywordReducer';
+import boardReducer from './BoardReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   dateFilterReducer,
   audienceReviewReducer,
   keywordReducer,
+  boardReducer,
 });
 
 export default rootReducer;

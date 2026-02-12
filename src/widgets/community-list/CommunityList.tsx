@@ -1,12 +1,38 @@
+import {
+  GET_BOARD,
+  type MainBoardData,
+} from '@/entities/reducers/BoardReducer';
+import { useCommunity } from '@/features/community/useCommunity';
 import { cn } from '@/shared';
 import CommunitySearcher from '@/shared/components/community-searcher/CommunitySearcher';
+import BoardList from './BoardList';
 import { ChevronRight } from 'lucide-react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function CommunityList({
   concertName,
 }: {
   concertName: string;
 }) {
+  const { getCommunityData, getCommunityLoading } = useCommunity();
+  const { data: boardData } = useSelector(
+    (state: { boardReducer: MainBoardData }) => state.boardReducer,
+  );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (getCommunityData) {
+      dispatch({
+        type: GET_BOARD,
+        payload: {
+          data: getCommunityData,
+        },
+      });
+    }
+  }, [dispatch, getCommunityData]);
+
   return (
     <div className={cn('community__list')}>
       <div className={cn('community__list__inner', 'max-w-[1080px] mx-auto')}>
@@ -38,6 +64,7 @@ export default function CommunityList({
           </button>
         </div>
       </div>
+      <BoardList data={boardData} isLoading={getCommunityLoading} />
     </div>
   );
 }
