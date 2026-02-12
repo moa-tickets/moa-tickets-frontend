@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@/shared';
-import { FaStar } from 'react-icons/fa6';
+import { Star } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CLOSE_MODAL, OPEN_MODAL } from '@/entities/reducers/ModalReducer';
 import type { ModalState } from '@/entities/types/types';
@@ -145,7 +145,7 @@ export default function AudienceReviewInput() {
                   onClick={() => clickChange(i)}
                   className={cn('cursor-pointer')}
                 >
-                  {s.bool ? <FaStar /> : <FaStar style={{ opacity: '.45' }} />}
+                  {s.bool ? <Star size={16} fill="currentColor" /> : <Star size={16} style={{ opacity: '.45' }} />}
                 </button>
               ))}
             </ul>

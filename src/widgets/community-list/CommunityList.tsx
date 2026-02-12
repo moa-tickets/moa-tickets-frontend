@@ -1,18 +1,42 @@
 import { cn } from '@/shared';
+import CommunitySearcher from '@/shared/components/community-searcher/CommunitySearcher';
+import { ChevronRight } from 'lucide-react';
 
-export default function CommunityList() {
+export default function CommunityList({
+  concertName,
+}: {
+  concertName: string;
+}) {
   return (
     <div className={cn('community__list')}>
       <div className={cn('community__list__inner', 'max-w-[1080px] mx-auto')}>
-        <h2
+        <div
           className={cn(
-            'text-[22px] font-bold',
-            'pb-[18px] border-b border-solid border-black',
-            'mb-[20px]',
+            'community__list__header',
+            'flex items-center gap-[8px] mb-[20px]',
           )}
         >
-          커뮤니티
-        </h2>
+          <span
+            className={cn('community__header__start text-[14px] text-[#777]')}
+          >
+            {concertName}
+          </span>
+          <ChevronRight
+            className={cn('community__header__icon', 'text-[#777]')}
+            size={16}
+          />
+          <span>커뮤니티</span>
+        </div>
+        <div className="community__list__second flex justify-between items-center mb-[30px]">
+          <CommunitySearcher />
+          <button
+            className={cn(
+              'community__list__button bg-[#161339] px-[14px] py-[6px] rounded-[6px] text-white text-[14px] cursor-pointer',
+            )}
+          >
+            글 작성하기
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -72,7 +72,9 @@ const DetailPageContainer = React.memo(({ data }: { data: ProductDetail }) => {
           onChange={(element: string) => setSelectedTab(element)}
         />
         {selectedTab === '관람후기' && <AudienceReview />}
-        {selectedTab === '커뮤니티' && <CommunityList />}
+        {selectedTab === '커뮤니티' && (
+          <CommunityList concertName={data.concertName} />
+        )}
       </div>
     </div>
   );

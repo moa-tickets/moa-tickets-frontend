@@ -27,6 +27,8 @@ export default defineConfig(({ mode }) => {
         'react-dom',
         'react/jsx-runtime',
         'react/jsx-dev-runtime',
+        'react-router-dom',
+        'react-router',
       ],
       entries: ['src/**/*.tsx', 'src/**/*.ts'],
     },
@@ -74,44 +76,9 @@ export default defineConfig(({ mode }) => {
       },
       fs: {
         cachedChecks: true,
-        deny: ['.env', '.env.local', '.git', 'node_modules/.vite'],
+        deny: ['.env', '.env.local', '.git'],
       },
-      middlewares: [
-        (req: any, res: any, next: any) => {
-          // WebSocket 업그레이드 요청은 스킵
-          if (req.headers.upgrade === 'websocket') {
-            return next();
-          }
-
-          // HMR 웹소켓 요청은 스킵
-          if (
-            req.url.includes('?token=') ||
-            req.url === '/@vite/client' ||
-            req.url.includes('/@react-refresh')
-          ) {
-            return next();
-          }
-
-          // assets: 1년 캐싱
-          if (req.url.startsWith('/assets/')) {
-            res.setHeader(
-              'Cache-Control',
-              'public, max-age=31536000, immutable',
-            );
-          }
-          // HTML: 재검증
-          else if (req.url.endsWith('.html') || req.url === '/') {
-            res.setHeader(
-              'Cache-Control',
-              'public, max-age=0, must-revalidate',
-            );
-          }
-
-          res.setHeader('ETag', 'false');
-          res.setHeader('Last-Modified', 'false');
-          next();
-        },
-      ],
+      middlewares: [],
       proxy: {
         '/api': {
           target: apiBaseUrl,
@@ -125,9 +92,7 @@ export default defineConfig(({ mode }) => {
           rewrite: (path: string) => path.replace(/^\/newApi/, '/api'),
         },
       },
-      headers: {
-        'Cache-Control': 'public, max-age=3600',
-      },
+      headers: {},
     },
   } as any;
 });
