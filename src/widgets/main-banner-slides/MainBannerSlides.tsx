@@ -211,50 +211,57 @@ const MainBannerSlides = () => {
           />,
           document.getElementById('modal-root')!,
         )}
-      <div
-        className={cn(
-          'main__banner__slides w-full h-[500px] overflow-hidden select-none relative cursor-grab',
-          'max-w-full mx-auto',
-          isDrag && 'cursor-grabbing',
-        )}
-        onClickCapture={(e) => {
-          // 드래그였으면 Link 클릭 차단
-          if (wasDragRef.current) {
-            e.preventDefault();
-            e.stopPropagation();
-            wasDragRef.current = false;
-          }
-        }}
-        onMouseDown={(e) => {
-          e.preventDefault();
-          handleStart(e.clientX);
-        }}
-        onMouseMove={(e) => handleMove(e.clientX)}
-        onMouseUp={handleEnd}
-        onMouseLeave={handleEnd}
-        onTouchStart={(e) => handleStart(e.touches[0].clientX)}
-        onTouchMove={(e) => handleMove(e.touches[0].clientX)}
-        onTouchEnd={handleEnd}
-        ref={ref}
-      >
-        <div
-          ref={trackRef}
-          className="flex h-full"
-          style={{
-            transform: `translateX(${trackTranslate}%)`,
-            transition:
-              isDrag || !isTransition ? 'none' : 'transform 0.5s ease-in-out',
-          }}
-        >
-          {extendedSlides.map((mbs: MainBannerSlide, idx: number) => (
-            <MainBannerSlideItem key={`${mbs.id}-${idx}`} slideItem={mbs} />
-          ))}
+      <div className="main__banner__wrapper w-full">
+        <div className="main__banner__inner max-w-[1080px] mx-auto mt-[30px]">
+          <div
+            className={cn(
+              'main__banner__slidesxw h-[500px] overflow-hidden select-none relative cursor-grab',
+              'max-w-full mx-auto',
+              'rounded-lg',
+              isDrag && 'cursor-grabbing',
+            )}
+            onClickCapture={(e) => {
+              // 드래그였으면 Link 클릭 차단
+              if (wasDragRef.current) {
+                e.preventDefault();
+                e.stopPropagation();
+                wasDragRef.current = false;
+              }
+            }}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              handleStart(e.clientX);
+            }}
+            onMouseMove={(e) => handleMove(e.clientX)}
+            onMouseUp={handleEnd}
+            onMouseLeave={handleEnd}
+            onTouchStart={(e) => handleStart(e.touches[0].clientX)}
+            onTouchMove={(e) => handleMove(e.touches[0].clientX)}
+            onTouchEnd={handleEnd}
+            ref={ref}
+          >
+            <div
+              ref={trackRef}
+              className="flex h-full"
+              style={{
+                transform: `translateX(${trackTranslate}%)`,
+                transition:
+                  isDrag || !isTransition
+                    ? 'none'
+                    : 'transform 0.5s ease-in-out',
+              }}
+            >
+              {extendedSlides.map((mbs: MainBannerSlide, idx: number) => (
+                <MainBannerSlideItem key={`${mbs.id}-${idx}`} slideItem={mbs} />
+              ))}
+            </div>
+            <ThumbnailClickWrapper
+              mainBannerSlides={mainBannerSlides}
+              currentIndex={currentIndex}
+              setCurrentIndex={setCurrentIndex}
+            />
+          </div>
         </div>
-        <ThumbnailClickWrapper
-          mainBannerSlides={mainBannerSlides}
-          currentIndex={currentIndex}
-          setCurrentIndex={setCurrentIndex}
-        />
       </div>
     </>
   );

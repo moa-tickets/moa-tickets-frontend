@@ -1,4 +1,6 @@
+import { useHomeProduct } from '@/features/home-product/useHomeProduct';
 import { cn } from '@/shared';
+import BrandBanner from './BrandBanner';
 
 export default function CommonBrandBanner({ title }: { title: string }) {
   return (
@@ -17,6 +19,7 @@ export default function CommonBrandBanner({ title }: { title: string }) {
         >
           {title}
         </h2>
+        <BrandBanner title={title} />
       </div>
     </div>
   );
