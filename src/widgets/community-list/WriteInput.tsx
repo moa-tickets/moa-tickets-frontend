@@ -5,11 +5,15 @@ export default function WriteInput({
   isTextArea,
   placeholder,
   title,
+  value,
+  onChange,
 }: {
   className: string;
   isTextArea?: boolean;
   placeholder: string;
   title: string;
+  value: string;
+  onChange: (e: any) => void;
 }) {
   return (
     <div className={cn('write__input mt-[16px]', className)}>
@@ -23,6 +27,8 @@ export default function WriteInput({
             'p-[8px]',
             'text-[14px]',
           )}
+          value={value}
+          onChange={onChange}
         />
       ) : (
         <input
@@ -34,6 +40,8 @@ export default function WriteInput({
             'text-[14px] py-[6px] px-[4px]',
             'outline-none',
           )}
+          value={value}
+          onChange={onChange}
         />
       )}
     </div>

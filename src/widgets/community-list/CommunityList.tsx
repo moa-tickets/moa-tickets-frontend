@@ -38,7 +38,11 @@ export default function CommunityList({
   return (
     <>
       {writeData.isModalOpen && (
-        <WriteModal isModalOpen={writeData.isModalOpen} />
+        <WriteModal
+          isModalOpen={writeData.isModalOpen}
+          title={writeData.title}
+          content={writeData.content}
+        />
       )}
       <div className={cn('community__list')}>
         <div className={cn('community__list__inner', 'max-w-[1080px] mx-auto')}>
