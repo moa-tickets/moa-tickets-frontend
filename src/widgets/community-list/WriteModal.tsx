@@ -89,7 +89,7 @@ export default function WriteModal({
           {writeLoading ? '작성 중...' : '작성 완료'}
         </button>
         <button
-          className={cn('absolute top-[16px] right-[16px]')}
+          className={cn('absolute top-[16px] right-[16px] cursor-pointer')}
           type="button"
           onClick={() => {
             dispatch({ type: CLOSE_WRITE_MODAL });
