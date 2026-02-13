@@ -1,11 +1,20 @@
 import type { Action } from '../types/types';
 
 export const GET_BOARD = 'get/board';
+export const OPEN_WRITE_MODAL = 'open/write/modal';
 
 export const get_board = () => ({ type: GET_BOARD });
+export const open_write_modal = () => ({ type: OPEN_WRITE_MODAL });
 
 export interface MainBoardData {
+  write: WriteBoardData;
   data: BoardData[];
+}
+
+export interface WriteBoardData {
+  isModalOpen: boolean;
+  title: string;
+  content: string;
 }
 
 export interface BoardData {
@@ -16,38 +25,12 @@ export interface BoardData {
 }
 
 const initialBoardData = {
-  data: [
-    {
-      boardId: 0,
-      title: '안녕하세요',
-      content: '첫 번째 게시글입니다.',
-      nickname: '관리자',
-    },
-    {
-      boardId: 0,
-      title: '안녕하세요',
-      content: '첫 번째 게시글입니다.',
-      nickname: '관리자',
-    },
-    {
-      boardId: 0,
-      title: '안녕하세요',
-      content: '첫 번째 게시글입니다.',
-      nickname: '관리자',
-    },
-    {
-      boardId: 0,
-      title: '안녕하세요',
-      content: '첫 번째 게시글입니다.',
-      nickname: '관리자',
-    },
-    {
-      boardId: 0,
-      title: '안녕하세요',
-      content: '첫 번째 게시글입니다.',
-      nickname: '관리자',
-    },
-  ],
+  write: {
+    isModalOpen: false,
+    title: '',
+    content: '',
+  },
+  data: [],
 };
 
 export default function boardReducer(
@@ -59,6 +42,14 @@ export default function boardReducer(
       return {
         ...state,
         data: action.payload.data,
+      };
+    case OPEN_WRITE_MODAL:
+      return {
+        ...state,
+        write: {
+          ...state.write,
+          isModalOpen: !state.write.isModalOpen,
+        },
       };
     default:
       return state;
