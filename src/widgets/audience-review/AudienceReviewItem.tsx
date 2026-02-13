@@ -1,6 +1,6 @@
 import type { ReviewData } from '@/entities/reducers/AudienceReviewReducer';
 import { cn } from '@/shared';
-import { FaStar } from 'react-icons/fa6';
+import { Star } from 'lucide-react';
 
 const AudienceReviewItem = ({ data }: { data: ReviewData }) => {
   return (
@@ -13,9 +13,9 @@ const AudienceReviewItem = ({ data }: { data: ReviewData }) => {
         {Array.from({ length: 5 }, (_, i) => (
           <li key={i}>
             {i + 1 <= data.score ? (
-              <FaStar />
+              <Star size={16} fill="currentColor" />
             ) : (
-              <FaStar style={{ opacity: '.45' }} />
+              <Star size={16} style={{ opacity: '.45' }} />
             )}
           </li>
         ))}

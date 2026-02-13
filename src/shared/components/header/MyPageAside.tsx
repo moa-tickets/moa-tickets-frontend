@@ -6,7 +6,7 @@ import {
   type TwoDepth,
 } from '@/entities/constant/mypageMenus';
 import { Link, useLocation } from 'react-router-dom';
-import { BiCaretRight } from 'react-icons/bi';
+import { ChevronRight } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import type { LoginState } from '@/entities/reducers/LoginReducer';
 import ConfirmModal from '../confirm-modal/ConfirmModal';
@@ -108,7 +108,7 @@ const MyPageAside = () => {
                       >
                         <span>{two_depth.childMenu}</span>
                         {location.pathname === two_depth.childLink && (
-                          <BiCaretRight />
+                          <ChevronRight size={14} />
                         )}
                       </Link>
                     ),
