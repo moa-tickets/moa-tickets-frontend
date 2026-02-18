@@ -26,7 +26,7 @@ const MainBannerItemText = ({
       ref={ref}
     >
       <div
-        className={cn('main__banner__inner px-[60px]')}
+        className={cn('main__banner__inner px-[30px]')}
         style={{ color: color }}
       >
         {isIntersecting ? (

@@ -18,7 +18,7 @@ export default function ThumbnailClickWrapper({
     >
       <div
         className={cn(
-          'thumbnail__inner px-[60px] flex items-center gap-[10px]',
+          'thumbnail__inner px-[30px] flex items-center gap-[10px]',
         )}
       >
         {mainBannerSlides.map((slide: MainBannerSlide, index: number) => (

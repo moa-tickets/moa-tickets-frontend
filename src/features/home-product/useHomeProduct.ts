@@ -24,7 +24,7 @@ export const useHomeProduct = (title: string) => {
         });
         return response.data;
       },
-      enabled: title === '감자 브랜드',
+      enabled: title === '감자 브랜드' || title === '인기 상품',
     },
   );
 

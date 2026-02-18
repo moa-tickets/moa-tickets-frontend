@@ -10,7 +10,10 @@ export default function ImageBox({
 }) {
   return (
     <div
-      className={cn('image__box rounded-[10px] overflow-hidden')}
+      className={cn(
+        'image__box rounded-[10px] overflow-hidden shrink-0',
+        'border border-solid border-[#ccc]',
+      )}
       style={{ width: `${boxSize}px`, height: `${boxSize}px` }}
     >
       {imgElement}
