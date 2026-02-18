@@ -5,6 +5,7 @@ import StateButton from '@/shared/components/state-button/StateButton';
 import DetailPageFunctions from '../detail-page-functions/DetailPageFunctions';
 import DetailSelectTab from '../detail-select-tab/DetailSelectTab';
 import AudienceReview from '../audience-review/AudienceReview';
+import CommunityList from '../community-list/CommunityList';
 
 const topState = [
   {
@@ -71,6 +72,9 @@ const DetailPageContainer = React.memo(({ data }: { data: ProductDetail }) => {
           onChange={(element: string) => setSelectedTab(element)}
         />
         {selectedTab === '관람후기' && <AudienceReview />}
+        {selectedTab === '커뮤니티' && (
+          <CommunityList concertName={data.concertName} />
+        )}
       </div>
     </div>
   );

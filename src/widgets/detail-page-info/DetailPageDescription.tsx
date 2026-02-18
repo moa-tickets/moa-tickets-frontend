@@ -1,6 +1,6 @@
 import type { ProductSession } from '@/entities/reducers/ConcertDetailReducer';
 import { cn } from '@/shared';
-import { BiCaretRight } from 'react-icons/bi';
+import { ChevronRight } from 'lucide-react';
 import DetailPriceList from './DetailPriceList';
 
 const DetailPageDescription = ({
@@ -40,7 +40,7 @@ const DetailPageDescription = ({
             onClick={buttonClick}
           >
             <span>전체가격보기</span>
-            <BiCaretRight />
+            <ChevronRight size={14} />
           </button>
           <DetailPriceList list={data as ProductSession[]} />
         </dt>

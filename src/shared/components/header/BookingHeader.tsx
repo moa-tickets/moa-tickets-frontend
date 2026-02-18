@@ -1,7 +1,5 @@
 import { cn } from '@/shared';
 import { Link, useLocation } from 'react-router-dom';
-import LazyImage from '../lazy-loading/LazyImage';
-import Skeleton from '../skeleton/Skeleton';
 import Icon from '@/shared/lib/Icon';
 
 const BookingHeader = () => {
@@ -26,12 +24,7 @@ const BookingHeader = () => {
         )}
       >
         <Link to="/" onClick={handleLogoClick}>
-          <LazyImage
-            className="w-[89px] h-[25px]"
-            src="/logo.svg"
-            alt="logo"
-            skeletonComponent={<Skeleton className="w-full h-full bg-[#ccc]" />}
-          />
+          <img className="w-[89px] h-[25px]" src="/logo.svg" alt="logo" />
         </Link>
         <Link to="/mypage/reservation">
           <Icon ICON={'MY_PAGE'} className="w-[82px] h-[24px]" />
