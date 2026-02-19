@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function AlarmContainer() {
   const eventSourceRef = useRef<EventSource | null>(null);
