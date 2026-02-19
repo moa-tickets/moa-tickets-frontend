@@ -1,4 +1,5 @@
 import { cn } from '@/shared';
+import HomeMainBanner from '@/widgets/home-main-banner/HomeMainBanner';
 import MainBannerSlides from '@/widgets/main-banner-slides/MainBannerSlides';
 import SideBanner from '@/widgets/side-banner/SideBanner';
 
@@ -12,7 +13,10 @@ const MainPage = () => {
           'gap-[50px]',
         )}
       >
-        <MainBannerSlides />
+        <div className={cn('top__banner__left')}>
+          <MainBannerSlides />
+          <HomeMainBanner title={'흥미로운 프로젝트'} query={'채소 브랜드'} />
+        </div>
         <SideBanner />
       </div>
     </div>

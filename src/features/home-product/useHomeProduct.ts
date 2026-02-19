@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-export const useHomeProduct = (title: string) => {
+export const useHomeProduct = () => {
   const { data: potatoProducts, isLoading: isPotatoProductsLoading } = useQuery(
     {
       queryKey: ['home-potato-products'],
@@ -24,9 +24,11 @@ export const useHomeProduct = (title: string) => {
         });
         return response.data;
       },
-      enabled: title === '감자 브랜드' || title === '인기 상품',
     },
   );
 
-  return { potatoProducts, isPotatoProductsLoading };
+  return {
+    potatoProducts,
+    isPotatoProductsLoading,
+  };
 };
