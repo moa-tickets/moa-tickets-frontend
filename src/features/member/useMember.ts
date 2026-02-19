@@ -1,6 +1,6 @@
 import { GET_MEMBER, LOGOUT } from '@/entities/reducers/LoginReducer';
+import { api } from '@/shared/lib/api';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 
 interface MemberResponse {
@@ -14,7 +14,7 @@ export const useMember = () => {
 
   const getMember = useMutation<MemberResponse>({
     mutationFn: async () => {
-      const response = await axios.get(`/api/members/me`);
+      const response = await api.get('/members/me');
       return response.data;
     },
     onSuccess: (data: MemberResponse) => {
@@ -31,7 +31,7 @@ export const useMember = () => {
 
   const logoutMember = useMutation<void>({
     mutationFn: async () => {
-      await axios.post('/api/logout');
+      await api.post('/logout');
     },
     onSuccess: () => {
       dispatch({ type: LOGOUT });
