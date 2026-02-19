@@ -5,8 +5,14 @@ export default function AlarmContainer() {
 
   useEffect(() => {
     const handleSseRequest = () => {
-      const eventSource = new EventSource('/api/alarm/sub', {
+      const EventSourcePolyfill =
+        (window as any).EventSourcePolyfill || EventSource;
+
+      const eventSource = new EventSourcePolyfill(`/api/alarm/sub`, {
         withCredentials: true,
+        headers: {
+          'Content-Type': 'text/event-stream',
+        },
       });
 
       eventSource.onopen = () => {
@@ -14,12 +20,12 @@ export default function AlarmContainer() {
         eventSourceRef.current = eventSource;
       };
 
-      eventSource.onerror = (event) => {
+      eventSource.onerror = (event: any) => {
         console.error('SSE connection error:', event);
       };
 
-      eventSource.addEventListener('SS_LEFT_10', () => {
-        console.log('SSE CONNECT event received:');
+      eventSource.addEventListener('message', (event: MessageEvent) => {
+        console.log('Received message:', event.data);
       });
     };
 
