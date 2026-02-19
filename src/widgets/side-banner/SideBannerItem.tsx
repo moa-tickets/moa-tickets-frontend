@@ -11,7 +11,13 @@ export default function SideBannerItem({
   index: number;
 }) {
   return (
-    <div className={cn('side__banner__item mb-[20px] gap-[16px] flex')}>
+    <div
+      className={cn(
+        'side__banner__item pb-[20px] gap-[16px] flex',
+        index === 1 ? 'pt-0' : 'pt-[20px]',
+        'border-b border-[#eee] border-solid',
+      )}
+    >
       <ImageBox
         imgElement={
           <img
@@ -20,7 +26,7 @@ export default function SideBannerItem({
             className={'w-full h-full object-cover'}
           />
         }
-        boxSize={150}
+        boxSize={130}
       />
       <span className={cn('text-[#FD5744]')}>{index}</span>
       <SideBannerDesc data={data} />

@@ -14,7 +14,7 @@ export default function SideBannerItemSkeleton() {
         {[...Array(3)].map((_, index) => (
           <Skeleton
             key={index}
-            className="w-full h-[20px] bg-[#ccc] rounded-[5px] mb-[8px]"
+            className="w-[calc(100%_+_36px)] h-[20px] bg-[#ccc] rounded-[5px] mb-[8px]"
           />
         ))}
       </div>

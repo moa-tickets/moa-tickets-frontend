@@ -5,22 +5,22 @@ import SideBannerItem from './SideBannerItem';
 import SideBannerItemSkeleton from './SideBannerItemSkeleton';
 
 export default function SideBannerList() {
-  const { potatoProducts, isPotatoProductsLoading } = useHomeProduct();
+  const { potatoProducts, isPotatoProductsLoading } = useHomeProduct(8);
 
   return (
     <div className={cn('side__banner__list')}>
       {!isPotatoProductsLoading &&
         potatoProducts &&
         ((potatoProducts?.result?.content?.length ?? 0) > 0 ? (
-          potatoProducts?.result?.content
-            .slice(0, 8)
-            .map((product: HomeProductContent, index: number) => (
+          potatoProducts?.result?.content.map(
+            (product: HomeProductContent, index: number) => (
               <SideBannerItem
                 key={product.productId}
                 data={product}
                 index={index + 1}
               />
-            ))
+            ),
+          )
         ) : (
           <div
             className={cn(

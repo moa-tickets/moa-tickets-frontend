@@ -13,7 +13,11 @@ export default function SideBanner() {
       <h3 className={cn('text-[14px] text-[#333] mt-[4px] mb-[20px]')}>
         {formattedDate} 기준
       </h3>
-      <button className={cn('absolute top-0 right-0')}>전체보기</button>
+      <button
+        className={cn('absolute top-0 right-0 cursor-pointer text-[14px]')}
+      >
+        전체보기
+      </button>
       <SideBannerList />
     </aside>
   );

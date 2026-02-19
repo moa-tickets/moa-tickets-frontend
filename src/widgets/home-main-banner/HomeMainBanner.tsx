@@ -3,7 +3,7 @@ import { cn } from '@/shared';
 import HomeMainList from './HomeMainList';
 
 export default function HomeMainBanner({ title }: { title: string }) {
-  const { potatoProducts, isPotatoProductsLoading } = useHomeProduct();
+  const { potatoProducts, isPotatoProductsLoading } = useHomeProduct(12);
 
   return (
     <div className={cn('home__main__banner', 'relative')}>
