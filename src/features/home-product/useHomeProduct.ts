@@ -8,20 +8,12 @@ export const useHomeProduct = () => {
       queryFn: async () => {
         const response = await axios.get(`/newApi/products/search`, {
           params: {
-            condition: {
-              keyword: '감자',
-              categoryIds: [1, 2, 3],
-              brandIds: [1, 2, 3],
-              excludeSoldOut: true,
-              deliveryTypes: 'DAWN',
-              packagingTypes: 'COLD',
-            },
-            pageable: {
-              page: 0,
-              size: 10,
-            },
+            keyword: '감자',
+            page: 0,
+            size: 10,
           },
         });
+        console.log('감자 상품 데이터:', response.data);
         return response.data;
       },
     },

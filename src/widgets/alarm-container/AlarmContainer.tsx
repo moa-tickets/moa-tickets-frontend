@@ -18,7 +18,7 @@ export default function AlarmContainer() {
         console.error('SSE connection error:', event);
       };
 
-      eventSource.addEventListener('CONNECT', () => {
+      eventSource.addEventListener('SS_LEFT_10', () => {
         console.log('SSE CONNECT event received:');
       });
     };
