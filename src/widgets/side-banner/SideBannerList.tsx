@@ -11,8 +11,8 @@ export default function SideBannerList() {
     <div className={cn('side__banner__list')}>
       {!isPotatoProductsLoading &&
         potatoProducts &&
-        (potatoProducts?.result.content.length > 0 ? (
-          potatoProducts?.result.content
+        ((potatoProducts?.result?.content?.length ?? 0) > 0 ? (
+          potatoProducts?.result?.content
             .slice(0, 8)
             .map((product: HomeProductContent, index: number) => (
               <SideBannerItem
