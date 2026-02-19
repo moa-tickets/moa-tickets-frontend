@@ -14,7 +14,7 @@ export default function HomeMainBanner({ title }: { title: string }) {
       >
         {title}
       </h2>
-      {!isPotatoProductsLoading && potatoProducts && (
+      {!isPotatoProductsLoading && potatoProducts?.result?.content && (
         <HomeMainList products={potatoProducts} />
       )}
       <button
