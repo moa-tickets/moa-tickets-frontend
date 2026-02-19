@@ -1,6 +1,6 @@
 import type { HomeProductContent } from '@/entities/types/types';
 import { cn } from '@/shared';
-import ImageBox from '@/shared/components/common-brand-banner/ImageBox';
+import ImageBox from '@/shared/components/image-box/ImageBox';
 import SideBannerDesc from './SideBannerDesc';
 
 export default function SideBannerItem({

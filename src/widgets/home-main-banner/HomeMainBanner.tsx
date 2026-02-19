@@ -2,13 +2,7 @@ import { useHomeProduct } from '@/features/home-product/useHomeProduct';
 import { cn } from '@/shared';
 import HomeMainList from './HomeMainList';
 
-export default function HomeMainBanner({
-  title,
-  query,
-}: {
-  title: string;
-  query: string;
-}) {
+export default function HomeMainBanner({ title }: { title: string }) {
   const { potatoProducts, isPotatoProductsLoading } = useHomeProduct();
 
   return (

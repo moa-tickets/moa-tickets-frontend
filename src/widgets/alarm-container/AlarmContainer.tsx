@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function AlarmContainer() {
   const eventSourceRef = useRef<EventSource | null>(null);
-  const [isConnected, setIsConnected] = useState<boolean>(false);
-  const [sseMessageList, setSseMessageList] = useState([]);
 
   useEffect(() => {
     const handleSseRequest = () => {
@@ -13,7 +11,6 @@ export default function AlarmContainer() {
 
       eventSource.onopen = () => {
         console.log('SSE connection opened');
-        setIsConnected(true);
         eventSourceRef.current = eventSource;
       };
 

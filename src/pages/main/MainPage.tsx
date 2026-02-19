@@ -15,7 +15,7 @@ const MainPage = () => {
       >
         <div className={cn('top__banner__left')}>
           <MainBannerSlides />
-          <HomeMainBanner title={'흥미로운 프로젝트'} query={'채소 브랜드'} />
+          <HomeMainBanner title={'흥미로운 프로젝트'} />
         </div>
         <SideBanner />
       </div>
