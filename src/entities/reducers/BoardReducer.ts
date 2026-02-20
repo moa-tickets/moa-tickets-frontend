@@ -1,3 +1,4 @@
+import { is } from 'date-fns/locale';
 import type { Action } from '../types/types';
 
 export const GET_BOARD = 'get/board';
@@ -21,13 +22,16 @@ export interface WriteBoardData {
   isModalOpen: boolean;
   title: string;
   content: string;
+  isModify: boolean;
+  modifyBoardId: number | null;
 }
 
 export interface BoardData {
   boardId: number;
   title: string;
   content: string;
-  nickname: string;
+  nickName: string;
+  createdAt: string;
 }
 
 const initialBoardData = {
@@ -35,6 +39,8 @@ const initialBoardData = {
     isModalOpen: false,
     title: '',
     content: '',
+    isModify: false,
+    modifyBoardId: null,
   },
   data: [],
 };
@@ -55,6 +61,10 @@ export default function boardReducer(
         write: {
           ...state.write,
           isModalOpen: true,
+          title: action.payload?.title || '',
+          content: action.payload?.content || '',
+          isModify: action.payload?.isModify || false,
+          modifyBoardId: action.payload?.modifyBoardId || null,
         },
       };
     case CLOSE_WRITE_MODAL:

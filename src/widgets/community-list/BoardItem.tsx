@@ -1,22 +1,50 @@
-import type { BoardData } from '@/entities/reducers/BoardReducer';
+import {
+  OPEN_WRITE_MODAL,
+  type BoardData,
+} from '@/entities/reducers/BoardReducer';
 import { cn } from '@/shared';
-import { Calendar, MessageCircleMore } from 'lucide-react';
+import {
+  Calendar,
+  MessageCircleMore,
+  MonitorCog,
+  UserRoundX,
+} from 'lucide-react';
+import { useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
 export default function BoardItem({ board }: { board: BoardData }) {
   const { id } = useParams<{ id: string }>();
+
+  const dispatch = useDispatch();
+
+  const handleModify = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // 수정 로직
+    console.log('수정 버튼 클릭:', board.boardId);
+    dispatch({
+      type: OPEN_WRITE_MODAL,
+      payload: {
+        title: board.title,
+        content: board.content,
+        isModify: true,
+        modifyBoardId: board.boardId,
+      },
+    });
+  };
 
   return (
     <Link
       to={`/detail/${Number(id)}/community/${board.boardId}`}
       className={cn(
         'board__item',
-        'h-[200px]',
+        'h-[220px]',
         'border border-solid border-[#ccc]',
         'rounded-[15px]',
         'bg-[#f2f2f2]',
         'p-[16px]',
         'hover:translate-y-[-20px] transition-all duration-300',
+        'relative',
       )}
     >
       <h2 className={cn('text-[14px]')}>{board.title}</h2>
@@ -36,7 +64,7 @@ export default function BoardItem({ board }: { board: BoardData }) {
           )}
         >
           <Calendar size={16} />
-          <span>12 Nov</span>
+          <span>{board.createdAt.split('T')[0]}</span>
         </div>
         <div
           className={cn(
@@ -55,7 +83,39 @@ export default function BoardItem({ board }: { board: BoardData }) {
         </div>
       </div>
       <div className={cn('board__extra mt-[16px] text-[14px]')}>
-        Designed By Cota
+        <span className={cn('block')}>Designed By Cota</span>
+        <span className={cn('block text-[#ccc] mt-[4px] text-[12px]')}>
+          {board.nickName}
+        </span>
+      </div>
+      <div
+        className={cn(
+          'board__buttons absolute top-[16px] right-[16px] flex gap-[8px] items-center',
+        )}
+      >
+        <button
+          className={cn(
+            'board__button',
+            'bg-white w-[30px] h-[30px] flex justify-center items-center',
+            'rounded-full',
+            'border border-solid border-[#000]',
+            'cursor-pointer',
+          )}
+          onClick={handleModify}
+        >
+          <MonitorCog size={16} />
+        </button>
+        <button
+          className={cn(
+            'board__button',
+            'bg-white w-[30px] h-[30px] flex justify-center items-center',
+            'rounded-full',
+            'border border-solid border-[#000]',
+            'cursor-pointer',
+          )}
+        >
+          <UserRoundX size={16} />
+        </button>
       </div>
     </Link>
   );

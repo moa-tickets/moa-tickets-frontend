@@ -2,11 +2,12 @@ import { cn } from '@/shared';
 import { X } from 'lucide-react';
 import { useEffect } from 'react';
 import WriteInput from './WriteInput';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   CLOSE_WRITE_MODAL,
   WRITE_CONTENT,
   WRITE_TITLE,
+  type MainBoardData,
 } from '@/entities/reducers/BoardReducer';
 import { useCommunity } from '@/features/community/useCommunity';
 
@@ -19,7 +20,12 @@ export default function WriteModal({
   title: string;
   content: string;
 }) {
-  const { writeCommunity, writeLoading } = useCommunity();
+  const { writeCommunity, writeLoading, modifyCommunity, modifyLoading } =
+    useCommunity();
+
+  const { write } = useSelector(
+    (state: { boardReducer: MainBoardData }) => state.boardReducer,
+  );
 
   useEffect(() => {
     if (isModalOpen) {
@@ -31,12 +37,22 @@ export default function WriteModal({
 
   const dispatch = useDispatch();
 
+  console.log(write.modifyBoardId);
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    writeCommunity.mutate({ title, content });
-    if (!writeLoading) {
-      dispatch({ type: CLOSE_WRITE_MODAL });
-      document.body.classList.remove('modal-dimmed');
+    if (!write.isModify) {
+      writeCommunity.mutate({ title, content });
+      if (!writeLoading) {
+        dispatch({ type: CLOSE_WRITE_MODAL });
+        document.body.classList.remove('modal-dimmed');
+      }
+    } else {
+      modifyCommunity.mutate({ boardId: write.modifyBoardId!, title, content });
+      if (!modifyLoading) {
+        dispatch({ type: CLOSE_WRITE_MODAL });
+        document.body.classList.remove('modal-dimmed');
+      }
     }
   };
 
@@ -74,6 +90,7 @@ export default function WriteModal({
               type: WRITE_CONTENT,
               payload: { content: e.target.value },
             });
+            console.log(content);
           }}
         />
         <button
