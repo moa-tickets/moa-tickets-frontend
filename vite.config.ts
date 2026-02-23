@@ -19,6 +19,17 @@ export default defineConfig(({ mode }) => {
         gzipSize: true,
         brotliSize: true,
       }),
+      {
+        name: 'image-cache-headers',
+        configureServer(server: import('vite').ViteDevServer) {
+          server.middlewares.use((req: any, res: any, next: any) => {
+            if (req.url && /\.(png|jpe?g|gif|svg|webp|ico|avif)$/i.test(req.url.split('?')[0])) {
+              res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+            }
+            next();
+          });
+        },
+      },
     ],
     // React 중복 로드 방지를 위한 의존성 최적화
     optimizeDeps: {
@@ -78,7 +89,6 @@ export default defineConfig(({ mode }) => {
         cachedChecks: true,
         deny: ['.env', '.env.local', '.git'],
       },
-      middlewares: [],
       proxy: {
         '/api': {
           target: apiBaseUrl,
@@ -92,7 +102,6 @@ export default defineConfig(({ mode }) => {
           rewrite: (path: string) => path.replace(/^\/newApi/, '/api'),
         },
       },
-      headers: {},
     },
   } as any;
 });
