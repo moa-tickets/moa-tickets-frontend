@@ -7,12 +7,14 @@ export default function ConfirmModal({
   message,
   isOpen,
   onClose,
+  onConfirm,
   isInfo,
 }: Readonly<{
   title: string;
   message: string | React.ReactNode;
   isOpen: boolean;
   onClose: () => void;
+  onConfirm?: () => void;
   isInfo?: boolean;
 }>) {
   useEffect(() => {
@@ -36,8 +38,15 @@ export default function ConfirmModal({
       ) : (
         <span className="block text-center mt-[20px]">{message}</span>
       )}
-      <div className="modal__buttons mt-[30px] flex justify-center">
-        <ModalButton onClick={onClose} title={'닫기'} />
+      <div className="modal__buttons mt-[30px] flex justify-center gap-[12px]">
+        {onConfirm ? (
+          <>
+            <ModalButton onClick={onClose} title={'취소'} variant="cancel" />
+            <ModalButton onClick={onConfirm} title={'확인'} />
+          </>
+        ) : (
+          <ModalButton onClick={onClose} title={'닫기'} />
+        )}
       </div>
     </div>
   );

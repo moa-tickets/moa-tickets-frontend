@@ -32,6 +32,9 @@ const PaymentSuccessPage = lazy(
 const PaymentFailPage = lazy(
   () => import('@/pages/payment-fail/PaymentFailPage'),
 );
+const CommunityDetailPage = lazy(
+  () => import('@/pages/community-detail/CommunityDetailPage'),
+);
 
 // Suspense 래퍼
 const withSuspense = (
@@ -103,6 +106,10 @@ const createdRouter = createBrowserRouter([
           {
             index: true,
             element: withSuspense(DetailPage),
+          },
+          {
+            path: 'community/:boardId',
+            element: withSuspense(CommunityDetailPage),
           },
         ],
       },

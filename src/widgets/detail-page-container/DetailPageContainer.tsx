@@ -6,6 +6,7 @@ import DetailPageFunctions from '../detail-page-functions/DetailPageFunctions';
 import DetailSelectTab from '../detail-select-tab/DetailSelectTab';
 import AudienceReview from '../audience-review/AudienceReview';
 import CommunityList from '../community-list/CommunityList';
+import { useLocation } from 'react-router-dom';
 
 const topState = [
   {
@@ -45,7 +46,10 @@ const tabs = [
 ];
 
 const DetailPageContainer = React.memo(({ data }: { data: ProductDetail }) => {
-  const [selectedTab, setSelectedTab] = useState<string>('상세정보');
+  const { state } = useLocation();
+  const [selectedTab, setSelectedTab] = useState<string>(
+    state?.tab ?? '상세정보',
+  );
 
   return (
     <div className={cn('detail__page__container', 'mt-[14px] relative')}>
