@@ -11,18 +11,41 @@ import WriteModal from './WriteModal';
 import { ChevronRight } from 'lucide-react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import AppLoading from '../app-loading/AppLoading';
 
 export default function CommunityList({
   concertName,
 }: {
   concertName: string;
 }) {
-  const { getCommunityData, getCommunityLoading } = useCommunity();
+  const {
+    getCommunityData,
+    getCommunityLoading,
+    writeLoading,
+    writeCommunity,
+    modifyCommunity,
+    modifyLoading,
+  } = useCommunity();
   const { data: boardData, write: writeData } = useSelector(
     (state: { boardReducer: MainBoardData }) => state.boardReducer,
   );
 
   const dispatch = useDispatch();
+
+  const writesCommunity = () => {
+    writeCommunity.mutate({
+      title: writeData.title,
+      content: writeData.content,
+    });
+  };
+
+  const modifiesCommunity = () => {
+    modifyCommunity.mutate({
+      boardId: writeData.modifyBoardId!,
+      title: writeData.title,
+      content: writeData.content,
+    });
+  };
 
   useEffect(() => {
     if (getCommunityData) {
@@ -35,6 +58,14 @@ export default function CommunityList({
     }
   }, [dispatch, getCommunityData]);
 
+  useEffect(() => {
+    if (writeLoading) {
+      document.body.classList.add('modal-dimmed');
+    } else {
+      document.body.classList.remove('modal-dimmed');
+    }
+  }, [writeLoading]);
+
   return (
     <>
       {writeData.isModalOpen && (
@@ -42,6 +73,8 @@ export default function CommunityList({
           isModalOpen={writeData.isModalOpen}
           title={writeData.title}
           content={writeData.content}
+          writes={writeData.isModify ? modifiesCommunity : writesCommunity}
+          loading={writeData.isModify ? modifyLoading : writeLoading}
         />
       )}
       <div className={cn('community__list')}>

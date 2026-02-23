@@ -2,6 +2,7 @@ import {
   OPEN_WRITE_MODAL,
   type BoardData,
 } from '@/entities/reducers/BoardReducer';
+import { useCommunity } from '@/features/community/useCommunity';
 import { cn } from '@/shared';
 import {
   Calendar,
@@ -14,6 +15,7 @@ import { Link, useParams } from 'react-router-dom';
 
 export default function BoardItem({ board }: { board: BoardData }) {
   const { id } = useParams<{ id: string }>();
+  const { deleteCommunity } = useCommunity();
 
   const dispatch = useDispatch();
 
@@ -21,7 +23,6 @@ export default function BoardItem({ board }: { board: BoardData }) {
     e.preventDefault();
     e.stopPropagation();
     // 수정 로직
-    console.log('수정 버튼 클릭:', board.boardId);
     dispatch({
       type: OPEN_WRITE_MODAL,
       payload: {
@@ -31,6 +32,13 @@ export default function BoardItem({ board }: { board: BoardData }) {
         modifyBoardId: board.boardId,
       },
     });
+  };
+
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // 삭제 로직
+    deleteCommunity.mutate({ boardId: board.boardId });
   };
 
   return (
@@ -113,6 +121,7 @@ export default function BoardItem({ board }: { board: BoardData }) {
             'border border-solid border-[#000]',
             'cursor-pointer',
           )}
+          onClick={handleDelete}
         >
           <UserRoundX size={16} />
         </button>

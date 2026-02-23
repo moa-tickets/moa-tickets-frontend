@@ -6,11 +6,13 @@ const Pagination = ({
   totalPages,
   onPageChange,
   isLast,
+  className,
 }: {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
   isLast?: boolean;
+  className?: string;
 }) => {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
   const isNextDisabled =
@@ -18,7 +20,10 @@ const Pagination = ({
 
   return (
     <div
-      className={cn('flex justify-center items-center gap-[10px] mt-[10px]')}
+      className={cn(
+        'flex justify-center items-center gap-[10px] mt-[10px]',
+        className,
+      )}
     >
       <button
         onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}

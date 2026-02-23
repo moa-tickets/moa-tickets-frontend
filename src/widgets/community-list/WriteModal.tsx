@@ -15,18 +15,15 @@ export default function WriteModal({
   isModalOpen,
   title,
   content,
+  writes,
+  loading,
 }: {
   isModalOpen: boolean;
   title: string;
   content: string;
+  writes: () => void;
+  loading: boolean;
 }) {
-  const { writeCommunity, writeLoading, modifyCommunity, modifyLoading } =
-    useCommunity();
-
-  const { write } = useSelector(
-    (state: { boardReducer: MainBoardData }) => state.boardReducer,
-  );
-
   useEffect(() => {
     if (isModalOpen) {
       document.body.classList.add('modal-dimmed');
@@ -37,23 +34,9 @@ export default function WriteModal({
 
   const dispatch = useDispatch();
 
-  console.log(write.modifyBoardId);
-
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!write.isModify) {
-      writeCommunity.mutate({ title, content });
-      if (!writeLoading) {
-        dispatch({ type: CLOSE_WRITE_MODAL });
-        document.body.classList.remove('modal-dimmed');
-      }
-    } else {
-      modifyCommunity.mutate({ boardId: write.modifyBoardId!, title, content });
-      if (!modifyLoading) {
-        dispatch({ type: CLOSE_WRITE_MODAL });
-        document.body.classList.remove('modal-dimmed');
-      }
-    }
+    writes();
   };
 
   return (
@@ -90,7 +73,6 @@ export default function WriteModal({
               type: WRITE_CONTENT,
               payload: { content: e.target.value },
             });
-            console.log(content);
           }}
         />
         <button
@@ -101,9 +83,9 @@ export default function WriteModal({
             'rounded-lg',
             'cursor-pointer',
           )}
-          disabled={writeLoading}
+          disabled={loading}
         >
-          {writeLoading ? '작성 중...' : '작성 완료'}
+          {loading ? '작성 중...' : '작성 완료'}
         </button>
         <button
           className={cn('absolute top-[16px] right-[16px] cursor-pointer')}
