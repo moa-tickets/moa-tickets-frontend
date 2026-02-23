@@ -11,7 +11,6 @@ import WriteModal from './WriteModal';
 import { ChevronRight } from 'lucide-react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AppLoading from '../app-loading/AppLoading';
 
 export default function CommunityList({
   concertName,

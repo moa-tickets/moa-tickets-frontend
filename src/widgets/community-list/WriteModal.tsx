@@ -2,14 +2,12 @@ import { cn } from '@/shared';
 import { X } from 'lucide-react';
 import { useEffect } from 'react';
 import WriteInput from './WriteInput';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   CLOSE_WRITE_MODAL,
   WRITE_CONTENT,
   WRITE_TITLE,
-  type MainBoardData,
 } from '@/entities/reducers/BoardReducer';
-import { useCommunity } from '@/features/community/useCommunity';
 
 export default function WriteModal({
   isModalOpen,
