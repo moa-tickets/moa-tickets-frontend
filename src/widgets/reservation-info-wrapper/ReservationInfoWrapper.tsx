@@ -3,6 +3,7 @@ import type { ProductDetail } from '@/entities/reducers/ConcertDetailReducer';
 import type { LoginState } from '@/entities/reducers/LoginReducer';
 import { cn } from '@/shared';
 import ImageFrame from '@/shared/components/image-frame/ImageFrame';
+import LazyImage from '@/shared/components/lazy-image/LazyImage';
 import InfoItem from '@/shared/components/info-list/InfoItem';
 import InfoList from '@/shared/components/info-list/InfoList';
 import { useMemo } from 'react';
@@ -67,7 +68,7 @@ const ReservationInfoWrapper = ({ data }: { data: ProductDetail }) => {
       >
         <ImageFrame
           imgComponent={
-            <img
+            <LazyImage
               src={data.thumbnail ?? '/placeholder.png'}
               alt={'concert-thumbnail'}
               className={'rounded-[10px] overflow-hidden'}

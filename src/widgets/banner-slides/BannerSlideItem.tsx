@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import LazyImage from '@/shared/components/lazy-image/LazyImage';
 
 interface BannerSlideItemProps {
   slide: {
@@ -12,7 +13,7 @@ interface BannerSlideItemProps {
 
 const BannerSlideItem = React.memo(({ slide }: BannerSlideItemProps) => (
   <Link to={slide.linkUrl} className="block w-[180px] h-[50px]">
-    <img src={slide.imageUrl} alt={slide.alt} className="w-[180px] h-[50px]" />
+    <LazyImage src={slide.imageUrl} alt={slide.alt} className="w-[180px] h-[50px]" />
   </Link>
 ));
 

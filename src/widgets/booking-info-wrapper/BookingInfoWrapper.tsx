@@ -2,6 +2,7 @@ import type { ProductDetail } from '@/entities/reducers/ConcertDetailReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { cn } from '@/shared';
 import ImageFrame from '@/shared/components/image-frame/ImageFrame';
+import LazyImage from '@/shared/components/lazy-image/LazyImage';
 import SessionSelector from '../session-selector/SessionSelector';
 import SubmitButton from '@/shared/components/submit-button/SubmitButton';
 
@@ -120,7 +121,7 @@ const BookingInfoWrapper = ({ data }: { data: ProductDetail }) => {
       >
         <ImageFrame
           imgComponent={
-            <img
+            <LazyImage
               src={data.thumbnail ?? '/placeholder.png'}
               alt={'detail-thumbnail'}
               className={'rounded-[10px] overflow-hidden'}

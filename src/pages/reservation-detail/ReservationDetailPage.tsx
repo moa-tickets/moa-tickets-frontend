@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { cn } from '@/shared';
+import LazyImage from '@/shared/components/lazy-image/LazyImage';
 import { useReservation } from '@/features/reservation/useReservation';
 import { useSelector } from 'react-redux';
 import type {
@@ -100,7 +101,7 @@ const ReservationDetailPage = () => {
             )}
           >
             {detail.concertThumbnail && (
-              <img
+              <LazyImage
                 src={detail.concertThumbnail}
                 alt={detail.concertName}
                 className="w-full h-full object-cover"

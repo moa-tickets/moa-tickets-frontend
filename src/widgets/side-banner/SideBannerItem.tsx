@@ -1,6 +1,7 @@
 import type { HomeProductContent } from '@/entities/types/types';
 import { cn } from '@/shared';
 import ImageBox from '@/shared/components/image-box/ImageBox';
+import LazyImage from '@/shared/components/lazy-image/LazyImage';
 import SideBannerDesc from './SideBannerDesc';
 
 export default function SideBannerItem({
@@ -20,7 +21,7 @@ export default function SideBannerItem({
     >
       <ImageBox
         imgElement={
-          <img
+          <LazyImage
             src={data.mainImageUrl}
             alt={data.name}
             className={'w-full h-full object-cover'}

@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import type { ConcertList } from '@/entities/reducers/ConcertListReducer';
+import LazyImage from '@/shared/components/lazy-image/LazyImage';
 
 const SearchResultItem = React.memo(
   ({ concertItem }: { concertItem: ConcertList }) => {
     return (
       <Link to={`/detail/${concertItem.concertId}`} className="mr-[30px]">
         <div className="search__result__item__thumbnail w-full h-[250px] mb-[20px] ">
-          <img
+          <LazyImage
             src={concertItem.concertThumbnail}
             alt={concertItem.concertName}
             className="w-full h-full object-cover rounded-[8px]"

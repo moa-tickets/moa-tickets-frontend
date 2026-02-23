@@ -247,7 +247,11 @@ const MainBannerSlides = () => {
           }}
         >
           {extendedSlides.map((mbs: MainBannerSlide, idx: number) => (
-            <MainBannerSlideItem key={`${mbs.id}-${idx}`} slideItem={mbs} />
+            <MainBannerSlideItem
+              key={`${mbs.id}-${idx}`}
+              slideItem={mbs}
+              isPriority={idx === 1}
+            />
           ))}
         </div>
         <ThumbnailClickWrapper
