@@ -1,6 +1,27 @@
 import { cn } from '@/shared';
 import Icon from '@/shared/lib/Icon';
 
+const WINDOW = 2; // 현재 페이지 기준 좌우로 보여줄 페이지 수
+
+type PageItem = number | 'ellipsis-left' | 'ellipsis-right';
+
+const getVisiblePages = (current: number, total: number): PageItem[] => {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  const left = Math.max(2, current - WINDOW);
+  const right = Math.min(total - 1, current + WINDOW);
+  const pages: PageItem[] = [1];
+
+  if (left > 2) pages.push('ellipsis-left');
+  for (let i = left; i <= right; i++) pages.push(i);
+  if (right < total - 1) pages.push('ellipsis-right');
+  pages.push(total);
+
+  return pages;
+};
+
 const Pagination = ({
   currentPage,
   totalPages,
@@ -14,9 +35,9 @@ const Pagination = ({
   isLast?: boolean;
   className?: string;
 }) => {
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
   const isNextDisabled =
     typeof isLast === 'boolean' ? isLast : currentPage === totalPages;
+  const visiblePages = getVisiblePages(currentPage, totalPages);
 
   return (
     <div
@@ -38,7 +59,19 @@ const Pagination = ({
           className={cn('w-[25px] h-[25px] block')}
         />
       </button>
-      {pages.map((page) => {
+      {visiblePages.map((page) => {
+        if (typeof page === 'string') {
+          return (
+            <span
+              key={page}
+              className={cn(
+                'w-[34px] h-[34px] flex items-center justify-center text-[14px] text-[rgba(0,0,0,0.4)]',
+              )}
+            >
+              ...
+            </span>
+          );
+        }
         const isPageDisabled = isLast && page > currentPage;
         return (
           <button

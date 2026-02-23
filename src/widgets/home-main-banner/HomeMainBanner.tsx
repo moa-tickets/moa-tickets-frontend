@@ -1,33 +1,33 @@
 import { useHomeProduct } from '@/features/home-product/useHomeProduct';
 import { cn } from '@/shared';
 import HomeMainList from './HomeMainList';
+import HomeMainListSkeleton from './HomeMainListSkeleton';
 
-export default function HomeMainBanner({ title }: { title: string }) {
-  const { potatoProducts, isPotatoProductsLoading } = useHomeProduct(12);
+export default function HomeMainBanner({
+  title,
+  keyword,
+}: Readonly<{ title: string; keyword: string }>) {
+  const { products, isProductsLoading } = useHomeProduct(12, keyword);
 
   return (
-    <div className={cn('home__main__banner', 'relative')}>
+    <div className={cn('home__main__banner', 'relative mt-[30px]')}>
       <h2
         className={cn(
-          'home__main__banner__title text-[20px] font-bold mb-[20px] mt-[30px]',
+          'home__main__banner__title text-[26px] font-bold mb-[50px]',
         )}
       >
         {title}
       </h2>
-      {!isPotatoProductsLoading && potatoProducts?.result?.content && (
-        <HomeMainList products={potatoProducts} />
-      )}
       <button
-        className={cn(
-          'absolute bottom-[-100px] w-[200px] border border-[#ccc] border-solid rounded-[40px]',
-          'text-[14px] py-[10px]',
-          'left-0 right-0 mx-auto',
-          'hover:bg-black hover:text-white transition-colors duration-300',
-          'cursor-pointer',
-        )}
+        className={cn('absolute top-0 right-0 cursor-pointer text-[14px]')}
       >
-        전체 확인하기
+        전체보기
       </button>
+      {isProductsLoading ? (
+        <HomeMainListSkeleton />
+      ) : (
+        products?.result?.content && <HomeMainList products={products} />
+      )}
     </div>
   );
 }

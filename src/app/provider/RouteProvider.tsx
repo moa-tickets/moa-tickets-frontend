@@ -67,6 +67,7 @@ const createdRouter = createBrowserRouter([
         path: 'search/result',
         element: withSuspense(SearchResult),
       },
+
       {
         path: 'payment/success',
         element: withSuspense(PaymentSuccessPage),

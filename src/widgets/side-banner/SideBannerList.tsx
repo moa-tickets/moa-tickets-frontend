@@ -5,14 +5,14 @@ import SideBannerItem from './SideBannerItem';
 import SideBannerItemSkeleton from './SideBannerItemSkeleton';
 
 export default function SideBannerList() {
-  const { potatoProducts, isPotatoProductsLoading } = useHomeProduct(8);
+  const { products, isProductsLoading } = useHomeProduct(8, '감자');
 
   return (
     <div className={cn('side__banner__list')}>
-      {!isPotatoProductsLoading &&
-        potatoProducts &&
-        ((potatoProducts?.result?.content?.length ?? 0) > 0 ? (
-          potatoProducts?.result?.content.map(
+      {!isProductsLoading &&
+        products &&
+        ((products?.result?.content?.length ?? 0) > 0 ? (
+          products?.result?.content.map(
             (product: HomeProductContent, index: number) => (
               <SideBannerItem
                 key={product.productId}
@@ -31,7 +31,7 @@ export default function SideBannerList() {
             상품이 없습니다.
           </div>
         ))}
-      {isPotatoProductsLoading &&
+      {isProductsLoading &&
         [...Array(3)].map((_, index) => <SideBannerItemSkeleton key={index} />)}
     </div>
   );

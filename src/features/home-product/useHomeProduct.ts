@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-export const useHomeProduct = (size: number) => {
-  const { data: potatoProducts, isLoading: isPotatoProductsLoading } = useQuery({
-    queryKey: ['home-potato-products', size],
+export const useHomeProduct = (size: number, keyword: string, page: number = 0) => {
+  const { data: products, isLoading: isProductsLoading } = useQuery({
+    queryKey: ['home-products', keyword, size, page],
     queryFn: async () => {
       const response = await axios.get('/newApi/products/search', {
         params: {
-          keyword: '감자',
-          page: 0,
+          keyword,
+          page,
           size,
         },
       });
@@ -17,7 +17,7 @@ export const useHomeProduct = (size: number) => {
   });
 
   return {
-    potatoProducts,
-    isPotatoProductsLoading,
+    products,
+    isProductsLoading,
   };
 };
