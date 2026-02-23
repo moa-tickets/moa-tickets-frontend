@@ -24,7 +24,11 @@ export default function AlarmContainer() {
         console.error('SSE connection error:', event);
       };
 
-      eventSource.addEventListener('SS_ON_HOUR', (event: MessageEvent) => {
+      eventSource.addEventListener('CONNECT', (event: any) => {
+        console.log(JSON.parse(event.data));
+      });
+
+      eventSource.addEventListener('SS_LEFT_10', (event: MessageEvent) => {
         console.log('Received message:', event.data);
       });
     };
