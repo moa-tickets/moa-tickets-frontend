@@ -1,4 +1,3 @@
-import { is } from 'date-fns/locale';
 import type { Action } from '../types/types';
 
 export const GET_BOARD = 'get/board';
