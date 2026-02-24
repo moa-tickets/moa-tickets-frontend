@@ -58,7 +58,7 @@ const ReservationPage = () => {
         내용을 확인할 수 있습니다.
       </div>
       <ReservationTab
-        contents={['예매 내역/reservation', '예매 취소/cancel']}
+        contents={['예매 내역/reservation']}
         selectedTab={selectedTab}
         onTabChange={setSelectedTab}
       />

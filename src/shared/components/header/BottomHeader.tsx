@@ -17,19 +17,19 @@ const BottomHeader = React.memo(() => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (isLoggedIn) {
+      getMember.mutate();
+    }
+    localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
+  }, [isLoggedIn]);
+
+  useEffect(() => {
     const ls = localStorage.getItem('isLoggedIn');
     if (ls) {
       const parsed = JSON.parse(ls);
       dispatch({ type: LOGGED_INIT, payload: { isLoggedIn: parsed } });
     }
   }, []);
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      getMember.mutate();
-    }
-    localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
-  }, [isLoggedIn]);
 
   const goLogin = () => {
     navigate('/login');
@@ -67,10 +67,6 @@ const BottomHeader = React.memo(() => {
           iconComponent={<Icon ICON="TICKET" className={'w-5 h-5 fill-none'} />}
           text={'내 예약'}
           onNavigate={goMyReservation}
-        />
-        <IconButton
-          iconComponent={<Icon ICON="QUESTION" className={'w-6 h-6'} />}
-          text={'1:1 문의'}
         />
       </div>
     </div>

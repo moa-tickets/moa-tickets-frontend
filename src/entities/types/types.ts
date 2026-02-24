@@ -9,6 +9,17 @@ export type ModalState = {
   message: string | null;
 };
 
+export type ConcertItem = {
+  bookingOpen: string;
+  concertDuration: string;
+  concertEnd: string;
+  concertId: number;
+  concertName: string;
+  concertStart: string;
+  concertThumbnail: string;
+  hallName: string;
+};
+
 export type HomeProduct = {
   result: HomeProductResult;
   statusCode: number;

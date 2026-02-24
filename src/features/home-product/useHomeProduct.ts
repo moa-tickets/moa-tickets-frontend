@@ -1,13 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { api } from '@/shared/lib/api';
+import type { ConcertItem } from '@/entities/types/types';
 
-export const useHomeProduct = (size: number, keyword: string, page: number = 0) => {
-  const { data: products, isLoading: isProductsLoading } = useQuery({
-    queryKey: ['home-products', keyword, size, page],
+export const useHomeProduct = (size: number, searchValue: string = '서울', page: number = 0) => {
+  const { data: products, isLoading: isProductsLoading } = useQuery<ConcertItem[]>({
+    queryKey: ['home-products', searchValue, size, page],
     queryFn: async () => {
-      const response = await axios.get('/newApi/products/search', {
+      const response = await api.get('/product/concertList', {
         params: {
-          keyword,
+          searchValue,
+          sortBy: 'date',
+          sortOrder: 'desc',
           page,
           size,
         },
