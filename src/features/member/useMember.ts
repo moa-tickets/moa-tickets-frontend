@@ -35,6 +35,12 @@ export const useMember = () => {
     },
     onSuccess: () => {
       dispatch({ type: LOGOUT });
+      localStorage.setItem('isLoggedIn', JSON.stringify(false));
+    },
+    onError: () => {
+      // 서버 로그아웃 실패해도 클라이언트에서는 로그아웃 처리
+      dispatch({ type: LOGOUT });
+      localStorage.setItem('isLoggedIn', JSON.stringify(false));
     },
   });
 

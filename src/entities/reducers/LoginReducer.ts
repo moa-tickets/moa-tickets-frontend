@@ -64,6 +64,10 @@ export default function loginReducer(
         nickname: '',
         email: '',
         isSeller: false,
+        selectedSession: {
+          date: '',
+          sessionId: 0,
+        },
       };
     case SESSION_CHANGE:
       return {

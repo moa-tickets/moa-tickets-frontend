@@ -24,7 +24,7 @@ const BookingPage = () => {
     dispatch({ type: SESSION_INIT });
     dispatch({ type: RESET_SEAT_STATE });
     getDetailProduct.mutate({ id: Number(id) });
-  }, [id]);
+  }, [id, dispatch]);
 
   return (
     <div className={cn('booking__page')}>
