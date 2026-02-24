@@ -18,7 +18,7 @@ const SearchResultList = React.memo(({ data }: { data: ConcertList[] }) => {
   }
 
   return (
-    <div className={cn('flex ml-[40px]')}>
+    <div className={cn('grid grid-cols-4 gap-x-[30px] gap-y-[40px] ml-[40px]')}>
       {data.map((concertItem: ConcertList) => (
         <SearchResultItem
           key={concertItem.concertId}

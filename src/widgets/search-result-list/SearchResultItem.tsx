@@ -6,7 +6,7 @@ import LazyImage from '@/shared/components/lazy-image/LazyImage';
 const SearchResultItem = React.memo(
   ({ concertItem }: { concertItem: ConcertList }) => {
     return (
-      <Link to={`/detail/${concertItem.concertId}`} className="mr-[30px]">
+      <Link to={`/detail/${concertItem.concertId}`}>
         <div className="search__result__item__thumbnail w-full h-[250px] mb-[20px] ">
           <LazyImage
             src={concertItem.concertThumbnail}
