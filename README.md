@@ -7,7 +7,7 @@
 - TailwindCSS
 - React-icons
 
-## PACKAGE DESIGN
+## FOLDER DESIGN
 ```
 src
   ├── app             # provider 설정 및 style 설정
