@@ -16,6 +16,7 @@ const BottomHeader = React.memo(() => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('BottomHeader: isLoggedIn state changed to:', isLoggedIn);
     if (isLoggedIn) {
       getMember.mutate();
     }
