@@ -40,8 +40,10 @@ export default function loginReducer(
   state: LoginState = initialLoginState,
   action: Action,
 ) {
+  console.log('LoginReducer: Action dispatched:', action.type, action.payload);
   switch (action.type) {
     case LOGIN:
+      console.log('LoginReducer: Setting isLoggedIn to true');
       return {
         ...state,
         isLoggedIn: true,
@@ -59,6 +61,7 @@ export default function loginReducer(
         isSeller: action.payload.isSeller,
       };
     case LOGOUT:
+      console.log('LoginReducer: Setting isLoggedIn to false');
       return {
         isLoggedIn: false,
         nickname: '',

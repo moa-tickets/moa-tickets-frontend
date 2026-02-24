@@ -34,11 +34,11 @@ export const useMember = () => {
     mutationFn: async () => {
       try {
         console.log('Checking auth status with httpOnly cookie...');
-        await api.get('/members/me');
-        console.log('Auth status: authenticated');
+        const response = await api.get('/members/me');
+        console.log('Auth status: authenticated - Response:', response.status, response.data);
         return true;
-      } catch (error) {
-        console.log('Auth status: not authenticated', error);
+      } catch (error: any) {
+        console.log('Auth status: not authenticated - Error:', error.response?.status, error.response?.data || error.message);
         return false;
       }
     },
@@ -53,6 +53,9 @@ export const useMember = () => {
         localStorage.setItem('isLoggedIn', JSON.stringify(false));
       }
     },
+    onError: (error) => {
+      console.error('checkAuthStatus mutation error:', error);
+    }
   });
 
   const logoutMember = useMutation<void>({
