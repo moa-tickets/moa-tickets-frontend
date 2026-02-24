@@ -6,34 +6,34 @@ import AppLoading from '@/widgets/app-loading/AppLoading';
 
 // 레이지 로딩 페이지 컴포넌트
 const MyPageLayout = lazy(
-  () => import('@/shared/components/layouts/MyPageLayout'),
+  () => import(/* @vite-prefetch */ '@/shared/components/layouts/MyPageLayout'),
 );
 const BookingLayout = lazy(
-  () => import('@/shared/components/layouts/BookingLayout'),
+  () => import(/* @vite-prefetch */ '@/shared/components/layouts/BookingLayout'),
 );
-const ProtectedRoute = lazy(() => import('@/shared/components/ProtectedRoute'));
-const SearchResult = lazy(() => import('@/pages/search-result/SearchResult'));
-const DetailPage = lazy(() => import('@/pages/detail/DetailPage'));
+const ProtectedRoute = lazy(() => import(/* @vite-prefetch */ '@/shared/components/ProtectedRoute'));
+const SearchResult = lazy(() => import(/* @vite-prefetch */ '@/pages/search-result/SearchResult'));
+const DetailPage = lazy(() => import(/* @vite-prefetch */ '@/pages/detail/DetailPage'));
 const ReservationPage = lazy(
-  () => import('@/pages/reservation/ReservationPage'),
+  () => import(/* @vite-prefetch */ '@/pages/reservation/ReservationPage'),
 );
 const ReservationDetailPage = lazy(
-  () => import('@/pages/reservation-detail/ReservationDetailPage'),
+  () => import(/* @vite-prefetch */ '@/pages/reservation-detail/ReservationDetailPage'),
 );
-const BookingPage = lazy(() => import('@/pages/booking/BookingPage'));
-const PaymentPage = lazy(() => import('@/pages/payment/PaymentPage'));
-const LoginPage = lazy(() => import('@/pages/login/LoginPage'));
+const BookingPage = lazy(() => import(/* @vite-prefetch */ '@/pages/booking/BookingPage'));
+const PaymentPage = lazy(() => import(/* @vite-prefetch */ '@/pages/payment/PaymentPage'));
+const LoginPage = lazy(() => import(/* @vite-prefetch */ '@/pages/login/LoginPage'));
 const LoginCallback = lazy(
-  () => import('@/pages/login-callback/LoginCallback'),
+  () => import(/* @vite-prefetch */ '@/pages/login-callback/LoginCallback'),
 );
 const PaymentSuccessPage = lazy(
-  () => import('@/pages/payment-success/PaymentSuccessPage'),
+  () => import(/* @vite-prefetch */ '@/pages/payment-success/PaymentSuccessPage'),
 );
 const PaymentFailPage = lazy(
-  () => import('@/pages/payment-fail/PaymentFailPage'),
+  () => import(/* @vite-prefetch */ '@/pages/payment-fail/PaymentFailPage'),
 );
 const CommunityDetailPage = lazy(
-  () => import('@/pages/community-detail/CommunityDetailPage'),
+  () => import(/* @vite-prefetch */ '@/pages/community-detail/CommunityDetailPage'),
 );
 
 // Suspense 래퍼

@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { OPEN_MODAL } from '@/entities/reducers/ModalReducer';
 import MainBannerItemText from './MainBannerItemText';
-import LazyImage from '@/shared/components/lazy-image/LazyImage';
 
 const MainBannerSlideItem = React.memo(
   ({
@@ -36,19 +35,13 @@ const MainBannerSlideItem = React.memo(
         )}
         onClick={waitOpenModal}
       >
-        {isPriority ? (
-          <img
-            src={slideItem.imageUrl}
-            alt={slideItem.bigText}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <LazyImage
-            src={slideItem.imageUrl}
-            alt={slideItem.bigText}
-            className="w-full h-full object-cover"
-          />
-        )}
+        <img
+          src={slideItem.imageUrl}
+          alt={slideItem.bigText}
+          className="w-full h-full object-cover"
+          loading="eager"
+          fetchPriority={isPriority ? 'high' : 'low'}
+        />
         <MainBannerItemText
           bigText={slideItem.bigText}
           smallText={slideItem.smallText}
