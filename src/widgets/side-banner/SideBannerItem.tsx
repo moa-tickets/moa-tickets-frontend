@@ -21,15 +21,9 @@ export default function SideBannerItem({
     >
       <ImageBox
         imgElement={
-<<<<<<< HEAD
           <LazyImage
-            src={data.mainImageUrl}
-            alt={data.name}
-=======
-          <img
             src={data.concertThumbnail}
             alt={data.concertName}
->>>>>>> feature/home-renewal
             className={'w-full h-full object-cover'}
           />
         }
