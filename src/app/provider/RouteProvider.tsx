@@ -9,33 +9,53 @@ const MyPageLayout = lazy(
   () => import(/* @vite-prefetch */ '@/shared/components/layouts/MyPageLayout'),
 );
 const BookingLayout = lazy(
-  () => import(/* @vite-prefetch */ '@/shared/components/layouts/BookingLayout'),
+  () =>
+    import(/* @vite-prefetch */ '@/shared/components/layouts/BookingLayout'),
 );
-const ProtectedRoute = lazy(() => import(/* @vite-prefetch */ '@/shared/components/ProtectedRoute'));
-const SearchResult = lazy(() => import(/* @vite-prefetch */ '@/pages/search-result/SearchResult'));
-const DetailPage = lazy(() => import(/* @vite-prefetch */ '@/pages/detail/DetailPage'));
+const ProtectedRoute = lazy(
+  () => import(/* @vite-prefetch */ '@/shared/components/ProtectedRoute'),
+);
+const SearchResult = lazy(
+  () => import(/* @vite-prefetch */ '@/pages/search-result/SearchResult'),
+);
+const DetailPage = lazy(
+  () => import(/* @vite-prefetch */ '@/pages/detail/DetailPage'),
+);
 const ReservationPage = lazy(
   () => import(/* @vite-prefetch */ '@/pages/reservation/ReservationPage'),
 );
 const ReservationDetailPage = lazy(
-  () => import(/* @vite-prefetch */ '@/pages/reservation-detail/ReservationDetailPage'),
+  () =>
+    import(
+      /* @vite-prefetch */ '@/pages/reservation-detail/ReservationDetailPage'
+    ),
 );
-const BookingPage = lazy(() => import(/* @vite-prefetch */ '@/pages/booking/BookingPage'));
-const PaymentPage = lazy(() => import(/* @vite-prefetch */ '@/pages/payment/PaymentPage'));
-const LoginPage = lazy(() => import(/* @vite-prefetch */ '@/pages/login/LoginPage'));
+const BookingPage = lazy(
+  () => import(/* @vite-prefetch */ '@/pages/booking/BookingPage'),
+);
+const PaymentPage = lazy(
+  () => import(/* @vite-prefetch */ '@/pages/payment/PaymentPage'),
+);
+const LoginPage = lazy(
+  () => import(/* @vite-prefetch */ '@/pages/login/LoginPage'),
+);
 const LoginCallback = lazy(
   () => import(/* @vite-prefetch */ '@/pages/login-callback/LoginCallback'),
 );
 const PaymentSuccessPage = lazy(
-  () => import(/* @vite-prefetch */ '@/pages/payment-success/PaymentSuccessPage'),
+  () =>
+    import(/* @vite-prefetch */ '@/pages/payment-success/PaymentSuccessPage'),
 );
 const PaymentFailPage = lazy(
   () => import(/* @vite-prefetch */ '@/pages/payment-fail/PaymentFailPage'),
 );
 const CommunityDetailPage = lazy(
-  () => import(/* @vite-prefetch */ '@/pages/community-detail/CommunityDetailPage'),
+  () =>
+    import(/* @vite-prefetch */ '@/pages/community-detail/CommunityDetailPage'),
 );
-const StreamPage = lazy(() => import(/* @vite-prefetch */ '@/pages/stream/StreamPage'));
+const StreamPage = lazy(
+  () => import(/* @vite-prefetch */ '@/pages/stream/StreamPage'),
+);
 
 // Suspense 래퍼
 const withSuspense = (
@@ -118,7 +138,7 @@ const createdRouter = createBrowserRouter([
     ],
   },
   {
-    path: 'stream/:playbackId',
+    path: 'live/:playbackId',
     element: <ProtectedRoute />,
     children: [
       {
