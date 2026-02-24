@@ -23,8 +23,16 @@ export default defineConfig(({ mode }) => {
         name: 'image-cache-headers',
         configureServer(server: import('vite').ViteDevServer) {
           server.middlewares.use((req: any, res: any, next: any) => {
-            if (req.url && /\.(png|jpe?g|gif|svg|webp|ico|avif)$/i.test(req.url.split('?')[0])) {
-              res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+            if (
+              req.url &&
+              /\.(png|jpe?g|gif|svg|webp|ico|avif)$/i.test(
+                req.url.split('?')[0],
+              )
+            ) {
+              res.setHeader(
+                'Cache-Control',
+                'public, max-age=31536000, immutable',
+              );
             }
             next();
           });
@@ -96,7 +104,7 @@ export default defineConfig(({ mode }) => {
           ws: false,
         },
         '/newApi': {
-          target: 'http://172.16.24.179:8080',
+          target: 'http://3.39.97.116',
           changeOrigin: true,
           ws: false,
           rewrite: (path: string) => path.replace(/^\/newApi/, '/api'),
