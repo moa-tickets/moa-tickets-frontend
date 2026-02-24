@@ -5,9 +5,8 @@ import HomeMainListSkeleton from './HomeMainListSkeleton';
 
 export default function HomeMainBanner({
   title,
-  keyword,
-}: Readonly<{ title: string; keyword: string }>) {
-  const { products, isProductsLoading } = useHomeProduct(12, keyword);
+}: Readonly<{ title: string }>) {
+  const { products, isProductsLoading } = useHomeProduct(12);
 
   return (
     <div className={cn('home__main__banner', 'relative mt-[30px]')}>
@@ -26,7 +25,7 @@ export default function HomeMainBanner({
       {isProductsLoading ? (
         <HomeMainListSkeleton />
       ) : (
-        products?.result?.content && <HomeMainList products={products} />
+        products && products.length > 0 && <HomeMainList products={products} />
       )}
     </div>
   );

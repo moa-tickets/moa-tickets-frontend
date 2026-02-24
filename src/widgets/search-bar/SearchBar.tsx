@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { cn } from '@/shared';
 import SearchInput from './SearchInput';
-import SearchRankingBarWrapper from './SearchRankingBarWrapper';
 import { useSearchParams } from 'react-router-dom';
 
 const SearchBar = () => {
@@ -28,7 +27,7 @@ const SearchBar = () => {
         searchWords={searchWords}
         onSearchWordsChange={handleSearchWordsChange}
       />
-      <SearchRankingBarWrapper inputRef={inputRef} />
+
     </div>
   );
 };

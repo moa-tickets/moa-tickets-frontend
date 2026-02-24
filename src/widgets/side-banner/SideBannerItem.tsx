@@ -1,4 +1,4 @@
-import type { HomeProductContent } from '@/entities/types/types';
+import type { ConcertItem } from '@/entities/types/types';
 import { cn } from '@/shared';
 import ImageBox from '@/shared/components/image-box/ImageBox';
 import LazyImage from '@/shared/components/lazy-image/LazyImage';
@@ -8,7 +8,7 @@ export default function SideBannerItem({
   data,
   index,
 }: {
-  data: HomeProductContent;
+  data: ConcertItem;
   index: number;
 }) {
   return (
@@ -21,9 +21,15 @@ export default function SideBannerItem({
     >
       <ImageBox
         imgElement={
+<<<<<<< HEAD
           <LazyImage
             src={data.mainImageUrl}
             alt={data.name}
+=======
+          <img
+            src={data.concertThumbnail}
+            alt={data.concertName}
+>>>>>>> feature/home-renewal
             className={'w-full h-full object-cover'}
           />
         }

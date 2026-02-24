@@ -11,7 +11,7 @@ export default function DetailSelectTab({
 }) {
   return (
     <ul
-      className={cn('detail__select__tab', 'flex mt-[30px] mb-[40px] bg-black')}
+      className={cn('detail__select__tab', 'flex mt-[30px] mb-[40px]')}
     >
       {lists.map((list: { label: string; value: string }) => (
         <li key={list.label}>

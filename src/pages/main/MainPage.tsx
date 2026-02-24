@@ -17,7 +17,7 @@ const MainPage = () => {
           <div className={cn('flex gap-[50px]')}>
             <MainBannerSlides />
           </div>
-          <HomeMainBanner title={'흥미로운 프로젝트'} keyword={'채소'} />
+          <HomeMainBanner title={'흥미로운 프로젝트'} />
         </div>
         <SideBanner />
       </div>
