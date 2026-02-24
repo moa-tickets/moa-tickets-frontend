@@ -26,6 +26,7 @@ const ProtectedRoute = () => {
         localStorage.setItem('isLoggedIn', JSON.stringify(true));
       } catch (error) {
         // 서버 인증 실패 시
+        console.warn('Authentication check failed:', error);
         dispatch({ type: LOGOUT });
         localStorage.setItem('isLoggedIn', JSON.stringify(false));
       } finally {

@@ -1,4 +1,4 @@
-import { GET_MEMBER, LOGOUT } from '@/entities/reducers/LoginReducer';
+import { GET_MEMBER, LOGOUT, LOGIN } from '@/entities/reducers/LoginReducer';
 import { api } from '@/shared/lib/api';
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
@@ -29,6 +29,29 @@ export const useMember = () => {
     },
   });
 
+  // 쿠키 기반 인증 상태 확인 함수
+  const checkAuthStatus = useMutation<boolean>({
+    mutationFn: async () => {
+      try {
+        await api.get('/members/me');
+        return true;
+      } catch (error) {
+        console.warn('Auth status check failed:', error);
+        return false;
+      }
+    },
+    onSuccess: (isAuthenticated: boolean) => {
+      if (isAuthenticated) {
+        dispatch({ type: LOGIN });
+        getMember.mutate();
+        localStorage.setItem('isLoggedIn', JSON.stringify(true));
+      } else {
+        dispatch({ type: LOGOUT });
+        localStorage.setItem('isLoggedIn', JSON.stringify(false));
+      }
+    },
+  });
+
   const logoutMember = useMutation<void>({
     mutationFn: async () => {
       await api.post('/logout');
@@ -44,5 +67,10 @@ export const useMember = () => {
     },
   });
 
-  return { getMember, getMemberPending: getMember.isPending, logoutMember };
+  return { 
+    getMember, 
+    getMemberPending: getMember.isPending, 
+    logoutMember,
+    checkAuthStatus
+  };
 };
