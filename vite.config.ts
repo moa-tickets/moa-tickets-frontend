@@ -104,7 +104,7 @@ export default defineConfig(({ mode }) => {
           ws: false,
         },
         '/newApi': {
-          target: 'http://3.39.97.116:8080',
+          target: 'http://172.16.24.179:8080/',
           changeOrigin: true,
           ws: false,
           rewrite: (path: string) => path.replace(/^\/newApi/, '/api'),
