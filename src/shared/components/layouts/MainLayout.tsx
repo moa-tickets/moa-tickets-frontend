@@ -24,6 +24,16 @@ const MainLayout = () => {
       console.log('MainLayout: Initializing auth status check...');
       console.log('MainLayout: Current Redux isLoggedIn state:', isLoggedIn);
       
+      // localStorage에 저장된 로그인 상태 확인
+      const savedLoginState = localStorage.getItem('isLoggedIn');
+      
+      // 이미 인증 상태가 확정되어 있다면 서버 체크 스킵
+      if (savedLoginState === 'true' && isLoggedIn) {
+        console.log('MainLayout: Auth already verified, skipping server check');
+        setIsAuthChecking(false);
+        return;
+      }
+      
       // 인증 상태 확인 완료 후 로딩 상태 해제
       checkAuthStatus.mutate(undefined, {
         onSettled: () => {
@@ -32,7 +42,7 @@ const MainLayout = () => {
         }
       });
     }
-  });
+  }, []); // 의존성 배열을 빈 배열로 변경하여 최초 1회만 실행
 
   // Redux 상태 변화 감지
   useEffect(() => {

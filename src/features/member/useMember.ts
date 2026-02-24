@@ -29,24 +29,32 @@ export const useMember = () => {
     },
   });
 
-  // 쿠키 기반 인증 상태 확인 함수
-  const checkAuthStatus = useMutation<boolean>({
+  // 쿠키 기반 인증 상태 확인 함수 (사용자 정보도 함께 가져옴)
+  const checkAuthStatus = useMutation<MemberResponse | null>({
     mutationFn: async () => {
       try {
         console.log('Checking auth status with httpOnly cookie...');
         const response = await api.get('/members/me');
         console.log('Auth status: authenticated - Response:', response.status, response.data);
-        return true;
+        return response.data;
       } catch (error: any) {
         console.log('Auth status: not authenticated - Error:', error.response?.status, error.response?.data || error.message);
-        return false;
+        return null;
       }
     },
-    onSuccess: (isAuthenticated: boolean) => {
-      console.log('Setting auth state:', isAuthenticated ? 'logged in' : 'logged out');
-      if (isAuthenticated) {
+    onSuccess: (userData: MemberResponse | null) => {
+      console.log('Setting auth state:', userData ? 'logged in' : 'logged out');
+      if (userData) {
         dispatch({ type: LOGIN });
-        getMember.mutate();
+        // 사용자 정보를 직접 저장 (중복 API 호출 방지)
+        dispatch({
+          type: GET_MEMBER,
+          payload: {
+            nickname: userData.nickname,
+            email: userData.email,
+            isSeller: userData.seller,
+          },
+        });
         localStorage.setItem('isLoggedIn', JSON.stringify(true));
       } else {
         dispatch({ type: LOGOUT });
