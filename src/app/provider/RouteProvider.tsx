@@ -35,6 +35,7 @@ const PaymentFailPage = lazy(
 const CommunityDetailPage = lazy(
   () => import(/* @vite-prefetch */ '@/pages/community-detail/CommunityDetailPage'),
 );
+const StreamPage = lazy(() => import(/* @vite-prefetch */ '@/pages/stream/StreamPage'));
 
 // Suspense 래퍼
 const withSuspense = (
@@ -113,6 +114,16 @@ const createdRouter = createBrowserRouter([
             element: withSuspense(CommunityDetailPage),
           },
         ],
+      },
+    ],
+  },
+  {
+    path: 'stream/:playbackId',
+    element: <ProtectedRoute />,
+    children: [
+      {
+        index: true,
+        element: withSuspense(StreamPage),
       },
     ],
   },
