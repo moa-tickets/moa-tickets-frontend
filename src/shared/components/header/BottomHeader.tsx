@@ -5,7 +5,7 @@ import IconButton from '../icon-button/IconButton';
 import Icon from '@/shared/lib/Icon';
 import { useNavigate } from 'react-router-dom';
 
-import { LOGGED_INIT, type LoginState } from '@/entities/reducers/LoginReducer';
+import type { LoginState } from '@/entities/reducers/LoginReducer';
 import { useMember } from '@/features/member/useMember';
 
 const BottomHeader = React.memo(() => {
@@ -14,7 +14,6 @@ const BottomHeader = React.memo(() => {
   );
   const { getMember, logoutMember } = useMember();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -22,14 +21,6 @@ const BottomHeader = React.memo(() => {
     }
     localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
   }, [isLoggedIn]);
-
-  useEffect(() => {
-    const ls = localStorage.getItem('isLoggedIn');
-    if (ls) {
-      const parsed = JSON.parse(ls);
-      dispatch({ type: LOGGED_INIT, payload: { isLoggedIn: parsed } });
-    }
-  }, []);
 
   const goLogin = () => {
     navigate('/login');

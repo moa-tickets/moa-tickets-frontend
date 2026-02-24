@@ -33,14 +33,17 @@ export const useMember = () => {
   const checkAuthStatus = useMutation<boolean>({
     mutationFn: async () => {
       try {
+        console.log('Checking auth status with httpOnly cookie...');
         await api.get('/members/me');
+        console.log('Auth status: authenticated');
         return true;
       } catch (error) {
-        console.warn('Auth status check failed:', error);
+        console.log('Auth status: not authenticated', error);
         return false;
       }
     },
     onSuccess: (isAuthenticated: boolean) => {
+      console.log('Setting auth state:', isAuthenticated ? 'logged in' : 'logged out');
       if (isAuthenticated) {
         dispatch({ type: LOGIN });
         getMember.mutate();
