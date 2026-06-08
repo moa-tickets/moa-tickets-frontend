@@ -3,6 +3,8 @@
 import LoginInput from '@/shared/ui/login/LoginInput'
 import { useRouter } from 'next/navigation'
 import { IoCheckboxOutline } from 'react-icons/io5'
+import { RiKakaoTalkFill } from 'react-icons/ri'
+import { SiNaver } from 'react-icons/si'
 
 export default function LoginRightComponent() {
   const router = useRouter()
@@ -40,16 +42,18 @@ export default function LoginRightComponent() {
         <button
           type="button"
           id="kakao"
-          className="w-full bg-transparent border border-black rounded-[10px] py-[10px] mb-[10px] text-[14px] font-[700] cursor-pointer"
+          className="w-full bg-transparent border border-[#d8d3ce] rounded-[10px] py-[16px] mb-[10px] text-[16px] font-[700] cursor-pointer flex justify-center items-center gap-[8px]"
         >
-          카카오톡으로 로그인
+          <RiKakaoTalkFill size={22} />
+          <span>카카오톡으로 로그인</span>
         </button>
         <button
           type="button"
           id="kakao"
-          className="w-full bg-transparent border border-black rounded-[10px] py-[10px] mb-[10px] text-[14px] font-[700] cursor-pointer"
+          className="w-full bg-transparent border border-[#d8d3ce] rounded-[10px] py-[16px] mb-[10px] text-[16px] font-[700] cursor-pointer flex justify-center items-center gap-[8px]"
         >
-          네이버로 로그인
+          <SiNaver size={16} />
+          <span>네이버로 로그인</span>
         </button>
         <div
           id="join"

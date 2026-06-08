@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export default function SignupLeftComponent() {
   return (
-    <div className="hidden lg:flex w-1/2 h-screen bg-radial-[at_100%_0%] from-[#311917] to-[#000] box-border px-[45px] py-[40px] flex-col justify-between">
+    <div className="w-1/2 h-screen bg-radial-[at_100%_0%] from-[#311917] to-[#000] box-border px-[45px] py-[40px] flex-col justify-between flex">
       <Link href="/" className="flex items-center gap-[16px]">
         <div
           id="logoBox"
