@@ -1,8 +1,13 @@
+'use client'
+
+import { useState } from 'react'
 import FormField from '@/shared/ui/FormField'
 import SubmitButton from '@/shared/ui/SubmitButton'
 import TermsCheckbox from '@/shared/ui/TermsCheckbox'
 
 export default function SignupRightComponent() {
+  const [termsChecked, setTermsChecked] = useState(false)
+
   return (
     <div className="w-full lg:w-1/2 h-screen bg-[#fff] px-[20px] sm:px-[45px] py-[40px] box-border overflow-y-auto">
       <p className="text-[#000] font-[800] text-[32px] mb-[10px]">모아티켓 시작하기</p>
@@ -14,8 +19,16 @@ export default function SignupRightComponent() {
         <FormField label="비밀번호" type="password" placeholder="••••••••" />
         <FormField label="휴대폰 번호" type="tel" placeholder="••••••••" />
 
-        {/* Terms */}
-        <TermsCheckbox />
+        <TermsCheckbox
+          label={
+            <>
+              만 14세 이상이며, 이용약관 및{' '}
+              <span className="text-[#ed4543]">개인정보 처리정책</span>에 동의합니다.
+            </>
+          }
+          checked={termsChecked}
+          onChange={setTermsChecked}
+        />
 
         {/* Submit Button */}
         <SubmitButton>가입하고 시작하기</SubmitButton>
