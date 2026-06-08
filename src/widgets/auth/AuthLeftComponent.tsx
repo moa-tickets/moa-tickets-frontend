@@ -6,10 +6,9 @@ interface AuthLeftComponentProps {
 
 export default function AuthLeftComponent({ showStats = true }: AuthLeftComponentProps) {
   return (
-    <div className="w-1/2 h-screen bg-radial-[at_100%_0%] from-[#311917] to-[#000] box-border px-[45px] py-[40px] flex flex-col justify-between">
+    <div className="w-1/2 lg:flex lg:flex-col lg:justify-between hidden h-screen bg-radial-[at_100%_0%] from-[#311917] to-[#000] box-border px-[45px] py-[40px] flex flex-col justify-between">
       <LogoLink logoSize={30} containerClassName="flex items-center gap-[16px]" />
-
-      <div>
+      <div id="authInfo">
         <p className="text-[#fff] font-[800] text-[48px] leading-[1.1] mb-[20px]">
           무대의 첫 줄 <br />
           가장 가까운 자리에서
@@ -36,6 +35,7 @@ export default function AuthLeftComponent({ showStats = true }: AuthLeftComponen
           </div>
         )}
       </div>
+      <p className="text-[#fff] text-[14px]">2026 MOA TICKET. 본 화면은 예시 화면입니다.</p>
     </div>
   )
 }

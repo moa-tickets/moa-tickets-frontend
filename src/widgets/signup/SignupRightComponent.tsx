@@ -1,49 +1,16 @@
+import FormField from '@/shared/ui/FormField'
+
 export default function SignupRightComponent() {
   return (
     <div className="w-full lg:w-1/2 h-screen bg-[#fff] px-[20px] sm:px-[45px] py-[40px] box-border overflow-y-auto">
-      <p className="text-[#000] font-[800] text-[32px] mb-[10px]">ONSTAGE 시작하기</p>
-      <p className="text-[#000] font-[400] mb-[30px]">멋 있는 공연을 예매하려면 시작하세요.</p>
+      <p className="text-[#000] font-[800] text-[32px] mb-[10px]">모아티켓 시작하기</p>
+      <p className="text-[#000] font-[400] mb-[30px]">멋있는 공연을 예매하려면 시작하세요.</p>
 
       <form className="w-full max-w-[460px] flex flex-col">
-        {/* Name */}
-        <div className="mb-[15px]">
-          <label className="block text-[14px] font-[700] mb-[8px]">이름</label>
-          <input
-            type="text"
-            placeholder="증길동"
-            className="w-full px-[12px] py-[10px] border border-[#ddd] rounded-[8px] focus:outline-none focus:border-[#ed4543]"
-          />
-        </div>
-
-        {/* Email */}
-        <div className="mb-[15px]">
-          <label className="block text-[14px] font-[700] mb-[8px]">이메일</label>
-          <input
-            type="email"
-            placeholder="onyu.kim@example.com"
-            className="w-full px-[12px] py-[10px] border border-[#ddd] rounded-[8px] focus:outline-none focus:border-[#ed4543]"
-          />
-        </div>
-
-        {/* Password */}
-        <div className="mb-[15px]">
-          <label className="block text-[14px] font-[700] mb-[8px]">비밀번호</label>
-          <input
-            type="password"
-            placeholder="••••••••"
-            className="w-full px-[12px] py-[10px] border border-[#ddd] rounded-[8px] focus:outline-none focus:border-[#ed4543]"
-          />
-        </div>
-
-        {/* Phone */}
-        <div className="mb-[15px]">
-          <label className="block text-[14px] font-[700] mb-[8px]">휴대폰 번호</label>
-          <input
-            type="tel"
-            placeholder="••••••••"
-            className="w-full px-[12px] py-[10px] border border-[#ddd] rounded-[8px] focus:outline-none focus:border-[#ed4543]"
-          />
-        </div>
+        <FormField label="이름" placeholder="홍길동" />
+        <FormField label="이메일" type="email" placeholder="onyu.kim@example.com" />
+        <FormField label="비밀번호" type="password" placeholder="••••••••" />
+        <FormField label="휴대폰 번호" type="tel" placeholder="••••••••" />
 
         {/* Terms */}
         <div className="pt-[10px] mb-[20px]">

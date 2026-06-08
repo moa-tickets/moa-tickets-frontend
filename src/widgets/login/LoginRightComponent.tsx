@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import LoginInput from '@/shared/ui/login/LoginInput'
+import FormField from '@/shared/ui/FormField'
 import LogoLink from '@/shared/ui/LogoLink'
 import { IoCheckboxOutline } from 'react-icons/io5'
 import { RiKakaoTalkFill } from 'react-icons/ri'
@@ -24,8 +24,8 @@ export default function LoginRightComponent() {
         로그인하고 예매를 이어가세요.
       </p>
       <form className="w-full max-w-[460px] flex flex-col">
-        <LoginInput label="이메일" type="email" placeholder="onyu.kim@example.com" />
-        <LoginInput label="비밀번호" type="password" placeholder="••••••••" />
+        <FormField label="이메일" type="email" placeholder="onyu.kim@example.com" />
+        <FormField label="비밀번호" type="password" placeholder="••••••••" />
         <div id="login__footer" className="flex justify-between mb-[20px]">
           <div id="login__memory" className="flex items-center gap-[8px]">
             <input type="checkbox" className="hidden" />
