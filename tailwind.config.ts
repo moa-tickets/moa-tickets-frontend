@@ -4,6 +4,10 @@ const config: Config = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
+      screens: {
+        xsm: '430px',
+        sm: '650px',
+      },
       colors: {
         primary: {
           50: '#eff6ff',

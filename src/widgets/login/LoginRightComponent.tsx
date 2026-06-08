@@ -1,7 +1,8 @@
 'use client'
 
-import LoginInput from '@/shared/ui/login/LoginInput'
 import { useRouter } from 'next/navigation'
+import LoginInput from '@/shared/ui/login/LoginInput'
+import LogoLink from '@/shared/ui/LogoLink'
 import { IoCheckboxOutline } from 'react-icons/io5'
 import { RiKakaoTalkFill } from 'react-icons/ri'
 import { SiNaver } from 'react-icons/si'
@@ -10,9 +11,18 @@ export default function LoginRightComponent() {
   const router = useRouter()
 
   return (
-    <div className="lg:block flex flex-col justify-center lg:w-1/2 w-[50%] w- h-screen mx-auto bg-[#fff] lg:px-[45px] lg:py-[40px] p-0 box-border overflow-y-auto">
-      <p className="text-[#000] font-[800] text-[32px] mb-[10px]">다시 오신 걸 환영해요</p>
-      <p className="text-[#000] font-[400] mb-[20px]">로그인하고 예매를 이어가세요.</p>
+    <div className="lg:block flex flex-col justify-center lg:w-1/2 xsm:w-[50%] w-[80%] w- h-screen mx-auto bg-[#fff] lg:px-[45px] lg:py-[40px] p-0 box-border overflow-y-auto">
+      <LogoLink
+        logoSize={30}
+        containerClassName="lg:hidden flex items-center gap-[16px] sm:mb-[40px] mb-[20px]"
+        textClassName="text-[#000] font-[800] text-[24px]"
+      />
+      <p className="text-[#000] font-[800] text-[24px] sm:text-[32px] mb-[10px]">
+        다시 오신 걸 환영해요
+      </p>
+      <p className="text-[#000] font-[400] sm:text-[16px] text-[14px] mb-[20px]">
+        로그인하고 예매를 이어가세요.
+      </p>
       <form className="w-full max-w-[460px] flex flex-col">
         <LoginInput label="이메일" type="email" placeholder="onyu.kim@example.com" />
         <LoginInput label="비밀번호" type="password" placeholder="••••••••" />
@@ -42,7 +52,7 @@ export default function LoginRightComponent() {
         <button
           type="button"
           id="kakao"
-          className="w-full bg-transparent border border-[#d8d3ce] rounded-[10px] py-[16px] mb-[10px] text-[16px] font-[700] cursor-pointer flex justify-center items-center gap-[8px]"
+          className="w-full bg-transparent border border-[#d8d3ce] rounded-[10px] py-[16px] mb-[10px] sm:text-[16px] text-[14px] font-[700] cursor-pointer flex justify-center items-center gap-[8px]"
         >
           <RiKakaoTalkFill size={22} />
           <span>카카오톡으로 로그인</span>
@@ -50,7 +60,7 @@ export default function LoginRightComponent() {
         <button
           type="button"
           id="kakao"
-          className="w-full bg-transparent border border-[#d8d3ce] rounded-[10px] py-[16px] mb-[10px] text-[16px] font-[700] cursor-pointer flex justify-center items-center gap-[8px]"
+          className="w-full bg-transparent border border-[#d8d3ce] rounded-[10px] py-[16px] mb-[10px] sm:text-[16px] text-[14px] font-[700] cursor-pointer flex justify-center items-center gap-[8px]"
         >
           <SiNaver size={16} />
           <span>네이버로 로그인</span>
