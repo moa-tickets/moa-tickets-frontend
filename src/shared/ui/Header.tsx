@@ -1,15 +1,16 @@
 import Link from 'next/link'
-import Logo from './Logo'
+import LogoLink from './LogoLink'
 
 export default function Header() {
   return (
     <header className="w-full bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition">
-          <Logo size={32} />
-          <span className="font-bold text-xl tracking-tight">MOA TICKETS</span>
-        </Link>
+        <LogoLink
+          logoSize={32}
+          textClassName="font-bold text-xl tracking-tight text-gray-900"
+          containerClassName="flex items-center gap-3 hover:opacity-80 transition"
+        />
 
         {/* Navigation */}
         <nav className="flex items-center gap-8">

@@ -1,18 +1,9 @@
-import Link from 'next/link'
-import Logo from '@/shared/ui/Logo'
+import LogoLink from '@/shared/ui/LogoLink'
 
 export default function LoginLeftComponent() {
   return (
     <div className="w-1/2 lg:block hidden h-screen bg-radial-[at_100%_0%] from-[#311917] to-[#000] box-border px-[45px] py-[40px] flex-col flex">
-      <Link href="/" className="flex items-center gap-[16px] mb-[160px]">
-        <Logo size={30} />
-        <span
-          className="text-[#fff] font-[800] text-[24px]"
-          style={{ letterSpacing: '-1px', paddingBottom: '2px' }}
-        >
-          MOA TICKETS
-        </span>
-      </Link>
+      <LogoLink logoSize={30} containerClassName="flex items-center gap-[16px] mb-[160px]" />
       <p className="text-[#fff] font-[800] text-[48px] leading-[1.1] mb-[20px]">
         무대의 첫 줄 <br />
         가장 가까운 자리에서
