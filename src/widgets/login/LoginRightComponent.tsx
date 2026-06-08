@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import FormField from '@/shared/ui/FormField'
+import SubmitButton from '@/shared/ui/SubmitButton'
 import LogoLink from '@/shared/ui/LogoLink'
 import { IoCheckboxOutline } from 'react-icons/io5'
 import { RiKakaoTalkFill } from 'react-icons/ri'
@@ -40,12 +41,7 @@ export default function LoginRightComponent() {
             </button>
           </div>
         </div>
-        <button
-          type="submit"
-          className="w-full py-[10px] bg-[#ed4543] rounded-[10px] text-[#fff] mb-[20px]"
-        >
-          로그인
-        </button>
+        <SubmitButton>로그인</SubmitButton>
         <div id="divider" className="text-[14px] self-center mb-[20px]">
           또는
         </div>

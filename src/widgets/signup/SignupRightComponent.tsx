@@ -1,4 +1,5 @@
 import FormField from '@/shared/ui/FormField'
+import SubmitButton from '@/shared/ui/SubmitButton'
 
 export default function SignupRightComponent() {
   return (
@@ -24,12 +25,7 @@ export default function SignupRightComponent() {
         </div>
 
         {/* Submit Button */}
-        <button
-          type="submit"
-          className="w-full py-[12px] bg-[#ed4543] rounded-[10px] text-[#fff] font-[700] mb-[20px] hover:bg-[#d63a35] transition"
-        >
-          가입하고 시작하기
-        </button>
+        <SubmitButton>가입하고 시작하기</SubmitButton>
 
         {/* Login Link */}
         <div className="flex gap-[10px] justify-center text-[14px] text-[#5c5955]">
