@@ -10,8 +10,11 @@ export function DarkModeToggle() {
   const { matches: prefersDark, isLoaded: prefersLoaded } = useMediaQuery(
     '(prefers-color-scheme: dark)'
   )
-  const { value: theme, setValue: setTheme, isLoaded: themeLoaded } =
-    useLocalStorage('theme', prefersDark ? 'dark' : 'light')
+  const {
+    value: theme,
+    setValue: setTheme,
+    isLoaded: themeLoaded,
+  } = useLocalStorage('theme', prefersDark ? 'dark' : 'light')
 
   // 두 hook 모두 로드될 때까지 렌더링 안 함
   if (!prefersLoaded || !themeLoaded) {

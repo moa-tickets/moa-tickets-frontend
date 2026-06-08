@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { QueryProvider } from '@/shared/providers/QueryProvider'
 
 export const metadata: Metadata = {
   title: {
@@ -20,7 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <QueryProvider>{children}</QueryProvider>
+      </body>
     </html>
   )
 }

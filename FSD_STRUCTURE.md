@@ -112,23 +112,27 @@ src/
 ## 레이어별 책임
 
 ### 🎨 shared (공유 레이어)
+
 - 비즈니스 로직이 없는 재사용 가능한 컴포넌트와 유틸리티
 - 프로젝트 어느 곳에서나 import 가능
 - 예: 버튼, 입력 필드, 유틸 함수
 
 ### 📦 entities (엔티티 레이어)
+
 - 비즈니스 도메인의 핵심 객체 (Ticket, User, Category 등)
 - 타입 정의, UI 컴포넌트, 상태 관리 포함
 - 다른 엔티티와 의존성 최소화
 - 예: TicketCard (ticket 엔티티의 UI 표현)
 
 ### ⚡ features (기능 레이어)
+
 - 사용자 상호작용과 비즈니스 로직
 - 여러 엔티티를 조합하여 기능 구현
 - API 호출, 상태 관리, 폼 처리 등
 - 예: 검색 기능 (ticket 검색 + filter 조합)
 
 ### 📄 app (App Router 라우팅)
+
 - Next.js App Router의 라우팅 및 레이아웃
 - `page.tsx`: 각 라우트의 진입점
 - `layout.tsx`: 라우트별 레이아웃 (optional)
@@ -139,6 +143,7 @@ src/
 ## 임포트 규칙
 
 ✅ **허용하는 임포트:**
+
 ```typescript
 // pages에서는 features, entities, shared 모두 임포트 가능
 import { TicketCard } from '@/entities/ticket/ui'
@@ -156,6 +161,7 @@ import { cn } from '@/shared/lib'
 ```
 
 ❌ **금지하는 임포트:**
+
 ```typescript
 // ❌ entities에서 features 임포트 불가
 import { SearchForm } from '@/features/ticket-search'
@@ -167,6 +173,7 @@ import OtherPage from '@/pages/other'
 ## 각 레이어의 구조
 
 ### shared/
+
 ```
 shared/
 ├── ui/               # 순수 UI 컴포넌트
@@ -177,6 +184,7 @@ shared/
 ```
 
 ### entities/[entityName]/
+
 ```
 entities/[name]/
 ├── model/            # 비즈니스 로직, 타입, 상태
@@ -185,6 +193,7 @@ entities/[name]/
 ```
 
 ### features/[featureName]/
+
 ```
 features/[name]/
 ├── ui/               # 기능의 UI 컴포넌트
@@ -194,6 +203,7 @@ features/[name]/
 ```
 
 ### app/[route]/
+
 ```
 app/[route]/
 ├── page.tsx          # Next.js 라우트 (필수)
@@ -275,6 +285,7 @@ export default async function TicketDetailPage({
 ## 임포트 규칙 (Updated)
 
 ✅ **허용하는 임포트:**
+
 ```typescript
 // app/page.tsx에서
 import { TicketCard } from '@/entities/ticket/ui'
@@ -290,6 +301,7 @@ import { cn } from '@/shared/lib'
 ```
 
 ❌ **금지하는 임포트:**
+
 ```typescript
 // ❌ app/page.tsx에서 다른 page.tsx 직접 임포트 (next/link 사용)
 import OtherPage from '@/app/other/page'
