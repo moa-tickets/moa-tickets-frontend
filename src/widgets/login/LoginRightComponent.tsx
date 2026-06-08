@@ -1,7 +1,12 @@
+'use client'
+
 import LoginInput from '@/shared/ui/login/LoginInput'
+import { useRouter } from 'next/navigation'
 import { IoCheckboxOutline } from 'react-icons/io5'
 
 export default function LoginRightComponent() {
+  const router = useRouter()
+
   return (
     <div className="w-full lg:w-1/2 h-screen bg-[#fff] px-[20px] sm:px-[45px] py-[40px] box-border overflow-y-auto">
       <p className="text-[#000] font-[800] text-[32px] mb-[10px]">다시 오신 걸 환영해요</p>
@@ -54,6 +59,7 @@ export default function LoginRightComponent() {
           <button
             type="button"
             className="bg-transparent text-[14px] text-[#ED4543] cursor-pointer"
+            onClick={() => router.push('/signup')}
           >
             회원가입
           </button>

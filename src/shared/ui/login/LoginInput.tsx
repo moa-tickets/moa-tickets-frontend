@@ -1,5 +1,3 @@
-import { cn } from '@/shared/lib'
-
 export default function LoginInput({
   label,
   type,
@@ -10,14 +8,12 @@ export default function LoginInput({
   placeholder: string
 }) {
   return (
-    <div className={cn('login__input__container flex flex-col mb-[16px]')}>
-      <label className="text-[#5c5955] text-[14px] font-[600] mb-[10px]">{label}</label>
+    <div className="mb-[15px]">
+      <label className="block text-[14px] font-[700] mb-[8px]">{label}</label>
       <input
         type={type}
         placeholder={placeholder}
-        className={cn(
-          'w-[460px] border border-[#5c5955] box-border py-[10px] px-[16px] outline-[#ED4543] rounded-[10px] text-[14px]'
-        )}
+        className="w-full px-[12px] py-[10px] border border-[#ddd] rounded-[8px] focus:outline-none focus:border-[#ed4543]"
       />
     </div>
   )
