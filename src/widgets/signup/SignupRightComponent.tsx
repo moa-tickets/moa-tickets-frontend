@@ -1,5 +1,6 @@
 import FormField from '@/shared/ui/FormField'
 import SubmitButton from '@/shared/ui/SubmitButton'
+import TermsCheckbox from '@/shared/ui/TermsCheckbox'
 
 export default function SignupRightComponent() {
   return (
@@ -14,15 +15,7 @@ export default function SignupRightComponent() {
         <FormField label="휴대폰 번호" type="tel" placeholder="••••••••" />
 
         {/* Terms */}
-        <div className="pt-[10px] mb-[20px]">
-          <div className="flex items-center gap-[8px] mb-[10px]">
-            <input type="checkbox" id="terms" className="w-4 h-4 accent-[#ed4543]" />
-            <label htmlFor="terms" className="text-[14px] text-[#5c5955]">
-              만 14세 이상이며, 이용약관 및{' '}
-              <span className="text-[#ed4543]">개인정보 처리정책</span>에 동의합니다.
-            </label>
-          </div>
-        </div>
+        <TermsCheckbox />
 
         {/* Submit Button */}
         <SubmitButton>가입하고 시작하기</SubmitButton>
