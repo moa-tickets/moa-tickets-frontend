@@ -1,17 +1,16 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import FormField from '@/shared/ui/FormField'
 import SubmitButton from '@/shared/ui/SubmitButton'
 import SocialLoginButton from '@/shared/ui/SocialLoginButton'
+import AuthToggleLink from '@/shared/ui/AuthToggleLink'
 import LogoLink from '@/shared/ui/LogoLink'
 import TermsCheckbox from '@/shared/ui/TermsCheckbox'
 import { RiKakaoTalkFill } from 'react-icons/ri'
 import { SiNaver } from 'react-icons/si'
 
 export default function LoginRightComponent() {
-  const router = useRouter()
   const [isIdMemory, setIsIdMemory] = useState<boolean>(false)
 
   return (
@@ -44,19 +43,7 @@ export default function LoginRightComponent() {
         </div>
         <SocialLoginButton icon={<RiKakaoTalkFill size={22} />} label="카카오톡으로 로그인" />
         <SocialLoginButton icon={<SiNaver size={16} />} label="네이버로 로그인" />
-        <div
-          id="join"
-          className="flex gap-[10px] justify-center text-[14px] text-[#5c5955] mt-[20px]"
-        >
-          <span>아직 회원이 아니신가요?</span>
-          <button
-            type="button"
-            className="bg-transparent text-[14px] text-[#ED4543] cursor-pointer"
-            onClick={() => router.push('/signup')}
-          >
-            회원가입
-          </button>
-        </div>
+        <AuthToggleLink text="아직 회원이 아니신가요?" linkText="회원가입" href="/signup" />
       </form>
     </div>
   )
