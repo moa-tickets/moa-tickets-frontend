@@ -10,7 +10,7 @@ export default function LoginRightComponent() {
   const router = useRouter()
 
   return (
-    <div className="w-full lg:w-1/2 h-screen bg-[#fff] px-[20px] sm:px-[45px] py-[40px] box-border overflow-y-auto">
+    <div className="lg:block flex flex-col justify-center lg:w-1/2 w-[50%] w- h-screen mx-auto bg-[#fff] lg:px-[45px] lg:py-[40px] p-0 box-border overflow-y-auto">
       <p className="text-[#000] font-[800] text-[32px] mb-[10px]">다시 오신 걸 환영해요</p>
       <p className="text-[#000] font-[400] mb-[20px]">로그인하고 예매를 이어가세요.</p>
       <form className="w-full max-w-[460px] flex flex-col">

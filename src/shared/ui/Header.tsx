@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Logo from './Logo'
 
 export default function Header() {
   return (
@@ -6,20 +7,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition">
-          <div className="w-8 h-8 bg-[#ed4543] rounded-lg flex items-center justify-center flex-shrink-0">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#fff"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M5 8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2 1.6 1.6 0 0 0 0 3.2 1.6 1.6 0 0 1 0 3.2 2 2 0 0 1-2 2H7a2 2 0 0 1-2-2 1.6 1.6 0 0 0 0-3.2A1.6 1.6 0 0 1 5 8z"></path>
-            </svg>
-          </div>
+          <Logo size={32} />
           <span className="font-bold text-xl tracking-tight">MOA TICKETS</span>
         </Link>
 
