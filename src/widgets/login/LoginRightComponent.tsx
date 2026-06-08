@@ -1,15 +1,18 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import FormField from '@/shared/ui/FormField'
 import SubmitButton from '@/shared/ui/SubmitButton'
+import SocialLoginButton from '@/shared/ui/SocialLoginButton'
 import LogoLink from '@/shared/ui/LogoLink'
-import { IoCheckboxOutline } from 'react-icons/io5'
+import TermsCheckbox from '@/shared/ui/TermsCheckbox'
 import { RiKakaoTalkFill } from 'react-icons/ri'
 import { SiNaver } from 'react-icons/si'
 
 export default function LoginRightComponent() {
   const router = useRouter()
+  const [isIdMemory, setIsIdMemory] = useState<boolean>(false)
 
   return (
     <div className="lg:block flex flex-col justify-center lg:w-1/2 xsm:w-[50%] w-[80%] w- h-screen mx-auto bg-[#fff] lg:px-[45px] lg:py-[40px] p-0 box-border overflow-y-auto">
@@ -28,13 +31,7 @@ export default function LoginRightComponent() {
         <FormField label="이메일" type="email" placeholder="onyu.kim@example.com" />
         <FormField label="비밀번호" type="password" placeholder="••••••••" />
         <div id="login__footer" className="flex justify-between mb-[20px]">
-          <div id="login__memory" className="flex items-center gap-[8px]">
-            <input type="checkbox" className="hidden" />
-            <button type="button" className="bg-transparent cursor-pointer">
-              <IoCheckboxOutline color="#ED4543" size={22} />
-            </button>
-            <label className="text-[14px] text-[#5c5955]">아이디 저장</label>
-          </div>
+          <TermsCheckbox label={'아이디 저장'} checked={isIdMemory} onChange={setIsIdMemory} />
           <div id="find__password">
             <button type="button" className="bg-transparent text-[14px]">
               비밀번호 찾기
@@ -45,22 +42,8 @@ export default function LoginRightComponent() {
         <div id="divider" className="text-[14px] self-center mb-[20px]">
           또는
         </div>
-        <button
-          type="button"
-          id="kakao"
-          className="w-full bg-transparent border border-[#d8d3ce] rounded-[10px] py-[16px] mb-[10px] sm:text-[16px] text-[14px] font-[700] cursor-pointer flex justify-center items-center gap-[8px]"
-        >
-          <RiKakaoTalkFill size={22} />
-          <span>카카오톡으로 로그인</span>
-        </button>
-        <button
-          type="button"
-          id="kakao"
-          className="w-full bg-transparent border border-[#d8d3ce] rounded-[10px] py-[16px] mb-[10px] sm:text-[16px] text-[14px] font-[700] cursor-pointer flex justify-center items-center gap-[8px]"
-        >
-          <SiNaver size={16} />
-          <span>네이버로 로그인</span>
-        </button>
+        <SocialLoginButton icon={<RiKakaoTalkFill size={22} />} label="카카오톡으로 로그인" />
+        <SocialLoginButton icon={<SiNaver size={16} />} label="네이버로 로그인" />
         <div
           id="join"
           className="flex gap-[10px] justify-center text-[14px] text-[#5c5955] mt-[20px]"
