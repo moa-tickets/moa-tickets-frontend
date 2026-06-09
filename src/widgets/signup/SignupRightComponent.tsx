@@ -1,14 +1,14 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import FormField from '@/shared/ui/FormField'
 import SubmitButton from '@/shared/ui/SubmitButton'
 import TermsCheckbox from '@/shared/ui/TermsCheckbox'
 import AuthToggleLink from '@/shared/ui/AuthToggleLink'
-import SocialLoginButton from '@/shared/ui/SocialLoginButton'
-import { RiKakaoTalkFill } from 'react-icons/ri'
-import { SiNaver } from 'react-icons/si'
 import LogoLink from '@/shared/ui/LogoLink'
+
+const SocialLoginSection = dynamic(() => import('@/shared/ui/SocialLoginSection'), { ssr: true })
 
 export default function SignupRightComponent() {
   const [termsChecked, setTermsChecked] = useState(false)
@@ -27,7 +27,27 @@ export default function SignupRightComponent() {
         <FormField label="이름" placeholder="홍길동" />
         <FormField label="이메일" type="email" placeholder="onyu.kim@example.com" />
         <FormField label="비밀번호" type="password" placeholder="••••••••" />
-        <FormField label="휴대폰 번호" type="tel" placeholder="••••••••" />
+        <FormField label="비밀번호 확인" type="password" placeholder="••••••••" />
+
+        <div className="mb-[15px]">
+          <label className="block text-[14px] font-[700] mb-[8px]">휴대폰 번호</label>
+          <div className="flex gap-[10px]">
+            <input
+              type="tel"
+              placeholder="010-0000-0000"
+              className="flex-1 px-[12px] py-[10px] border border-[#ddd] rounded-[8px] focus:outline-none focus:border-[#ed4543]"
+            />
+            <button
+              type="button"
+              className="px-[16px] py-[10px] bg-[#ed4543] text-[#fff] rounded-[8px] font-[700] text-[14px] hover:bg-[#d63a35] transition whitespace-nowrap"
+            >
+              인증요청
+            </button>
+          </div>
+        </div>
+
+        <FormField label="인증 코드" type="text" placeholder="000000" />
+        <FormField label="닉네임" type="text" placeholder="모아팬" />
 
         <TermsCheckbox
           label={
@@ -46,10 +66,9 @@ export default function SignupRightComponent() {
           <span>또는</span>
         </div>
 
-        <SocialLoginButton icon={<RiKakaoTalkFill size={22} />} label="카카오톡으로 로그인" />
-        <SocialLoginButton icon={<SiNaver size={16} />} label="네이버로 로그인" />
+        <SocialLoginSection />
 
-        <AuthToggleLink text="이미 계정이 있으신가요?" linkText="로그인" href="/login" />
+        <AuthToggleLink text="이미 계정이 있으신가요?" linkText="로그인" href="/auth/login" />
       </form>
     </div>
   )

@@ -1,20 +1,20 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import FormField from '@/shared/ui/FormField'
 import SubmitButton from '@/shared/ui/SubmitButton'
-import SocialLoginButton from '@/shared/ui/SocialLoginButton'
 import AuthToggleLink from '@/shared/ui/AuthToggleLink'
 import LogoLink from '@/shared/ui/LogoLink'
 import TermsCheckbox from '@/shared/ui/TermsCheckbox'
-import { RiKakaoTalkFill } from 'react-icons/ri'
-import { SiNaver } from 'react-icons/si'
+
+const SocialLoginSection = dynamic(() => import('@/shared/ui/SocialLoginSection'), { ssr: true })
 
 export default function LoginRightComponent() {
   const [isIdMemory, setIsIdMemory] = useState<boolean>(false)
 
   return (
-    <div className="lg:block flex flex-col justify-center lg:w-1/2 xsm:w-[50%] w-[80%] w- h-screen mx-auto bg-[#fff] lg:px-[45px] lg:py-[40px] p-0 box-border overflow-y-auto">
+    <div className="lg:block flex flex-col justify-center lg:w-1/2 w-full h-screen mx-auto bg-[#fff] lg:px-[45px] lg:py-[40px] p-[20px] box-border overflow-y-auto">
       <LogoLink
         logoSize={30}
         containerClassName="lg:hidden flex items-center gap-[16px] sm:mb-[40px] mb-[20px]"
@@ -41,9 +41,8 @@ export default function LoginRightComponent() {
         <div id="divider" className="text-[14px] self-center mb-[20px]">
           또는
         </div>
-        <SocialLoginButton icon={<RiKakaoTalkFill size={22} />} label="카카오톡으로 로그인" />
-        <SocialLoginButton icon={<SiNaver size={16} />} label="네이버로 로그인" />
-        <AuthToggleLink text="아직 회원이 아니신가요?" linkText="회원가입" href="/signup" />
+        <SocialLoginSection />
+        <AuthToggleLink text="아직 회원이 아니신가요?" linkText="회원가입" href="/auth/signup" />
       </form>
     </div>
   )

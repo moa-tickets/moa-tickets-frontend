@@ -7,6 +7,7 @@ const config: Config = {
       screens: {
         xsm: '430px',
         sm: '650px',
+        lg: '1080px'
       },
       colors: {
         primary: {
@@ -20,6 +21,22 @@ const config: Config = {
           700: '#1d4ed8',
           800: '#1e40af',
           900: '#1e3a8a',
+        },
+        neutral: {
+          50: '#f5f5f5',
+          300: '#c2c2c2',
+          600: '#595959',
+          700: '#404040',
+          900: '#1a1a1a',
+        },
+        seat: {
+          vip: '#ffc107',
+          r: '#9c27b0',
+          s: '#2196f3',
+          a: '#4caf50',
+          ok: '#4caf50',
+          warn: '#ff9800',
+          info: '#2196f3',
         },
       },
       spacing: {
